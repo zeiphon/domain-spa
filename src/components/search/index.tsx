@@ -1,11 +1,11 @@
 import React from 'react';
 
-function Search(props) {
-    const { suburb } = props;
+function Search(props: any) {
+    const { suburb, updateSuburb } = props;
     return (
         <>
             <div>Search fields</div>
-            <input type="text" value={suburb} />
+            <input type="text" defaultValue={suburb} onChange={updateSuburb} />
         </>
     );
 }
