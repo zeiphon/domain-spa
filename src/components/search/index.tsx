@@ -9,7 +9,7 @@ function Search(props: any) {
 
     return (
         <>
-            <div id="search" className="mb-2 p-2">
+            <div id="search" className="p-2">
                 <label htmlFor="suburb">Suburb:</label>
                 <input id="suburb" type="text" defaultValue={suburb} onChange={updateSuburb} onBlur={updateSuburb} />
                 <input type="button" value="Search" onClick={runSearch} />
