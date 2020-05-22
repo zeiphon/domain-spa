@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Search from './components/search';
+import Footer from './components/footer';
 
 function App() {
   const [suburb, setSuburb] = React.useState('Blackburn');
@@ -18,6 +19,7 @@ function App() {
       <div id="output">
         <span>{suburb}</span>
       </div>
+      <Footer />
     </div>
   );
 }

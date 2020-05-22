@@ -27,6 +27,11 @@
   height: 100px;
 }
 
+#footer {
+  color: rgb(197, 197, 197);
+  font-size: 8pt;
+}
+
 label, input {
   margin-right: 10px;
 }
