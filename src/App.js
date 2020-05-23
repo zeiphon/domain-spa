@@ -3,9 +3,12 @@ import './App.css';
 import Search from './components/search';
 import Footer from './components/footer';
 import axios from 'axios';
+import SearchResult from './components/searchResult';
 
 function App() {
   const [suburb, setSuburb] = React.useState('Blackburn');
+  const [results, setResults] = React.useState([]);
+  const [searchResultList, setSearchResultList] = React.useState([]);
   const updateSuburb = function(evt) {
     setSuburb(evt.currentTarget.value);
   };
@@ -13,8 +16,8 @@ function App() {
     return window.location.search.split('=')[1];
   };
   const runSearch = async function() {
-    const key = getKeyFromQueryString();
-    const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
+    //const key = getKeyFromQueryString();
+    //const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
     const data = {
       "listingType":"Sale",
       "propertyTypes":[
@@ -41,10 +44,17 @@ function App() {
         "direction": "Descending"
       }
     };
-    const result = await axios.post(url, data);
-    document.querySelector("#searchResult").innerHTML = JSON.stringify(result, undefined, 2);
+    //const result = await axios.post(url, data);
+    setResults(getMockResults());
   }
- 
+
+  React.useEffect(() => {
+    const list = results && results.length > 0 
+      ? results.map(x => <SearchResult key={x.listing.listingSlug} data={x} />)
+      : <></>;
+    setSearchResultList(list);
+  }, [results]);
+   
   return (
     <div className="App py-2 container-fluid">
       <h1 className="pb-2">Domain Property Search</h1>
@@ -53,8 +63,7 @@ function App() {
           <Search suburb={suburb} updateSuburb={updateSuburb} runSearch={runSearch} />
         </div>
         <div className="col-9 p-2 pl-4" id="output">
-          <span>{suburb}</span><br />
-          <pre id="searchResult"></pre>
+          {searchResultList}
         </div>
       </div>
       <Footer />
@@ -63,3 +72,273 @@ function App() {
 }
 
 export default App;
+
+function getMockResults() {
+  return [
+    {
+        "type": "PropertyListing",
+        "listing": {
+            "listingType": "Sale",
+            "id": 2016241957,
+            "advertiser": {
+                "type": "Agency",
+                "id": 24636,
+                "name": "Biggin & Scott Glen Waverley",
+                "logoUrl": "https://images.domain.com.au/img/Agencys/24636/logo_24636.GIF",
+                "preferredColourHex": "#012b5d",
+                "bannerUrl": "https://images.domain.com.au/img/Agencys/24636/banner_24636.GIF",
+                "contacts": [
+                    {
+                        "name": "Lindy Xue",
+                        "photoUrl": "https://images.domain.com.au/img/24636/contact_1406069.jpeg?mod=200519-145012"
+                    },
+                    {
+                        "name": "Ming  Xu",
+                        "photoUrl": "https://images.domain.com.au/img/24636/contact_1356004.jpeg?mod=200520-164022"
+                    }
+                ]
+            },
+            "priceDetails": {
+                "displayPrice": "Book for a private Inspection!"
+            },
+            "media": [
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016241957_1_1_200504_122018-w800-h540"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016092109_12_1_200512_114500-w3071-h2480"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016241957_2_1_200504_122018-w1571-h1062"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016241957_3_1_200504_122018-w1579-h1062"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016241957_4_1_200504_122018-w1580-h1062"
+                }
+            ],
+            "propertyDetails": {
+                "state": "VIC",
+                "features": [],
+                "propertyType": "ApartmentUnitFlat",
+                "allPropertyTypes": [
+                    "ApartmentUnitFlat"
+                ],
+                "bathrooms": 2.0,
+                "bedrooms": 2.0,
+                "carspaces": 1,
+                "unitNumber": "110",
+                "streetNumber": "2",
+                "street": "Elland Avenue",
+                "area": "Whitehorse",
+                "region": "Eastern Suburbs",
+                "suburb": "BOX HILL",
+                "postcode": "3128",
+                "displayableAddress": "110/2 Elland Avenue, Box Hill",
+                "latitude": -37.8166847,
+                "longitude": 145.123489
+            },
+            "headline": "AN OPPORTUNITY NOT TO BE MISSED!",
+            "summaryDescription": "<b></b><br />If you're looking for an amazing location, spectacular rental yield and quality living, then this apartment ticks all those boxes. We call out for all investors, first home buyers and downsizers to not miss the opportunity to secure this a...",
+            "hasFloorplan": true,
+            "hasVideo": false,
+            "labels": [
+                "Auction Sat 30 May"
+            ],
+            "auctionSchedule": {
+                "time": "2020-05-30T12:00:00",
+                "auctionLocation": "On Site"
+            },
+            "inspectionSchedule": {
+                "byAppointment": false,
+                "recurring": false,
+                "times": [
+                    {
+                        "openingTime": "2020-05-23T13:00:00",
+                        "closingTime": "2020-05-23T13:30:00"
+                    }
+                ]
+            },
+            "listingSlug": "110-2-elland-avenue-box-hill-vic-3128-2016241957"
+        }
+    },
+    {
+        "type": "PropertyListing",
+        "listing": {
+            "listingType": "Sale",
+            "id": 2016236415,
+            "advertiser": {
+                "type": "Agency",
+                "id": 20157,
+                "name": "Jellis Craig Whitehorse",
+                "logoUrl": "https://images.domain.com.au/img/Agencys/20157/logo_20157.GIF",
+                "preferredColourHex": "#1c252e",
+                "bannerUrl": "https://images.domain.com.au/img/Agencys/20157/banner_20157.GIF",
+                "contacts": [
+                    {
+                        "name": "Adrian Nyariri",
+                        "photoUrl": "https://images.domain.com.au/img/20157/contact_1404484.jpeg?mod=200522-092310"
+                    }
+                ]
+            },
+            "priceDetails": {
+                "displayPrice": "$460,000 - $500,000"
+            },
+            "media": [
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016236415_1_1_200429_112607-w1600-h1065"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016236415_2_1_200429_112607-w1600-h1065"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016236415_3_1_200429_112607-w1600-h1065"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016236415_4_1_200429_112607-w1600-h1065"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016236415_5_1_200429_112607-w1600-h1065"
+                }
+            ],
+            "propertyDetails": {
+                "state": "VIC",
+                "features": [
+                    "AirConditioning",
+                    "Ensuite",
+                    "NorthFacing",
+                    "Intercom",
+                    "Heating",
+                    "Dishwasher"
+                ],
+                "propertyType": "ApartmentUnitFlat",
+                "allPropertyTypes": [
+                    "ApartmentUnitFlat"
+                ],
+                "bathrooms": 2.0,
+                "bedrooms": 2.0,
+                "carspaces": 1,
+                "unitNumber": "",
+                "streetNumber": "105/569",
+                "street": "Whitehorse Road",
+                "area": "Whitehorse",
+                "region": "Eastern Suburbs",
+                "suburb": "MITCHAM",
+                "postcode": "3132",
+                "displayableAddress": "105/569 Whitehorse Road, Mitcham",
+                "latitude": -37.81538,
+                "longitude": 145.198029
+            },
+            "headline": "Savour the convenience",
+            "summaryDescription": "<b></b><br />Beautifully presented and bathed in light, this modern apartment has been designed to complement a busy modern lifestyle, ideal for buyers seeking secure, low-maintenance living. Comprising of two generous bedrooms with ensuite and walk-in...",
+            "hasFloorplan": true,
+            "hasVideo": false,
+            "labels": [],
+            "inspectionSchedule": {
+                "byAppointment": false,
+                "recurring": false,
+                "times": [
+                    {
+                        "openingTime": "2020-05-23T12:00:00",
+                        "closingTime": "2020-05-23T12:30:00"
+                    }
+                ]
+            },
+            "listingSlug": "105-569-whitehorse-road-mitcham-vic-3132-2016236415"
+        }
+    },
+    {
+        "type": "PropertyListing",
+        "listing": {
+            "listingType": "Sale",
+            "id": 2016223107,
+            "advertiser": {
+                "type": "Agency",
+                "id": 33445,
+                "name": "Market Expert Australia",
+                "preferredColourHex": "#DDDDDD",
+                "contacts": [
+                    {
+                        "name": "Market Expert Australia"
+                    }
+                ]
+            },
+            "priceDetails": {
+                "displayPrice": "Contact Agent"
+            },
+            "media": [
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016223107_3_1_200421_105516-w1600-h1067"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016223107_1_1_200421_105516-w1600-h1067"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016223107_2_1_200421_105516-w1600-h1067"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016223107_4_1_200421_105516-w1600-h1067"
+                },
+                {
+                    "category": "Image",
+                    "url": "https://bucket-api.domain.com.au/v1/bucket/image/2016223107_5_1_200421_105516-w1600-h1067"
+                }
+            ],
+            "propertyDetails": {
+                "state": "VIC",
+                "features": [
+                    "AirConditioning",
+                    "BuiltInWardrobes",
+                    "Ensuite",
+                    "Intercom",
+                    "Heating",
+                    "Dishwasher"
+                ],
+                "propertyType": "ApartmentUnitFlat",
+                "allPropertyTypes": [
+                    "ApartmentUnitFlat"
+                ],
+                "bathrooms": 2.0,
+                "bedrooms": 2.0,
+                "carspaces": 1,
+                "unitNumber": "1",
+                "streetNumber": "569",
+                "street": "Whitehorse Road",
+                "area": "Whitehorse",
+                "region": "Eastern Suburbs",
+                "suburb": "MITCHAM",
+                "postcode": "3132",
+                "displayableAddress": "1/569 Whitehorse Road, Mitcham",
+                "latitude": -37.81538,
+                "longitude": 145.198029
+            },
+            "headline": "Near New, Ultra-Modern, Walk To All...",
+            "summaryDescription": "<b></b><br />INSPECTIONS BY PRIVATE APPOINTMENT ONLY -\r\nPlease contact our listing agent to make an appointment.\r\n\r\nSecurely located on the bottom floor of Britannia Rise, this executive two bedroom apartment offers a premium lock and leave lifestyle m...",
+            "hasFloorplan": false,
+            "hasVideo": false,
+            "labels": [],
+            "inspectionSchedule": {
+                "byAppointment": false,
+                "recurring": false,
+                "times": []
+            },
+            "listingSlug": "1-569-whitehorse-road-mitcham-vic-3132-2016223107"
+        }
+    }
+];
+}
