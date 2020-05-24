@@ -6,15 +6,22 @@ function SearchResult(props: any) {
     } = props;
 
     const href = `https://domain.com.au/${data.listing.listingSlug}`;
+    const streetAddress = data.listing.propertyDetails.unitNumber
+        ? `${data.listing.propertyDetails.unitNumber}/${data.listing.propertyDetails.streetNumber} ${data.listing.propertyDetails.street}`
+        : `${data.listing.propertyDetails.streetNumber} ${data.listing.propertyDetails.street}`;
 
     return (
         <>
-            <div className="searchResult p-2">
-                <span>Advertiser: {data.listing.advertiser.name}</span><br />
-                <span>Agents: {data.listing.advertiser.contacts.map(x => x.name).join()}</span><br />
-                <span>Address: {data.listing.propertyDetails.displayableAddress}</span><br />
-                <img src={data.listing.media[0].url} width="50" height="50" /><br />
-                <a href={href} target="_blank">View</a>
+            <div className="row py-2">
+                <div className="col-4 col-lg-2">
+                    <img src={data.listing.media[0].url} width="100%" /><br />
+                </div>
+                <div className="col-8 col-lg-10 pl-0">
+                    <span className="d-block font-weight-bold">{data.listing.priceDetails.displayPrice}</span>
+                    <span className="d-block">{streetAddress}</span>
+                    <span className="d-block">{data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}</span>
+                    <a className="d-block" href={href} target="_blank">View</a>
+                </div>
             </div>
         </>
     );

@@ -16,8 +16,8 @@ function App() {
     return window.location.search.split('=')[1];
   };
   const runSearch = async function() {
-    //const key = getKeyFromQueryString();
-    //const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
+    const key = getKeyFromQueryString();
+    const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
     const data = {
       "listingType":"Sale",
       "propertyTypes":[
@@ -44,14 +44,19 @@ function App() {
         "direction": "Descending"
       }
     };
-    //const result = await axios.post(url, data);
-    setResults(getMockResults());
+
+    const result = key 
+        ? await axios.post(url, data).then(x => {
+            setResults(x.data);
+        }) 
+        : setResults(getMockResults());
+    
   }
 
   React.useEffect(() => {
     const list = results && results.length > 0 
       ? results.map(x => <SearchResult key={x.listing.listingSlug} data={x} />)
-      : <></>;
+      : <><span>No properties found.</span></>;
     setSearchResultList(list);
   }, [results]);
    
