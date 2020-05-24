@@ -1,4 +1,5 @@
 import React from 'react';
+import NumericSearchField from '../numericSearchField';
 
 function Search(props: any) {
     const { 
@@ -29,38 +30,10 @@ function Search(props: any) {
                         <input id="suburb" type="text" defaultValue={suburb} onChange={updateSuburb} onBlur={updateSuburb} />
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-lg-4">
-                        <label htmlFor="minBeds">Min. bedrooms:</label>
-                    </div>
-                    <div className="col-lg-8">
-                        <input id="minBeds" type="number" defaultValue={minBeds} onChange={updateMinBeds} onBlur={updateMinBeds} />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-lg-4">
-                        <label htmlFor="minBaths">Min. bathrooms:</label>
-                    </div>
-                    <div className="col-lg-8">
-                        <input id="minBaths" type="number" defaultValue={minBaths} onChange={updateMinBaths} onBlur={updateMinBaths} />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-lg-4">
-                        <label htmlFor="minCarSpaces">Min. car spaces:</label>
-                    </div>
-                    <div className="col-lg-8">
-                        <input id="minCarSpaces" type="number" defaultValue={minCarSpaces} onChange={updateMinCarSpaces} onBlur={updateMinCarSpaces} />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-lg-4">
-                        <label htmlFor="maxPrice">Max price:</label>
-                    </div>
-                    <div className="col-lg-8">
-                        <input id="maxPrice" type="number" defaultValue={maxPrice} onChange={updateMaxPrice} onBlur={updateMaxPrice} />
-                    </div>
-                </div>
+                <NumericSearchField label="Min. bedrooms" id="minBeds" defaultValue={minBeds} updateHandler={updateMinBeds} />
+                <NumericSearchField label="Min. bathrooms" id="minBaths" defaultValue={minBaths} updateHandler={updateMinBaths} />
+                <NumericSearchField label="Min. car spaces" id="minCarSpaces" defaultValue={minCarSpaces} updateHandler={updateMinCarSpaces} />
+                <NumericSearchField label="Max price" id="maxPrice" defaultValue={maxPrice} updateHandler={updateMaxPrice} />
 
                 <input type="button" value="Search" onClick={runSearch} />
             </div>

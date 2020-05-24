@@ -52,7 +52,7 @@ function App() {
       }
     };
 
-    const result = key 
+    key 
         ? await axios.post(url, data).then(x => {
             setResults(x.data);
         }) 
@@ -68,7 +68,7 @@ function App() {
    
   return (
     <div className="App py-2 container-fluid">
-      <h1 className="pb-2">Domain Property Search</h1>
+      <h2>Domain Property Search</h2>
       <div className="row no-gutters mt-4">
         <div className="col-md-3 pr-md-2 pb-2 pb-md-0">
             <div className="border border-secondary rounded bg-white p-2">
