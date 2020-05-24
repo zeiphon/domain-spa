@@ -1,14 +1,22 @@
-.App {
+body {
 
 }
 
+.App {
+  
+}
+
 #output {
-  border-left: 1px solid rgb(197, 197, 197);
   min-height: 200px;
 }
 
 #search {
-  height: 100px;
+  overflow-x: hidden;
+}
+
+#search input[type=text] {
+  width: 100%;
+  max-width: 200px;
 }
 
 #footer {
@@ -18,10 +26,14 @@
 }
 
 label, input {
-  margin-right: 10px;
+  margin: 0 10px 10px 0;
 }
 
 h1 {
-  color: green;
+  color: #555;
   text-align: center;
+}
+
+.border-secondary {
+  border-color: #ccc !important;
 }

@@ -59,11 +59,15 @@ function App() {
     <div className="App py-2 container-fluid">
       <h1 className="pb-2">Domain Property Search</h1>
       <div className="row no-gutters mt-4">
-        <div className="col-3">
-          <Search suburb={suburb} updateSuburb={updateSuburb} runSearch={runSearch} />
+        <div className="col-md-3 pr-md-2 pb-2 pb-md-0">
+            <div className="border border-secondary rounded bg-white p-2">
+                <Search suburb={suburb} updateSuburb={updateSuburb} runSearch={runSearch} />
+            </div>
         </div>
-        <div className="col-9 p-2 pl-4" id="output">
-          {searchResultList}
+        <div className="col-md-9">
+          <div className="border border-secondary rounded bg-white px-2" id="output">
+            {searchResultList}
+          </div>          
         </div>
       </div>
       <Footer />
