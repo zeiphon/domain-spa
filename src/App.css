@@ -19,6 +19,10 @@ body {
   max-width: 200px;
 }
 
+#search label {
+  
+}
+
 #footer {
   color: rgb(197, 197, 197);
   font-size: 8pt;
