@@ -7,11 +7,18 @@ import SearchResult from './components/searchResult';
 
 function App() {
   const [suburb, setSuburb] = React.useState('Blackburn');
+  const [minBeds, setMinBeds] = React.useState(2);
+  const [minBaths, setMinBaths] = React.useState(2);
+  const [minCarSpaces, setMinCarSpaces] = React.useState(1);
+  const [maxPrice, setMaxPrice] = React.useState(650000);
+  
   const [results, setResults] = React.useState([]);
   const [searchResultList, setSearchResultList] = React.useState([]);
-  const updateSuburb = function(evt) {
-    setSuburb(evt.currentTarget.value);
-  };
+  
+  const setStateFromChangeEvent = function(evt, setFunc) {
+      setFunc(evt.currentTarget.value);
+  }
+
   const getKeyFromQueryString = function() {
     return window.location.search.split('=')[1];
   };
@@ -29,10 +36,10 @@ function App() {
       "listingAttributes": [
         "NotUnderContract"
       ],
-      "minBedrooms":2,
-      "minBathrooms":2,
-      "minCarspaces":1,
-      "maxPrice":650000,
+      "minBedrooms":minBeds,
+      "minBathrooms":minBaths,
+      "minCarspaces":minCarSpaces,
+      "maxPrice":maxPrice,
       "locations":[
         {
           "state":"VIC",
@@ -50,7 +57,6 @@ function App() {
             setResults(x.data);
         }) 
         : setResults(getMockResults());
-    
   }
 
   React.useEffect(() => {
@@ -66,11 +72,19 @@ function App() {
       <div className="row no-gutters mt-4">
         <div className="col-md-3 pr-md-2 pb-2 pb-md-0">
             <div className="border border-secondary rounded bg-white p-2">
-                <Search suburb={suburb} updateSuburb={updateSuburb} runSearch={runSearch} />
+                <Search 
+                    suburb={suburb} updateSuburb={(evt) => setStateFromChangeEvent(evt, setSuburb)}
+                    minBeds={minBeds} updateMinBeds={(evt) => setStateFromChangeEvent(evt, setMinBeds)}
+                    minBaths={minBaths} updateMinBaths={(evt) => setStateFromChangeEvent(evt, setMinBaths)}
+                    minCarSpaces={minCarSpaces} updateMinCarSpaces={(evt) => setStateFromChangeEvent(evt, setMinCarSpaces)}
+                    maxPrice={maxPrice} updateMaxPrice={(evt) => setStateFromChangeEvent(evt, setMaxPrice)}
+                    
+                    runSearch={runSearch}
+                />
             </div>
         </div>
         <div className="col-md-9">
-          <div className="border border-secondary rounded bg-white px-2" id="output">
+          <div className="border border-secondary rounded bg-white p-2 pl-3" id="output">
             {searchResultList}
           </div>          
         </div>

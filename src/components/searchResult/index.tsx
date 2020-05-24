@@ -20,6 +20,7 @@ function SearchResult(props: any) {
                     <span className="d-block font-weight-bold">{data.listing.priceDetails.displayPrice}</span>
                     <span className="d-block">{streetAddress}</span>
                     <span className="d-block">{data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}</span>
+                    <span className="d-block">{data.listing.propertyDetails.bedrooms} bed(s) {data.listing.propertyDetails.bathrooms} bath(s) {data.listing.propertyDetails.carspaces} car space(s)</span>
                     <a className="d-block" href={href} target="_blank">View</a>
                 </div>
             </div>
