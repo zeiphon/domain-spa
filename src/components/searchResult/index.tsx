@@ -1,4 +1,5 @@
 import React from 'react';
+import getDistanceFromLatLonInKm from '../../utils/distance'
 
 function SearchResult(props: any) {
     const { 
@@ -10,6 +11,8 @@ function SearchResult(props: any) {
         ? `${data.listing.propertyDetails.unitNumber}/${data.listing.propertyDetails.streetNumber} ${data.listing.propertyDetails.street}`
         : `${data.listing.propertyDetails.streetNumber} ${data.listing.propertyDetails.street}`;
     const imageAltText = `Image for ${streetAddress}`;
+    const distance = getDistanceFromLatLonInKm(-37.881585, 145.139287, data.listing.propertyDetails.latitude, data.listing.propertyDetails.longitude);
+    const roundedDistance = Math.round(distance * 10) / 10;
 
     return (
         <>
@@ -24,6 +27,7 @@ function SearchResult(props: any) {
                     <span className="d-block">{data.listing.propertyDetails.bedrooms} bed(s) {data.listing.propertyDetails.bathrooms} bath(s) {data.listing.propertyDetails.carspaces} car space(s)</span>
                     <a className="d-block" href={href} target="_blank" rel="noopener noreferrer">View</a>
                 </div>
+                {roundedDistance} km
             </div>
         </>
     );
