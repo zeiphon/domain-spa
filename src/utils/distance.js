@@ -1,3 +1,5 @@
+import stops from '../data/stopsLatLon';
+
 //Source: https://stackoverflow.com/q/18883601
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
     var R = 6371; // Radius of the earth in km
@@ -17,4 +19,29 @@ function deg2rad(deg) {
     return deg * (Math.PI/180)
 }
 
-export default getDistanceFromLatLonInKm;
+function findClosestStops(lat, lon) {
+  let nearbyStops = [];
+  const offset = 0.02;
+  for (const stop of stops) {
+    const lonDiff = stop.stop_longitude - lon;
+    const latDiff = stop.stop_latitude - lat;
+    
+    if (lonDiff > -offset && lonDiff < offset
+      && latDiff > -offset && latDiff < offset) {
+      nearbyStops.push(stop);
+      console.log(stop.stop_name, { latDiff, lonDiff} );
+    }
+  }
+
+  const results = nearbyStops.map(x =>
+    { return { 
+      stop_name: x.stop_name, 
+      distance: getDistanceFromLatLonInKm(lat, lon, x.stop_latitude, x.stop_longitude) 
+    }}
+    )
+    .sort((a, b) => a.distance - b.distance);
+
+  return results;
+}
+
+export default findClosestStops;
