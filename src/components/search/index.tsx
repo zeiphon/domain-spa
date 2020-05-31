@@ -8,6 +8,7 @@ function Search(props: any) {
         minBaths, updateMinBaths,
         minCarSpaces, updateMinCarSpaces,
         maxPrice, updateMaxPrice,
+        maxDistanceFromTrain, updateMaxDistanceFromTrain,
         runSearch
     } = props;
 
@@ -33,7 +34,8 @@ function Search(props: any) {
                 <NumericSearchField label="Min. bedrooms" id="minBeds" defaultValue={minBeds} updateHandler={updateMinBeds} />
                 <NumericSearchField label="Min. bathrooms" id="minBaths" defaultValue={minBaths} updateHandler={updateMinBaths} />
                 <NumericSearchField label="Min. car spaces" id="minCarSpaces" defaultValue={minCarSpaces} updateHandler={updateMinCarSpaces} />
-                <NumericSearchField label="Max price" id="maxPrice" defaultValue={maxPrice} updateHandler={updateMaxPrice} />
+                <NumericSearchField label="Max. price" id="maxPrice" defaultValue={maxPrice} updateHandler={updateMaxPrice} />
+                <NumericSearchField label="Max. distance from train" id="maxDistanceFromTrain" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} />
 
                 <input type="button" value="Search" onClick={runSearch} />
             </div>

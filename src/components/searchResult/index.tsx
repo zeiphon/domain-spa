@@ -1,9 +1,8 @@
 import React from 'react';
-import findClosestStops from '../../utils/distance'
 
 function SearchResult(props: any) {
     const { 
-        data
+        closestStops, data
     } = props;
 
     const href = `https://domain.com.au/${data.listing.listingSlug}`;
@@ -11,10 +10,18 @@ function SearchResult(props: any) {
         ? `${data.listing.propertyDetails.unitNumber}/${data.listing.propertyDetails.streetNumber} ${data.listing.propertyDetails.street}`
         : `${data.listing.propertyDetails.streetNumber} ${data.listing.propertyDetails.street}`;
     const imageAltText = `Image for ${streetAddress}`;
-    const closestStops = findClosestStops(data.listing.propertyDetails.latitude, data.listing.propertyDetails.longitude)
-        .map(x => `${x.stop_name.replace(' Station', '')}: ${Math.round(x.distance * 10) / 10}km`)
-        .join(', ');
-
+    
+    //Select at most the first two closest stops, then add markup for rendering
+    const closestStopsMarkup = closestStops
+        .filter((stop, i) => { return i < 2 })
+        .map(y => {
+            const key = `${data.listing.listingSlug}_${y.stop_name.replace(' ', '')}`;
+            return <span className="mr-2" key={key}>
+                <i className="icon-train" />
+                {y.stop_name.replace(' Station', '')}: {Math.round(y.distance * 10) / 10}km
+            </span>
+        });
+    
     return (
         <>
             <div className="row py-2 search-result">
@@ -30,13 +37,9 @@ function SearchResult(props: any) {
                         {data.listing.propertyDetails.bathrooms}<i className="icon-bath" /> 
                         {data.listing.propertyDetails.carspaces}<i className="icon-cab" />
                     </span>
-                    <span className="d-block">
-                        <i className="icon-train" />{closestStops}
-                    </span>
+                    <span className="d-block">{closestStopsMarkup}</span>
                     <a className="d-block" href={href} target="_blank" rel="noopener noreferrer">View</a>
                 </div>
-                
-                
             </div>
         </>
     );

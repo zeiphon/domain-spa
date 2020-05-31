@@ -4,6 +4,7 @@ import Search from './components/search';
 import Footer from './components/footer';
 import axios from 'axios';
 import SearchResult from './components/searchResult';
+import findClosestStops from './utils/distance'
 
 function App() {
   const [suburb, setSuburb] = React.useState('Blackburn');
@@ -11,6 +12,7 @@ function App() {
   const [minBaths, setMinBaths] = React.useState(2);
   const [minCarSpaces, setMinCarSpaces] = React.useState(1);
   const [maxPrice, setMaxPrice] = React.useState(650000);
+  const [maxDistanceFromTrain, setMaxDistanceFromTrain] = React.useState(1.5);
   
   const [results, setResults] = React.useState([]);
   const [searchResultList, setSearchResultList] = React.useState([]);
@@ -22,6 +24,19 @@ function App() {
   const getKeyFromQueryString = function() {
     return window.location.search.split('=')[1];
   };
+
+  const setResultsWithClosestStops = function(r) {
+    const resultsWithClosestStops = r
+        .map(x => {
+            x.closestStops = findClosestStops(x.listing.propertyDetails.latitude, x.listing.propertyDetails.longitude);
+            return x;
+        })
+        .filter(x => {
+            return x.closestStops.length > 0 
+                && Math.round(x.closestStops[0].distance * 10) / 10 <= maxDistanceFromTrain;
+        });
+    setResults(resultsWithClosestStops);
+  }
   const runSearch = async function() {
     const key = getKeyFromQueryString();
     const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
@@ -53,16 +68,14 @@ function App() {
     };
 
     key 
-        ? await axios.post(url, data).then(x => {
-            setResults(x.data);
-        }) 
-        : setResults(getMockResults());
+        ? await axios.post(url, data).then(x => setResultsWithClosestStops(x.data)) 
+        : setResultsWithClosestStops(getMockResults());
   }
 
   React.useEffect(() => {
     const list = results && results.length > 0 
-      ? results.map(x => <SearchResult key={x.listing.listingSlug} data={x} />)
-      : <><span>No properties found.</span></>;
+        ? results.map(x => <SearchResult key={x.listing.listingSlug} closestStops={x.closestStops} data={x} />)
+        : <><span>No properties found.</span></>;
     setSearchResultList(list);
   }, [results]);
    
@@ -78,6 +91,7 @@ function App() {
                     minBaths={minBaths} updateMinBaths={(evt) => setStateFromChangeEvent(evt, setMinBaths)}
                     minCarSpaces={minCarSpaces} updateMinCarSpaces={(evt) => setStateFromChangeEvent(evt, setMinCarSpaces)}
                     maxPrice={maxPrice} updateMaxPrice={(evt) => setStateFromChangeEvent(evt, setMaxPrice)}
+                    maxDistanceFromTrain={maxDistanceFromTrain} updateMaxDistanceFromTrain={(evt) => setStateFromChangeEvent(evt, setMaxDistanceFromTrain)}
                     
                     runSearch={runSearch}
                 />
