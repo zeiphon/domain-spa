@@ -34,3 +34,15 @@ h2 {
 .border-secondary {
   border-color: #ccc !important;
 }
+
+.search-result .icon-bed,
+.search-result .icon-bath,
+.search-result .icon-cab {
+  margin-left: 3px;
+  margin-right: 5px;
+}
+
+.search-result .icon-train {
+  margin-left: -4px;
+  margin-right: 5px;
+}

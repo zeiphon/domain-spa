@@ -29,7 +29,6 @@ function findClosestStops(lat, lon) {
     if (lonDiff > -offset && lonDiff < offset
       && latDiff > -offset && latDiff < offset) {
       nearbyStops.push(stop);
-      console.log(stop.stop_name, { latDiff, lonDiff} );
     }
   }
 
