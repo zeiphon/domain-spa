@@ -87,12 +87,11 @@ function App() {
             <div className="border border-secondary rounded bg-white p-2">
                 <Search 
                     suburb={suburb} updateSuburb={(evt) => setStateFromChangeEvent(evt, setSuburb)}
-                    minBeds={minBeds} updateMinBeds={(evt) => setStateFromChangeEvent(evt, setMinBeds)}
-                    minBaths={minBaths} updateMinBaths={(evt) => setStateFromChangeEvent(evt, setMinBaths)}
-                    minCarSpaces={minCarSpaces} updateMinCarSpaces={(evt) => setStateFromChangeEvent(evt, setMinCarSpaces)}
-                    maxPrice={maxPrice} updateMaxPrice={(evt) => setStateFromChangeEvent(evt, setMaxPrice)}
-                    maxDistanceFromTrain={maxDistanceFromTrain} updateMaxDistanceFromTrain={(evt) => setStateFromChangeEvent(evt, setMaxDistanceFromTrain)}
-                    
+                    minBeds={minBeds} updateMinBeds={(val) => setMinBeds(val)}
+                    minBaths={minBaths} updateMinBaths={(val) => setMinBaths(val)}
+                    minCarSpaces={minCarSpaces} updateMinCarSpaces={(val) => setMinCarSpaces(val)}
+                    maxPrice={maxPrice} updateMaxPrice={(val) => setMaxPrice(val)}
+                    maxDistanceFromTrain={maxDistanceFromTrain} updateMaxDistanceFromTrain={(val) => setMaxDistanceFromTrain(val)}
                     runSearch={runSearch}
                 />
             </div>

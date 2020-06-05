@@ -41,7 +41,22 @@ h2 {
   margin-left: 3px;
   margin-right: 5px;
 }
-
 .search-result .icon-train {
   margin-left: -4px;
+}
+
+.numeric-search-field .controls {
+  max-width: 200px;
+}
+
+.numeric-search-field .value {
+  min-width: 40%;
+  text-align: center;
+}
+
+.numeric-search-field .down,
+.numeric-search-field .up {
+  min-width: 20%;
+  text-align: center;
+  cursor: pointer;
 }
