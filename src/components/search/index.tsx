@@ -1,5 +1,6 @@
 import React from 'react';
 import NumericSearchField from '../numericSearchField';
+import SuburbSearch from '../suburbSearch';
 
 function Search(props: any) {
     const { 
@@ -23,6 +24,7 @@ function Search(props: any) {
                         <input id="state" type="text" value="VIC" disabled />
                     </div>
                 </div>
+                
                 <div className="row">
                     <div className="col-lg-4">
                         <label htmlFor="suburb">Suburb:</label>
