@@ -16,7 +16,8 @@ function App() {
   
   const [results, setResults] = React.useState([]);
   const [searchResultList, setSearchResultList] = React.useState([]);
-  
+  let isLoading = false;
+
   const setStateFromChangeEvent = function(evt, setFunc) {
       setFunc(evt.currentTarget.value);
   }
@@ -37,6 +38,7 @@ function App() {
         });
     setResults(resultsWithClosestStops);
   }
+
   const runSearch = async function() {
     const key = getKeyFromQueryString();
     const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
@@ -67,10 +69,29 @@ function App() {
       }
     };
 
-    key 
-        ? await axios.post(url, data).then(x => setResultsWithClosestStops(x.data)) 
-        : setResultsWithClosestStops(getMockResults());
+    if (key) {
+        isLoading = true;
+        await axios.post(url, data)
+            .then(x => {
+                isLoading = false;
+                setResultsWithClosestStops(x.data);
+            })
+            .catch(err => {
+                isLoading = false;
+                console.error(err);
+            });
+    } else { 
+        setResultsWithClosestStops(getMockResults()); 
+    }
   }
+
+  const spinner = isLoading
+    ? (
+        <div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
+        </div>
+    )
+    : <></>
 
   React.useEffect(() => {
     const list = results && results.length > 0 
@@ -78,7 +99,7 @@ function App() {
         : <><span>No properties found.</span></>;
     setSearchResultList(list);
   }, [results]);
-   
+
   return (
     <div className="App py-2 container-fluid">
       <h2>Domain Property Search</h2>
@@ -98,6 +119,7 @@ function App() {
         </div>
         <div className="col-md-9">
           <div className="border border-secondary rounded bg-white p-2 pl-3" id="output">
+            {spinner}
             {searchResultList}
           </div>          
         </div>
