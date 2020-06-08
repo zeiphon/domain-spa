@@ -4,7 +4,9 @@ function NumericSearchField(props: any) {
     const { label, id, defaultValue, updateHandler, interval } = props;
 
     const decrement = function() {
-        updateHandler(defaultValue - interval);
+        if (defaultValue - interval >= 0) {
+            updateHandler(defaultValue - interval);
+        }        
     }
 
     const increment = function() {
@@ -14,7 +16,7 @@ function NumericSearchField(props: any) {
     return (
         <>
             <div className="row numeric-search-field mb-2">
-                <div className="col-lg-4 mt-1">
+                <div className="col-lg-4 mt-2">
                     <label className="mb-0" htmlFor={id}>{label}:</label>
                 </div>
                 <div className="col-lg-8 align-bottom controls mt-2">

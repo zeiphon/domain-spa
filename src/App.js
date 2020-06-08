@@ -7,7 +7,7 @@ import SearchResult from './components/searchResult';
 import findClosestStops from './utils/distance'
 
 function App() {
-  const [suburb, setSuburb] = React.useState('Blackburn');
+  const [suburbs, setSuburbs] = React.useState('');
   const [minBeds, setMinBeds] = React.useState(2);
   const [minBaths, setMinBaths] = React.useState(2);
   const [minCarSpaces, setMinCarSpaces] = React.useState(1);
@@ -42,6 +42,12 @@ function App() {
   const runSearch = async function() {
     const key = getKeyFromQueryString();
     const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
+    const suburbArray = suburbs.split(',').map((s) => {
+        return {
+              "state":"VIC",
+              "suburb":s.trim()
+            };
+    });
     const data = {
       "listingType":"Sale",
       "propertyTypes":[
@@ -57,12 +63,7 @@ function App() {
       "minBathrooms":minBaths,
       "minCarspaces":minCarSpaces,
       "maxPrice":maxPrice,
-      "locations":[
-        {
-          "state":"VIC",
-          "suburb":suburb
-        }
-      ],
+      "locations":suburbArray,
       "sort": {
         "sortKey": "DateListed",
         "direction": "Descending"
@@ -107,7 +108,7 @@ function App() {
         <div className="col-md-3 pr-md-2 pb-2 pb-md-0">
             <div className="border border-secondary rounded bg-white p-2">
                 <Search 
-                    suburb={suburb} updateSuburb={(evt) => setStateFromChangeEvent(evt, setSuburb)}
+                    suburbs={suburbs} updateSuburbs={(evt) => setStateFromChangeEvent(evt, setSuburbs)}
                     minBeds={minBeds} updateMinBeds={(val) => setMinBeds(val)}
                     minBaths={minBaths} updateMinBaths={(val) => setMinBaths(val)}
                     minCarSpaces={minCarSpaces} updateMinCarSpaces={(val) => setMinCarSpaces(val)}

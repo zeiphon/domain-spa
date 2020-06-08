@@ -4,7 +4,7 @@ import SuburbSearch from '../suburbSearch';
 
 function Search(props: any) {
     const { 
-        suburb, updateSuburb,
+        suburbs, updateSuburbs,
         minBeds, updateMinBeds,
         minBaths, updateMinBaths,
         minCarSpaces, updateMinCarSpaces,
@@ -27,10 +27,10 @@ function Search(props: any) {
                 
                 <div className="row">
                     <div className="col-lg-4">
-                        <label htmlFor="suburb">Suburb:</label>
+                        <label htmlFor="suburb">Suburb(s):</label>
                     </div>
                     <div className="col-lg-8">
-                        <input id="suburb" type="text" defaultValue={suburb} onChange={updateSuburb} onBlur={updateSuburb} />
+                        <input id="suburb" type="text" placeholder="e.g Kew, Rye" defaultValue={suburbs} onChange={updateSuburbs} onBlur={updateSuburbs} />
                     </div>
                 </div>
                 <NumericSearchField label="Min. bedrooms" id="minBeds" defaultValue={minBeds} updateHandler={updateMinBeds} interval={1} />
@@ -39,7 +39,7 @@ function Search(props: any) {
                 <NumericSearchField label="Max. price" id="maxPrice" defaultValue={maxPrice} updateHandler={updateMaxPrice} interval={10000} />
                 <NumericSearchField label="Max. distance from train" id="maxDistanceFromTrain" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} interval={0.5} />
 
-                <input type="button" value="Search" onClick={runSearch} />
+                <input type="button" value="Search" onClick={runSearch} disabled={!suburbs} />
             </div>
         </>
     );
