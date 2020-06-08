@@ -6,8 +6,21 @@ import axios from 'axios';
 import SearchResult from './components/searchResult';
 import findClosestStops from './utils/distance'
 
+  //https://css-tricks.com/snippets/javascript/get-url-variables/
+  const getQueryVariable = function(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        if(pair[0] === variable){return pair[1];}
+    }
+    return false;
+  };
+
 function App() {
-  const [suburbs, setSuburbs] = React.useState('');
+  const suburbsFromQueryString = decodeURI(getQueryVariable('suburbs'));
+
+  const [suburbs, setSuburbs] = React.useState(suburbsFromQueryString ? suburbsFromQueryString : '');
   const [minBeds, setMinBeds] = React.useState(2);
   const [minBaths, setMinBaths] = React.useState(2);
   const [minCarSpaces, setMinCarSpaces] = React.useState(1);
@@ -21,10 +34,6 @@ function App() {
   const setStateFromChangeEvent = function(evt, setFunc) {
       setFunc(evt.currentTarget.value);
   }
-
-  const getKeyFromQueryString = function() {
-    return window.location.search.split('=')[1];
-  };
 
   const setResultsWithClosestStops = function(r) {
     const resultsWithClosestStops = r
@@ -40,7 +49,7 @@ function App() {
   }
 
   const runSearch = async function() {
-    const key = getKeyFromQueryString();
+    const key = getQueryVariable('api_key');
     const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
     const suburbArray = suburbs.split(',').map((s) => {
         return {
@@ -67,7 +76,8 @@ function App() {
       "sort": {
         "sortKey": "DateListed",
         "direction": "Descending"
-      }
+      },
+      "pageSize": 100
     };
 
     if (key) {

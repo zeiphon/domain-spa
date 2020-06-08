@@ -39,7 +39,11 @@ function Search(props: any) {
                 <NumericSearchField label="Max. price" id="maxPrice" defaultValue={maxPrice} updateHandler={updateMaxPrice} interval={10000} />
                 <NumericSearchField label="Max. distance from train" id="maxDistanceFromTrain" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} interval={0.5} />
 
-                <input type="button" value="Search" onClick={runSearch} disabled={!suburbs} />
+                <div className="row">
+                    <div className="offset-lg-4 col-lg-8">
+                        <input type="button" value="Search" onClick={runSearch} disabled={!suburbs} />
+                    </div>
+                </div>
             </div>
         </>
     );

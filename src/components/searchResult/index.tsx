@@ -25,7 +25,7 @@ function SearchResult(props: any) {
     return (
         <>
             <div className="row py-2 search-result">
-                <div className="col-4 col-lg-2">
+                <div className="col-4 col-lg-2 pt-1">
                     <img alt={imageAltText} src={data.listing.media[0].url} width="100%" /><br />
                 </div>
                 <div className="col-8 col-lg-10 pl-0">
