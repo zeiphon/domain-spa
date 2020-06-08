@@ -1,0 +1,11 @@
+TagInput component
+	- props:
+		- data > array of possible values
+	- state:
+		- text > the current value of the text box
+
+	Tags component
+		- props:
+			- 
+		- state:
+			- tags > array of currently displayed tags

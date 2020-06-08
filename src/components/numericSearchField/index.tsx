@@ -18,9 +18,9 @@ function NumericSearchField(props: any) {
                     <label className="mb-0" htmlFor={id}>{label}:</label>
                 </div>
                 <div className="col-lg-8 align-bottom controls mt-2">
-                    <span className="down bg-light text-dark p-1 border border-secondary rounded-left d-inline-block" onClick={decrement}>-</span>
+                    <button className="down bg-light text-dark p-1 border border-secondary rounded-left d-inline-block" onClick={decrement}>-</button>
                     <span className="value px-2 py-1 border-top border-bottom border-secondary d-inline-block">{defaultValue.toLocaleString()}</span>
-                    <span className="up bg-light text-dark p-1 border border-secondary rounded-right d-inline-block" onClick={increment}>+</span>
+                    <button className="up bg-light text-dark p-1 border border-secondary rounded-right d-inline-block" onClick={increment}>+</button>
                 </div>
             </div>
         </>
