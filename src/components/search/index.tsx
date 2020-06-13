@@ -37,7 +37,7 @@ function Search(props: any) {
                 <NumericSearchField label="Min. bathrooms" id="minBaths" defaultValue={minBaths} updateHandler={updateMinBaths} interval={1} />
                 <NumericSearchField label="Min. car spaces" id="minCarSpaces" defaultValue={minCarSpaces} updateHandler={updateMinCarSpaces} interval={1} />
                 <NumericSearchField label="Max. price" id="maxPrice" defaultValue={maxPrice} updateHandler={updateMaxPrice} interval={10000} />
-                <NumericSearchField label="Max. distance from train" id="maxDistanceFromTrain" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} interval={0.5} />
+                <NumericSearchField label="Max. distance from train" id="maxDistanceFromTrain" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} interval={0.25} />
 
                 <div className="row">
                     <div className="offset-lg-4 col-lg-8">

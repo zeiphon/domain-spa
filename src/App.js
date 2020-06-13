@@ -6,8 +6,8 @@ import axios from 'axios';
 import SearchResult from './components/searchResult';
 import findClosestStops from './utils/distance'
 
-  //https://css-tricks.com/snippets/javascript/get-url-variables/
-  const getQueryVariable = function(variable) {
+//https://css-tricks.com/snippets/javascript/get-url-variables/
+const getQueryVariable = function(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
     for (var i=0;i<vars.length;i++) {
@@ -15,21 +15,22 @@ import findClosestStops from './utils/distance'
         if(pair[0] === variable){return pair[1];}
     }
     return false;
-  };
+};
 
 function App() {
-  const suburbsFromQueryString = decodeURI(getQueryVariable('suburbs'));
+  const suburbsFromQueryString = getQueryVariable('suburbs');
 
-  const [suburbs, setSuburbs] = React.useState(suburbsFromQueryString ? suburbsFromQueryString : '');
+  const [suburbs, setSuburbs] = React.useState(suburbsFromQueryString ? decodeURI((suburbsFromQueryString)) : '');
   const [minBeds, setMinBeds] = React.useState(2);
-  const [minBaths, setMinBaths] = React.useState(2);
+  const [minBaths, setMinBaths] = React.useState(1);
   const [minCarSpaces, setMinCarSpaces] = React.useState(1);
   const [maxPrice, setMaxPrice] = React.useState(650000);
-  const [maxDistanceFromTrain, setMaxDistanceFromTrain] = React.useState(1.5);
+  const [maxDistanceFromTrain, setMaxDistanceFromTrain] = React.useState(1.25);
   
   const [results, setResults] = React.useState([]);
   const [searchResultList, setSearchResultList] = React.useState([]);
-  let isLoading = false;
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [searchResultSuburbs, setSearchResultSuburbs] = React.useState('');
 
   const setStateFromChangeEvent = function(evt, setFunc) {
       setFunc(evt.currentTarget.value);
@@ -49,6 +50,7 @@ function App() {
   }
 
   const runSearch = async function() {
+    setSearchResultSuburbs(suburbs);
     const key = getQueryVariable('api_key');
     const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
     const suburbArray = suburbs.split(',').map((s) => {
@@ -81,14 +83,14 @@ function App() {
     };
 
     if (key) {
-        isLoading = true;
+        setIsLoading(true);
         await axios.post(url, data)
             .then(x => {
-                isLoading = false;
+                setIsLoading(false);
                 setResultsWithClosestStops(x.data);
             })
             .catch(err => {
-                isLoading = false;
+                setIsLoading(false);
                 console.error(err);
             });
     } else { 
@@ -130,8 +132,21 @@ function App() {
         </div>
         <div className="col-md-9">
           <div className="border border-secondary rounded bg-white p-2 pl-3" id="output">
-            {spinner}
-            {searchResultList}
+            {isLoading
+            ? spinner
+            : <>
+                {searchResultSuburbs
+                ?
+                    <div className="row">
+                        <div className="col">
+                            <span>Showing properties in {searchResultSuburbs}</span>
+                        </div>
+                    </div>
+                : <></>
+                }
+                {searchResultList}
+            </>
+            }
           </div>          
         </div>
       </div>
