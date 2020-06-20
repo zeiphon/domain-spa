@@ -33,9 +33,9 @@ function SearchResult(props: any) {
                     <span className="d-block">{streetAddress}</span>
                     <span className="d-block">{data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}</span>
                     <span className="d-block">
-                        {data.listing.propertyDetails.bedrooms}<i className="icon-bed" /> 
-                        {data.listing.propertyDetails.bathrooms}<i className="icon-bath" /> 
-                        {data.listing.propertyDetails.carspaces}<i className="icon-cab" />
+                        <span className="icon-wrapper"><i className="icon-bed" />{data.listing.propertyDetails.bedrooms}</span>
+                        <span className="icon-wrapper"><i className="icon-bath" /> {data.listing.propertyDetails.bathrooms}</span>
+                        <span className="icon-wrapper"><i className="icon-cab" />{data.listing.propertyDetails.carspaces}</span>
                     </span>
                     <span className="d-block">{closestStopsMarkup}</span>
                     <a className="d-block" href={href} target="_blank" rel="noopener noreferrer">View</a>
