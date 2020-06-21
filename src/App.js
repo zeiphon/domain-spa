@@ -109,7 +109,7 @@ function App() {
   React.useEffect(() => {
     const list = results && results.length > 0 
         ? results.map(x => <SearchResult key={x.listing.listingSlug} closestStops={x.closestStops} data={x} />)
-        : <><span>No properties found.</span></>;
+        : <><span className="d-block pl-3">No properties found.</span></>;
     setSearchResultList(list);
   }, [results]);
 
@@ -117,7 +117,7 @@ function App() {
     <div className="App py-2 container-fluid">
       <h2>Domain Property Search</h2>
       <div className="row no-gutters mt-4">
-        <div className="col-md-3 pr-md-2 pb-2 pb-md-0">
+        <div className="col-sm-4 col-md-3 pr-sm-2 pb-2 pb-sm-0">
             <div className="border border-secondary rounded bg-white p-2">
                 <Search 
                     suburbs={suburbs} updateSuburbs={(evt) => setStateFromChangeEvent(evt, setSuburbs)}
@@ -130,7 +130,7 @@ function App() {
                 />
             </div>
         </div>
-        <div className="col-md-9">
+        <div className="col-sm-8 col-md-9">
           <div className="border border-secondary rounded bg-white p-2 pl-3" id="output">
             {isLoading
             ? spinner
@@ -144,7 +144,7 @@ function App() {
                     </div>
                 : <></>
                 }
-                {searchResultList}
+                <div className="row">{searchResultList}</div>
             </>
             }
           </div>          

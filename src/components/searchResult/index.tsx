@@ -1,4 +1,5 @@
 import React from 'react';
+import NewTabLink from '../newTabLink';
 
 function SearchResult(props: any) {
     const { 
@@ -16,7 +17,7 @@ function SearchResult(props: any) {
         .filter((stop, i) => { return i < 2 })
         .map(y => {
             const key = `${data.listing.listingSlug}_${y.stop_name.replace(' ', '')}`;
-            return <span className="mr-2" key={key}>
+            return <span className="col-12" key={key}>
                 <i className="icon-train" />
                 {y.stop_name.replace(' Station', '')}: {Math.round(y.distance * 10) / 10}km
             </span>
@@ -24,21 +25,23 @@ function SearchResult(props: any) {
     
     return (
         <>
-            <div className="row py-2 search-result">
-                <div className="col-4 col-lg-2 pt-1">
-                    <img alt={imageAltText} src={data.listing.media[0].url} width="100%" /><br />
-                </div>
-                <div className="col-8 col-lg-10 pl-0">
-                    <span className="d-block font-weight-bold">{data.listing.priceDetails.displayPrice}</span>
-                    <span className="d-block">{streetAddress}</span>
-                    <span className="d-block">{data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}</span>
-                    <span className="d-block">
-                        <span className="icon-wrapper"><i className="icon-bed" />{data.listing.propertyDetails.bedrooms}</span>
-                        <span className="icon-wrapper"><i className="icon-bath" />{data.listing.propertyDetails.bathrooms}</span>
-                        <span className="icon-wrapper"><i className="icon-cab" />{data.listing.propertyDetails.carspaces}</span>
-                    </span>
-                    <span className="d-block">{closestStopsMarkup}</span>
-                    <a className="d-block" href={href} target="_blank" rel="noopener noreferrer">View</a>
+            <div className="col-md-4 col-lg-3">
+                <div className="row py-2 search-result">
+                    <div className="col-12 pt-1">
+                        <img alt={imageAltText} src={data.listing.media[0].url} width="100%" /><br />
+                    </div>
+                    <div className="col-12 pl-3">
+                        <span className="d-block font-weight-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
+                        <span className="d-block">{streetAddress}</span>
+                        <span className="d-block">{data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}</span>
+                        <span className="d-block">
+                            <span className="icon-wrapper"><i className="icon-bed" />{data.listing.propertyDetails.bedrooms}</span>
+                            <span className="icon-wrapper"><i className="icon-bath" />{data.listing.propertyDetails.bathrooms}</span>
+                            <span className="icon-wrapper"><i className="icon-cab" />{data.listing.propertyDetails.carspaces}</span>
+                        </span>
+                        <span className="row">{closestStopsMarkup}</span>
+                        <NewTabLink href={href} label="View" />
+                    </div>
                 </div>
             </div>
         </>
