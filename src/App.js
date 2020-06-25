@@ -26,7 +26,7 @@ function App() {
   const [minCarSpaces, setMinCarSpaces] = React.useState(1);
   const [maxPrice, setMaxPrice] = React.useState(650000);
   const [maxDistanceFromTrain, setMaxDistanceFromTrain] = React.useState(1.25);
-  
+
   const [results, setResults] = React.useState([]);
   const [searchResultList, setSearchResultList] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -43,7 +43,7 @@ function App() {
             return x;
         })
         .filter(x => {
-            return x.closestStops.length > 0 
+            return x.closestStops.length > 0
                 && Math.round(x.closestStops[0].distance * 10) / 10 <= maxDistanceFromTrain;
         });
     setResults(resultsWithClosestStops);
@@ -93,8 +93,8 @@ function App() {
                 setIsLoading(false);
                 console.error(err);
             });
-    } else { 
-        setResultsWithClosestStops(getMockResults()); 
+    } else {
+        setResultsWithClosestStops([...getMockResults(), ...getMockResults()]);
     }
   }
 
@@ -107,7 +107,7 @@ function App() {
     : <></>
 
   React.useEffect(() => {
-    const list = results && results.length > 0 
+    const list = results && results.length > 0
         ? results.map(x => <SearchResult key={x.listing.listingSlug} closestStops={x.closestStops} data={x} />)
         : <><span className="d-block pl-3">No properties found.</span></>;
     setSearchResultList(list);
@@ -119,7 +119,7 @@ function App() {
       <div className="row no-gutters mt-4">
         <div className="col-sm-4 col-md-3 pr-sm-2 pb-2 pb-sm-0">
             <div className="border border-secondary rounded bg-white p-2">
-                <Search 
+                <Search
                     suburbs={suburbs} updateSuburbs={(evt) => setStateFromChangeEvent(evt, setSuburbs)}
                     minBeds={minBeds} updateMinBeds={(val) => setMinBeds(val)}
                     minBaths={minBaths} updateMinBaths={(val) => setMinBaths(val)}
@@ -131,7 +131,7 @@ function App() {
             </div>
         </div>
         <div className="col-sm-8 col-md-9">
-          <div className="border border-secondary rounded bg-white p-2 pl-3" id="output">
+          <div className="border border-secondary rounded bg-white p-2 px-3" id="output">
             {isLoading
             ? spinner
             : <>
@@ -147,7 +147,7 @@ function App() {
                 <div className="row">{searchResultList}</div>
             </>
             }
-          </div>          
+          </div>
         </div>
       </div>
       <Footer />
