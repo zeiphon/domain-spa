@@ -28,8 +28,8 @@ function SearchResult(props: any) {
             <div className="col-md-4 col-lg-3 my-2">
                 <div className="search-result mx-auto h-100">
                     <div className="border border-secondary rounded h-100 shadow">
-                        <div className="px-0">
-                            <img alt={imageAltText} src={data.listing.media[0].url} width="100%" /><br />
+                        <div className="px-0 bg-dark text-center">
+                            <img alt={imageAltText} src={data.listing.media[0].url} width="100%" />
                         </div>
                         <div className="px-2 pt-1 pb-2">
                             <span className="d-block font-weight-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
