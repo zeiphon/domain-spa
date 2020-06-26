@@ -50,7 +50,13 @@ function App() {
   }
 
   const runSearch = async function() {
-    setSearchResultSuburbs(suburbs);
+    setSearchResultSuburbs(
+        suburbs
+            .split(',')
+            .map(x => x.trim())
+            .sort()
+            .join(', ')
+    );
     const key = getQueryVariable('api_key');
     const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
     const suburbArray = suburbs.split(',').map((s) => {

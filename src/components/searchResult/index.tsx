@@ -27,11 +27,11 @@ function SearchResult(props: any) {
         <>
             <div className="col-md-4 col-lg-3 my-2">
                 <div className="search-result mx-auto h-100">
-                    <div className="border border-secondary rounded h-100 shadow">
-                        <div className="px-0 text-center">
+                    <div className="border border-secondary rounded h-100 shadow d-flex flex-column ">
+                        <div className="px-0 text-center rounded-top overflow-hidden">
                             <img alt={imageAltText} src={data.listing.media[0].url} width="100%" />
                         </div>
-                        <div className="px-2 pt-1 pb-2">
+                        <div className="px-3 pt-1 pb-2 mb-auto">
                             <span className="d-block font-weight-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
                             <span className="d-block">{streetAddress}</span>
                             <span className="d-block">{data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}</span>
@@ -41,7 +41,9 @@ function SearchResult(props: any) {
                                 <span className="icon-wrapper"><i className="icon-cab" />{data.listing.propertyDetails.carspaces}</span>
                             </span>
                             <span className="row">{closestStopsMarkup}</span>
-                            <NewTabLink href={href} label="View" />
+                        </div>
+                        <div className="row text-center mb-2">
+                            <span className="col-12"><NewTabLink href={href} label="View" /></span>
                         </div>
                     </div>
                 </div>

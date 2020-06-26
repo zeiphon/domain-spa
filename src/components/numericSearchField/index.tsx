@@ -6,7 +6,7 @@ function NumericSearchField(props: any) {
     const decrement = function() {
         if (defaultValue - interval >= 0) {
             updateHandler(defaultValue - interval);
-        }        
+        }
     }
 
     const increment = function() {
