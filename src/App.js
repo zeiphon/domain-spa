@@ -145,7 +145,7 @@ function App() {
                 ?
                     <div className="row">
                         <div className="col">
-                            <span>Showing properties in {searchResultSuburbs}</span>
+                            <span>Showing {searchResultList.length} properties in {searchResultSuburbs}</span>
                         </div>
                     </div>
                 : <></>
