@@ -37,6 +37,7 @@ h2 {
 
  .search-result img {
   max-width: 300px;
+  max-height: 200px;
 }
 
 .search-result .icon-bed,
