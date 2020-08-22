@@ -27,8 +27,8 @@ function SearchResult(props: any) {
         <>
             <div className="col-md-4 col-lg-3 my-2">
                 <div className="search-result mx-auto h-100">
-                    <div className="border border-secondary rounded h-100 shadow d-flex flex-column ">
-                        <div className="px-0 text-center rounded-top overflow-hidden">
+                    <div className="border border-secondary h-100 shadow d-flex flex-column ">
+                        <div className="px-0 text-center overflow-hidden">
                             <img alt={imageAltText} src={data.listing.media[0].url} width="100%" />
                         </div>
                         <div className="px-3 pt-1 pb-2 mb-auto">
