@@ -121,8 +121,8 @@ function App() {
 
   return (
     <div className="App py-2 container-fluid">
-      <h2>Domain Property Search</h2>
-      <div className="row no-gutters mt-4">
+      <h2 className="sticky-top py-2 bg-light">Domain Property Search</h2>
+      <div className="row no-gutters mt-3">
         <div className="col-sm-4 col-md-3 pr-sm-2 pb-2 pb-sm-0">
             <div className="border border-secondary rounded bg-white p-2">
                 <Search

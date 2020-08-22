@@ -16,6 +16,10 @@
   max-width: 80px;
 }
 
+#search label {
+  margin-bottom: 0px;
+}
+
 #footer {
   color: rgb(197, 197, 197);
   font-size: 8pt;
@@ -35,7 +39,7 @@ h2 {
   border-color: #ccc !important;
 }
 
- .search-result img {
+.search-result img {
   max-width: 300px;
   max-height: 200px;
 }
@@ -52,8 +56,13 @@ h2 {
   margin-left: -4px;
 }
 
+.numeric-search-field {
+  min-width: 270px;
+  max-width: 300px;
+}
+
 .numeric-search-field .controls {
-  max-width: 200px;
+  max-width: 300px;
 }
 
 .numeric-search-field .value {
@@ -63,7 +72,7 @@ h2 {
 
 .numeric-search-field .down,
 .numeric-search-field .up {
-  min-width: 20%;
+  min-width: 15%;
   text-align: center;
   cursor: pointer;
 }
