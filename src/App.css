@@ -30,13 +30,17 @@ label, input {
   margin: 0 10px 10px 0;
 }
 
-h2 {
+h1, h2, h3, h4 {
   color: #555;
   text-align: center;
 }
 
 .border-secondary {
   border-color: #ccc !important;
+}
+
+.search-result {
+  max-width: 300px;
 }
 
 .search-result img {
@@ -54,6 +58,7 @@ h2 {
 }
 .search-result .icon-train {
   margin-left: -4px;
+  margin-right: 6px;
 }
 
 .numeric-search-field {
