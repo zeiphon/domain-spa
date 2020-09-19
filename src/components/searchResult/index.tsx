@@ -1,5 +1,6 @@
 import React from 'react';
 import NewTabLink from '../newTabLink';
+import ImageCarousel from '../imageCarousel'
 
 function SearchResult(props: any) {
     const {
@@ -22,6 +23,9 @@ function SearchResult(props: any) {
                 {y.stop_name.replace(' Station', '')}: {Math.round(y.distance * 10) / 10}km
             </span>
         });
+    const imageUrls = data.listing.media
+        .filter(x => x.category === "Image")
+        .map(y => y.url);
 
     return (
         <>
@@ -29,7 +33,7 @@ function SearchResult(props: any) {
                 <div className="search-result mx-auto h-100">
                     <div className="border border-secondary h-100 shadow d-flex flex-column ">
                         <div className="px-0 text-center overflow-hidden">
-                            <img alt={imageAltText} src={data.listing.media[0].url} width="100%" />
+                            <ImageCarousel urls={imageUrls} />
                         </div>
                         <div className="px-3 pt-1 pb-2 mb-auto">
                             <span className="d-block font-weight-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
