@@ -33,11 +33,11 @@ function Search(props: any) {
                         <input id="suburb" type="text" placeholder="e.g Kew, Rye" defaultValue={suburbs} onChange={updateSuburbs} onBlur={updateSuburbs} />
                     </div>
                 </div>
-                <NumericSearchField icon="icon-bed" defaultValue={minBeds} updateHandler={updateMinBeds} interval={1} />
-                <NumericSearchField icon="icon-bath" defaultValue={minBaths} updateHandler={updateMinBaths} interval={1} />
-                <NumericSearchField icon="icon-cab" defaultValue={minCarSpaces} updateHandler={updateMinCarSpaces} interval={1} />
-                <NumericSearchField icon="icon-dollar" defaultValue={maxPrice} updateHandler={updateMaxPrice} interval={10000} />
-                <NumericSearchField icon="icon-train" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} interval={0.25} />
+                <NumericSearchField type="min" icon="icon-bed" defaultValue={minBeds} updateHandler={updateMinBeds} interval={1} />
+                <NumericSearchField type="min" icon="icon-bath" defaultValue={minBaths} updateHandler={updateMinBaths} interval={1} />
+                <NumericSearchField type="min" icon="icon-cab" defaultValue={minCarSpaces} updateHandler={updateMinCarSpaces} interval={1} />
+                <NumericSearchField type="max" icon="icon-dollar" defaultValue={maxPrice} updateHandler={updateMaxPrice} interval={10000} />
+                <NumericSearchField type="min" icon="icon-train" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} interval={0.25} />
 
                 <div className="row">
                     <div className="offset-lg-4 col-lg-8 mt-2">
