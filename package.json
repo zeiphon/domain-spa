@@ -10,9 +10,10 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "gh-pages": "^2.2.0",
+    "pure-react-carousel": "^1.27.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.3",
     "typescript": "^3.9.3"
   },
   "scripts": {
