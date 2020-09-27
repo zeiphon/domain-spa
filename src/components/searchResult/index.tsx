@@ -1,6 +1,6 @@
 import React from 'react';
 import NewTabLink from '../newTabLink';
-import ImageCarousel from '../imageCarousel'
+import SimpleCarousel from '../simpleCarousel';
 
 function SearchResult(props: any) {
     const {
@@ -32,8 +32,8 @@ function SearchResult(props: any) {
             <div className="col-md-4 col-lg-3 my-2">
                 <div className="search-result mx-auto h-100">
                     <div className="border border-secondary h-100 shadow d-flex flex-column ">
-                        <div className="px-0 text-center overflow-hidden">
-                            <ImageCarousel urls={imageUrls} />
+                        <div className="px-0 text-center overflow-hidden carousel">
+                            <SimpleCarousel key={data.listingSlug} urls={imageUrls} />
                         </div>
                         <div className="px-3 pt-1 pb-2 mb-auto">
                             <span className="d-block font-weight-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
