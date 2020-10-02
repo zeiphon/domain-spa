@@ -8,11 +8,18 @@ function SimpleCarousel(props: { key: string, urls: string[], altText: string })
 
     const [index, setIndex] = useState(0);
     const count = urls.length-1;
+    const dots = urls.map((x, i) => {
+        const icon = i === index ? "circle" : "circle-empty";
+        return <i className={`icon-${icon}`} />
+    });
 
     return (
         <React.Fragment key={key}>
             <div>
                 <img className="w-100" src={`${urls[index]}/500x500`} alt={altText} />
+                <div className="dots">
+                    <span>{dots}</span>
+                </div>
                 {urls.length > 1 &&
                 <React.Fragment>
                     <button className="back-button" onClick={() => { setIndex(index === 0 ? count : index-1) }}>

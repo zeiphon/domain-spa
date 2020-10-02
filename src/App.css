@@ -43,10 +43,6 @@ h1, h2, h3, h4 {
   max-width: 300px;
 }
 
-.search-result .carousel .slider {
-  max-height: 200px;
-}
-
 .search-result .carousel .back-button,
 .search-result .carousel .next-button {
   position: absolute;
@@ -56,7 +52,7 @@ h1, h2, h3, h4 {
   outline: none;
   height: 40px;
   width: 40px;
-  color: rgba(204, 204, 204, 1);
+  color: rgb(224, 224, 224);
   border-radius: 50%;
   padding-top: 2px;
 }
@@ -67,7 +63,7 @@ h1, h2, h3, h4 {
   outline: none;
   height: 40px;
   width: 40px;
-  color: rgba(204, 204, 204, 1);
+  color: rgb(255, 255, 255);
 }
 
 .search-result .carousel .back-button {
@@ -80,8 +76,13 @@ h1, h2, h3, h4 {
   padding-left: 10px;
 }
 
-.search-result .carousel .slider {
-  max-height: 200px;
+.search-result .carousel .dots {
+  position: absolute;
+  bottom: 10px;
+  width: 80%;
+  left: 10%;
+  color:rgb(224, 224, 224);
+  font-size: 8px;
 }
 
 .search-result img {
