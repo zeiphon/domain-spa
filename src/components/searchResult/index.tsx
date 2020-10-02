@@ -33,7 +33,7 @@ function SearchResult(props: any) {
                 <div className="search-result mx-auto h-100">
                     <div className="border border-secondary h-100 shadow d-flex flex-column ">
                         <div className="px-0 text-center overflow-hidden carousel">
-                            <SimpleCarousel key={data.listingSlug} urls={imageUrls} />
+                            <SimpleCarousel key={data.listingSlug} urls={imageUrls} altText={imageAltText} />
                         </div>
                         <div className="px-3 pt-1 pb-2 mb-auto">
                             <span className="d-block font-weight-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
