@@ -1,21 +1,7 @@
 import React from 'react';
+import AgencyDetails from '../agencyDetails';
 import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
-
-function hexToRgb(hex: string): number[] {
-    const withoutHash = hex.replaceAll('#', '');
-    const parts = withoutHash.length === 3
-        ? [ withoutHash[0], withoutHash[1], withoutHash[2] ]
-        : [ withoutHash.substr(0, 2), withoutHash.substr(2, 2), withoutHash.substr(4, 2) ];
-    return parts.map((x) => parseInt(`0x${x}`, 16));
-}
-
-// https://stackoverflow.com/a/3943023
-function calculateTextColourForBackgroundColour(rgb: number[]): string {
-    return (rgb[0]*0.299 + rgb[1]*0.587 + rgb[2]*0.114) > 186
-        ? "#000000"
-        : "#ffffff";
-}
 
 function SearchResult(props: any) {
     const {
@@ -27,8 +13,8 @@ function SearchResult(props: any) {
         ? `${data.listing.propertyDetails.unitNumber}/${data.listing.propertyDetails.streetNumber} ${data.listing.propertyDetails.street}`
         : `${data.listing.propertyDetails.streetNumber} ${data.listing.propertyDetails.street}`;
     const imageAltText = `Image for ${streetAddress}`;
-    const agentBackgroundColour = data.listing.advertiser.preferredColourHex;
-    const agentTextColour = calculateTextColourForBackgroundColour(hexToRgb(agentBackgroundColour));
+
+    const agent = data.listing.advertiser;
 
     //Select at most the first two closest stops, then add markup for rendering
     const closestStopsMarkup = closestStops
@@ -45,16 +31,20 @@ function SearchResult(props: any) {
         .map(y => y.url);
 
     return (
-        <>
+        <React.Fragment key={data.listing.listingSlug}>
             <div className="col-md-4 col-lg-3 my-2">
                 <div className="search-result mx-auto h-100">
                     <div className="border border-secondary h-100 shadow d-flex flex-column ">
                         <div className="px-0 text-center overflow-hidden carousel">
-                            <SimpleCarousel key={data.listingSlug} urls={imageUrls} altText={imageAltText} />
+                            <SimpleCarousel id={data.listing.listingSlug} urls={imageUrls} altText={imageAltText} />
                         </div>
-                        <div className="agent-banner pl-3" style={{backgroundColor: agentBackgroundColour, color: agentTextColour}}>
-                            {data.listing.advertiser.name}
-                        </div>
+                        <AgencyDetails
+                            id={data.listing.listingSlug}
+                            name={agent.name}
+                            logoUrl={agent.logoUrl}
+                            preferredColourHex={agent.preferredColourHex}
+                            contacts={agent.contacts}
+                            key={`agent_${data.listing.listingSlug}`} />
                         <div className="px-3 pt-1 pb-2 mb-auto">
                             <span className="d-block font-weight-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
                             <span className="d-block">{streetAddress}</span>
@@ -72,7 +62,7 @@ function SearchResult(props: any) {
                     </div>
                 </div>
             </div>
-        </>
+        </React.Fragment>
     );
 }
 

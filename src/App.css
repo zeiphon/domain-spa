@@ -46,7 +46,6 @@ h1, h2, h3, h4 {
 .search-result .carousel {
   height: 200px;
 }
-
 .search-result .carousel .back-button,
 .search-result .carousel .next-button {
   position: absolute;
@@ -60,7 +59,6 @@ h1, h2, h3, h4 {
   border-radius: 50%;
   padding-top: 2px;
 }
-
 .search-result .carousel .back-button:hover,
 .search-result .carousel .next-button:hover {
   background-color: rgba(85, 85, 85, 0.363);
@@ -69,17 +67,14 @@ h1, h2, h3, h4 {
   width: 40px;
   color: rgb(255, 255, 255);
 }
-
 .search-result .carousel .back-button {
   left: 5px;
   padding-right: 10px;
 }
-
 .search-result .carousel .next-button {
   right: 5px;
   padding-left: 10px;
 }
-
 .search-result .carousel .dots {
   position: absolute;
   bottom: 10px;
@@ -88,7 +83,6 @@ h1, h2, h3, h4 {
   color:rgb(224, 224, 224);
   font-size: 8px;
 }
-
 .search-result .carousel img {
   max-width: 300px;
   max-height: 200px;
@@ -97,10 +91,47 @@ h1, h2, h3, h4 {
   left: 0px;
 }
 
-.search-result .agent-banner {
+.search-result .agency-details {
   width: 100%;
-  height: 16px;
+  font-size: 14px;
+  position: relative;
+}
+.search-result .agency-details.open {
+  height: 80px;
+}
+.search-result .agency-details.closed {
+  height: 30px;
+}
+.search-result .agency-details .info {
+  max-width:200px;
+}
+.search-result .agency-details .agency-name {
+  line-height: 30px;
+}
+.search-result .agency-details .agency-logo {
+  max-width: 150px;
+  height: 30px;
+}
+.search-result .agency-details .agent-photo {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  right: 5px;
+}
+.search-result .agency-details.open .agent-photo {
+  top: -10px;
+}
+.search-result .agency-details.closed .agent-photo {
+  bottom: -10px;
+}
+.search-result .agency-details .agent-name {
+  position: absolute;
+  top: 40px;
+  right: 10px;
   font-size: 10px;
+  max-width: 50px;
+  word-wrap: break-word;
 }
 
 .search-result .icon-bed,

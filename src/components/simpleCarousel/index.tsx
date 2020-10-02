@@ -1,20 +1,20 @@
 import React from 'react';
 import { useState } from 'react';
 
-function SimpleCarousel(props: { key: string, urls: string[], altText: string }) {
+function SimpleCarousel(props: { id: string, urls: string[], altText: string }) {
     const {
-        key, urls, altText
+        id, urls, altText
     } = props;
 
     const [index, setIndex] = useState(0);
     const count = urls.length-1;
     const dots = urls.map((x, i) => {
         const icon = i === index ? "circle" : "circle-empty";
-        return <i className={`icon-${icon}`} />
+        return <i key={`dot_${id}_${i}`}className={`icon-${icon}`} />
     });
 
     return (
-        <React.Fragment key={key}>
+        <React.Fragment key={id}>
             <div>
                 <img className="w-100" src={`${urls[index]}/500x500`} alt={altText} />
                 <div className="dots">
