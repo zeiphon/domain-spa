@@ -28,7 +28,7 @@ function SearchResult(props: any) {
         });
     const imageUrls = data.listing.media
         .filter(x => x.category === "Image")
-        .map(y => y.url);
+        .map(y => `${y.url}/500x500`);
 
     return (
         <React.Fragment key={data.listing.listingSlug}>
@@ -36,7 +36,11 @@ function SearchResult(props: any) {
                 <div className="search-result mx-auto h-100">
                     <div className="border border-secondary h-100 shadow d-flex flex-column ">
                         <div className="px-0 text-center overflow-hidden carousel">
-                            <SimpleCarousel id={data.listing.listingSlug} urls={imageUrls} altText={imageAltText} />
+                            <SimpleCarousel
+                                id={data.listing.listingSlug}
+                                urls={imageUrls}
+                                altText={imageAltText}
+                            />
                         </div>
                         <AgencyDetails
                             id={data.listing.listingSlug}

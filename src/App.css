@@ -46,6 +46,10 @@ h1, h2, h3, h4 {
 .search-result .carousel {
   height: 200px;
 }
+.search-result .carousel .wrapper {
+  background-color: rgb(134, 134, 134);
+  height: 100%;
+}
 .search-result .carousel .back-button,
 .search-result .carousel .next-button {
   position: absolute;
@@ -83,12 +87,12 @@ h1, h2, h3, h4 {
   color:rgb(224, 224, 224);
   font-size: 8px;
 }
-.search-result .carousel img {
-  max-width: 300px;
-  max-height: 200px;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
+.search-result .carousel .img {
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
 }
 
 .search-result .agency-details {
