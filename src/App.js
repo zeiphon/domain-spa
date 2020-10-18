@@ -30,7 +30,8 @@ function App() {
   const [results, setResults] = React.useState([]);
   const [searchResultList, setSearchResultList] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [searchResultSuburbs, setSearchResultSuburbs] = React.useState('');
+  const [requestedSuburbs, setRequestedSuburbs] = React.useState('');
+  const [suburbCountsString, setSuburbCountsString] = React.useState('');
 
   const setStateFromChangeEvent = function(evt, setFunc) {
       setFunc(evt.currentTarget.value);
@@ -38,6 +39,11 @@ function App() {
 
   const setResultsWithClosestStops = function(r) {
     const resultsWithClosestStops = r
+        .filter(x => {
+            return x?.listing?.propertyDetails
+                && x.listing.propertyDetails.latitude
+                && x.listing.propertyDetails.longitude;
+        })
         .map(x => {
             x.closestStops = findClosestStops(x.listing.propertyDetails.latitude, x.listing.propertyDetails.longitude);
             return x;
@@ -50,7 +56,7 @@ function App() {
   }
 
   const runSearch = async function() {
-    setSearchResultSuburbs(
+    setRequestedSuburbs(
         suburbs
             .split(',')
             .map(x => x.trim())
@@ -117,7 +123,51 @@ function App() {
         ? results.map(x => <SearchResult key={x.listing.listingSlug} closestStops={x.closestStops} data={x} />)
         : <><span className="d-block pl-3">No properties found.</span></>;
     setSearchResultList(list);
+
+    const suburbCounts = {};
+    results.map(x => {
+        if (x?.listing?.propertyDetails) {
+            const upperCaseSuburb = x.listing.propertyDetails.suburb.toUpperCase();
+            if (suburbCounts[upperCaseSuburb]) {
+                suburbCounts[upperCaseSuburb]++;
+            } else {
+                suburbCounts[upperCaseSuburb] = 1;
+            }
+        }
+    });
+    const orderedSuburbCounts = orderObjectPropertiesByCount(suburbCounts);
+    let counts = [];
+    for (const s in orderedSuburbCounts) {
+        counts.push(`${toTitleCase(s)} (${orderedSuburbCounts[s]})`);
+    }
+
+    // Add in any that suburbs from the search that didn't have any search results
+    const requestedSuburbsArray = requestedSuburbs.split(', ').filter(r => !!r);
+    const keys = Object.keys(orderedSuburbCounts);
+    for (const r of requestedSuburbsArray) {
+        if (!keys.find(x => x === r.toUpperCase())) {
+            counts.push(`${toTitleCase(r)} (0)`);
+        }
+    }
+    setSuburbCountsString(counts.join(', '));
   }, [results]);
+
+  function toTitleCase(input) {
+    return input.split(' ')
+        .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
+        .join(' ');
+  }
+
+  function orderObjectPropertiesByCount(obj) {
+    const keys = Object.keys(obj);
+    const sorted = keys.sort(function(a,b){return obj[b]-obj[a]});
+    const result = {};
+    for (const k in sorted) {
+        const sortedKey = sorted[k];
+        result[sortedKey] = obj[sortedKey];
+    };
+    return result;
+  }
 
   return (
     <div className="App py-2 container-fluid">
@@ -141,11 +191,11 @@ function App() {
             {isLoading
             ? spinner
             : <>
-                {searchResultSuburbs
+                {results && results.length > 0 && requestedSuburbs
                 ?
                     <div className="row">
                         <div className="col">
-                            <span>Showing {searchResultList.length} properties in {searchResultSuburbs}</span>
+                            <span>Showing {searchResultList.length} properties in {suburbCountsString}</span>
                         </div>
                     </div>
                 : <></>
