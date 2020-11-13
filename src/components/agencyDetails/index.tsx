@@ -1,12 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
+import AgentDetails from '../agentDetails';
 
 function AgencyDetails(props: {
     id: string,
     name: string,
     logoUrl: string,
     preferredColourHex: string,
-    contacts: [{ name: string, photoUrl: string }]
+    contacts: { name: string, photoUrl: string }[]
 }) {
     const { id, name, logoUrl, preferredColourHex, contacts } = props;
 
@@ -17,7 +18,7 @@ function AgencyDetails(props: {
 
     return (
         <React.Fragment key={id}>
-            <div className={`agency-details pl-3 ${open ? "open" : "closed"}`} style={{backgroundColor: agentBackgroundColour, color: agentTextColour}}>
+            <div className={`agency-details px-3 ${open ? "open" : "closed"}`} style={{backgroundColor: agentBackgroundColour, color: agentTextColour}}>
                 <span className="toggle mr-2" onClick={() => setOpen(!open)}><i className={`icon-${open ? "up" : "down"}-open`} /></span>
                 {!logoUrl &&
                 <span className="agency-name">{name}</span>
@@ -25,16 +26,23 @@ function AgencyDetails(props: {
                 {logoUrl &&
                 <img className="agency-logo" src={logoUrl} />
                 }
-                {contacts && contacts[0] && contacts[0].photoUrl &&
+                {!open && contacts && contacts[0] && contacts[0].photoUrl &&
                 <img className="agent-photo" style={{border: `3px solid ${agentBackgroundColour}`}} src={contacts[0].photoUrl} />
                 }
                 {open &&
                 <React.Fragment>
-                    {contacts && contacts[0] &&
-                        <span className="agent-name">{contacts[0].name}</span>
+                    {contacts &&
+                        <div className="py-3">
+                            {contacts[0] &&
+                            <AgentDetails id={`${id}-agent-0`} name={contacts[0].name} photoUrl={contacts[0].photoUrl} />
+                            }
+                            {contacts[1] &&
+                            <AgentDetails id={`${id}-agent-1`} name={contacts[1].name} photoUrl={contacts[1].photoUrl} />
+                            }
+                        </div>
                     }
-                    <div className="info">
-                        <span>Agency: {name}</span>
+                    <div className="info mb-2">
+                        <span>{name}</span>
                     </div>
                 </React.Fragment>
                 }

@@ -100,9 +100,6 @@ h1, h2, h3, h4 {
   font-size: 14px;
   position: relative;
 }
-.search-result .agency-details.open {
-  height: 80px;
-}
 .search-result .agency-details.closed {
   height: 30px;
 }
@@ -120,19 +117,16 @@ h1, h2, h3, h4 {
   border-radius: 50%;
   height: 50px;
   width: 50px;
-  position: absolute;
-  right: 5px;
-}
-.search-result .agency-details.open .agent-photo {
-  top: -10px;
 }
 .search-result .agency-details.closed .agent-photo {
+  position: absolute;
+  right: 5px;
   bottom: -10px;
 }
 .search-result .agency-details .agent-name {
-  position: absolute;
+  /* position: absolute;
   top: 40px;
-  right: 10px;
+  right: 10px; */
   font-size: 10px;
   max-width: 50px;
   word-wrap: break-word;
