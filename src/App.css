@@ -95,43 +95,6 @@ h1, h2, h3, h4 {
   background-position: 50% 50%;
 }
 
-.search-result .agency-details {
-  width: 100%;
-  font-size: 14px;
-  position: relative;
-}
-.search-result .agency-details.closed {
-  height: 30px;
-}
-.search-result .agency-details .info {
-  max-width:200px;
-}
-.search-result .agency-details .agency-name {
-  line-height: 30px;
-}
-.search-result .agency-details .agency-logo {
-  max-width: 150px;
-  height: 30px;
-}
-.search-result .agency-details .agent-photo {
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-}
-.search-result .agency-details.closed .agent-photo {
-  position: absolute;
-  right: 5px;
-  bottom: -10px;
-}
-.search-result .agency-details .agent-name {
-  /* position: absolute;
-  top: 40px;
-  right: 10px; */
-  font-size: 10px;
-  max-width: 50px;
-  word-wrap: break-word;
-}
-
 .search-result .icon-bed,
 .search-result .icon-cab {
   margin-left: -2px;
