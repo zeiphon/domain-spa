@@ -1,5 +1,6 @@
 import React from 'react';
 import NumericSearchField from '../numericSearchField';
+import './search.scss';
 import SuburbSearch from '../suburbSearch';
 
 function Search(props: any) {

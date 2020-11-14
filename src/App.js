@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import Search from './components/search';
 import Footer from './components/footer';
 import axios from 'axios';

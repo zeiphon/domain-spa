@@ -2,6 +2,7 @@ import React from 'react';
 import AgencyDetails from '../agencyDetails';
 import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
+import './searchResult.scss';
 
 function SearchResult(props: any) {
     const {

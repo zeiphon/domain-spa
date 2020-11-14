@@ -1,0 +1,22 @@
+#output {
+  min-height: 200px;
+}
+
+#footer {
+  color: rgb(197, 197, 197);
+  font-size: 8pt;
+  text-align: center;
+}
+
+label, input {
+  margin: 0 10px 10px 0;
+}
+
+h1, h2, h3, h4 {
+  color: #555;
+  text-align: center;
+}
+
+.border-secondary {
+  border-color: #ccc !important;
+}

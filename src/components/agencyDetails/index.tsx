@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import AgentDetails from '../agentDetails';
+import './agencyDetails.scss';
 
 function AgencyDetails(props: {
     id: string,
