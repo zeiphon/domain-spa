@@ -1,4 +1,5 @@
 import React from 'react';
+import './numericSearchField.scss';
 
 function NumericSearchField(props: any) {
     const { defaultValue, updateHandler, interval, icon, type } = props;

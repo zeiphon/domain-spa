@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import './simpleCarousel.scss';
 
 function SimpleCarousel(props: { id: string, urls: string[], altText: string }) {
     const {

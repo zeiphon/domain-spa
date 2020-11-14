@@ -1,0 +1,20 @@
+.search-result {
+    max-width: 300px;
+
+    .icon-bed,
+    .icon-cab {
+        margin-left: -2px;
+        margin-right: 5px;
+    }
+    .icon-bath {
+        margin-right: 3px;
+    }
+    .icon-train {
+        margin-left: -4px;
+        margin-right: 6px;
+    }
+    .icon-wrapper {
+        margin-right: 10px;
+        display: inline-block;
+    }
+}

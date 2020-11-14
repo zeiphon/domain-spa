@@ -1,0 +1,17 @@
+#search {
+    overflow-x: hidden;
+
+    input[type=text] {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    input[type=number] {
+        width: 100%;
+        max-width: 80px;
+    }
+
+    label {
+        margin-bottom: 0px;
+    }
+}
