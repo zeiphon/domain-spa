@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AgencyDetails from '../agencyDetails';
 import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
@@ -6,9 +6,32 @@ import './searchResult.scss';
 
 function SearchResult(props: any) {
     const {
-        closestStops, data
+        closestStops, data //, isArchivedInStorage
     } = props;
 
+    const _archivedDataLocalStorageKey = 'DPS_archivedListings';
+    const getArchivedDataFromLocalStorage = (): {} => {
+        return JSON.parse(localStorage.getItem(_archivedDataLocalStorageKey) ?? '{}');
+    }
+
+    const isArchivedInStorage = (key: string) => {
+        const storageData = getArchivedDataFromLocalStorage();
+        return storageData && storageData[key];
+    }
+
+    function saveInLocalStorage(key: string, archive: boolean): void {
+        const storedData = getArchivedDataFromLocalStorage();
+
+        if (archive) {
+            storedData[key] = true;
+        } else {
+            delete storedData[key];
+        }
+
+        localStorage.setItem(_archivedDataLocalStorageKey, JSON.stringify(storedData));
+    }
+
+    const [isArchived, setIsArchived] = useState(isArchivedInStorage(data.listing.listingSlug));
     const href = `https://domain.com.au/${data.listing.listingSlug}`;
     const streetAddress = data.listing.propertyDetails.unitNumber
         ? `${data.listing.propertyDetails.unitNumber}/${data.listing.propertyDetails.streetNumber} ${data.listing.propertyDetails.street}`
@@ -34,7 +57,7 @@ function SearchResult(props: any) {
     return (
         <React.Fragment key={data.listing.listingSlug}>
             <div className="col-md-4 col-lg-3 my-2">
-                <div className="search-result mx-auto h-100">
+                <div className={`search-result mx-auto h-100 ${isArchived ? 'archived' : ''}`}>
                     <div className="border border-secondary h-100 shadow d-flex flex-column ">
                         <div className="px-0 text-center overflow-hidden carousel">
                             <SimpleCarousel
@@ -62,7 +85,11 @@ function SearchResult(props: any) {
                             <span className="row">{closestStopsMarkup}</span>
                         </div>
                         <div className="row text-center mb-2">
-                            <span className="col-12"><NewTabLink href={href} label="View" /></span>
+                            <span className="col-6"><NewTabLink href={href} label="View" /></span>
+                            <span className="col-6"><a href="javascript:(0);" onClick={() => {
+                                setIsArchived(!isArchived)
+                                saveInLocalStorage(data.listing.listingSlug, !isArchived);
+                            }}>{isArchived ? 'Unarchive' : 'Archive'}</a></span>
                         </div>
                     </div>
                 </div>

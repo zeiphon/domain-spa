@@ -120,7 +120,12 @@ function App() {
 
   React.useEffect(() => {
     const list = results && results.length > 0
-        ? results.map(x => <SearchResult key={x.listing.listingSlug} closestStops={x.closestStops} data={x} />)
+        ? results.map(x =>
+            <SearchResult
+                key={x.listing.listingSlug}
+                closestStops={x.closestStops}
+                data={x}
+            />)
         : <><span className="d-block pl-3">No properties found.</span></>;
     setSearchResultList(list);
 
