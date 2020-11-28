@@ -30,6 +30,7 @@ function App() {
   const [results, setResults] = React.useState([]);
   const [searchResultList, setSearchResultList] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [showArchived, setShowArchived] = React.useState(false);
   const [requestedSuburbs, setRequestedSuburbs] = React.useState('');
   const [suburbCountsString, setSuburbCountsString] = React.useState('');
 
@@ -125,6 +126,7 @@ function App() {
                 key={x.listing.listingSlug}
                 closestStops={x.closestStops}
                 data={x}
+                showArchived={showArchived}
             />)
         : <><span className="d-block pl-3">No properties found.</span></>;
     setSearchResultList(list);
@@ -155,7 +157,7 @@ function App() {
         }
     }
     setSuburbCountsString(counts.join(', '));
-  }, [results]);
+  }, [results, showArchived]);
 
   function toTitleCase(input) {
     return input.split(' ')
@@ -201,6 +203,10 @@ function App() {
                     <div className="row">
                         <div className="col">
                             <span>Showing {searchResultList.length} properties in {suburbCountsString}</span>
+                        </div>
+                        <div className="col-12">
+                            <input id="showArchivedCheckbox" type="checkbox" defaultChecked={showArchived} onChange={() => { setShowArchived(!showArchived) }} />
+                            <label htmlFor="showArchivedCheckbox">Show archived properties</label>
                         </div>
                     </div>
                 : <></>

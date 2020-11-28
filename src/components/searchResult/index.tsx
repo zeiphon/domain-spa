@@ -6,7 +6,7 @@ import './searchResult.scss';
 
 function SearchResult(props: any) {
     const {
-        closestStops, data //, isArchivedInStorage
+        closestStops, data, showArchived //, isArchivedInStorage
     } = props;
 
     const _archivedDataLocalStorageKey = 'DPS_archivedListings';
@@ -54,7 +54,8 @@ function SearchResult(props: any) {
         .filter(x => x.category === "Image")
         .map(y => `${y.url}/500x500`);
 
-    return (
+    return !isArchived || (isArchived && showArchived)
+    ? (
         <React.Fragment key={data.listing.listingSlug}>
             <div className="col-md-4 col-lg-3 my-2">
                 <div className={`search-result mx-auto h-100 ${isArchived ? 'archived' : ''}`}>
@@ -95,7 +96,8 @@ function SearchResult(props: any) {
                 </div>
             </div>
         </React.Fragment>
-    );
+    )
+    : <React.Fragment />;
 }
 
 export default SearchResult;
