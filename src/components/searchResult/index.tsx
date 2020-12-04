@@ -90,7 +90,7 @@ function SearchResult(props: any) {
                             <span className="col-6"><a href="javascript:(0);" onClick={() => {
                                 setIsArchived(!isArchived)
                                 saveInLocalStorage(data.listing.listingSlug, !isArchived);
-                            }}>{isArchived ? 'Unarchive' : 'Archive'}</a></span>
+                            }}>{isArchived ? 'Show' : 'Hide'}</a></span>
                         </div>
                     </div>
                 </div>

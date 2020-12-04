@@ -17,15 +17,32 @@ const getQueryVariable = function(variable) {
     return false;
 };
 
+const _searchParamsLocalStorageKey = 'DPS_searchParams';
+  const loadSearchParamsFromLocalStorage = function() {
+      return JSON.parse(localStorage.getItem(_searchParamsLocalStorageKey));
+  }
+  const saveSearchParamsToLocalStorage = function(minBeds, minBaths, minCarSpaces, maxPrice, maxDistFromTrain, suburbArray) {
+    window.localStorage.setItem(_searchParamsLocalStorageKey, JSON.stringify({
+        'minBeds': minBeds,
+        'minBaths': minBaths,
+        'minCarSpaces': minCarSpaces,
+        'maxPrice': maxPrice,
+        'maxDistFromTrain': maxDistFromTrain,
+        'suburbs': suburbArray,
+    }));
+  };
+
 function App() {
   const suburbsFromQueryString = getQueryVariable('suburbs');
+  const savedSearchParams = loadSearchParamsFromLocalStorage() ?? {};
 
-  const [suburbs, setSuburbs] = React.useState(suburbsFromQueryString ? decodeURI((suburbsFromQueryString)) : '');
-  const [minBeds, setMinBeds] = React.useState(2);
-  const [minBaths, setMinBaths] = React.useState(1);
-  const [minCarSpaces, setMinCarSpaces] = React.useState(1);
-  const [maxPrice, setMaxPrice] = React.useState(650000);
-  const [maxDistanceFromTrain, setMaxDistanceFromTrain] = React.useState(1.25);
+  const defaultSuburbs = savedSearchParams.suburbs ?? (suburbsFromQueryString ? decodeURI((suburbsFromQueryString)) : '');
+  const [suburbs, setSuburbs] = React.useState(defaultSuburbs);
+  const [minBeds, setMinBeds] = React.useState(savedSearchParams.minBeds ?? 2);
+  const [minBaths, setMinBaths] = React.useState(savedSearchParams.minBaths ?? 1);
+  const [minCarSpaces, setMinCarSpaces] = React.useState(savedSearchParams.minCarSpaces ?? 1);
+  const [maxPrice, setMaxPrice] = React.useState(savedSearchParams.maxPrice ?? 650000);
+  const [maxDistanceFromTrain, setMaxDistanceFromTrain] = React.useState(savedSearchParams.maxDistFromTrain ?? 1.25);
 
   const [results, setResults] = React.useState([]);
   const [searchResultList, setSearchResultList] = React.useState([]);
@@ -57,13 +74,13 @@ function App() {
   }
 
   const runSearch = async function() {
-    setRequestedSuburbs(
-        suburbs
-            .split(',')
-            .map(x => x.trim())
-            .sort()
-            .join(', ')
-    );
+    const reqSuburbs = suburbs
+        .split(',')
+        .map(x => x.trim())
+        .sort()
+        .join(', ');
+    setRequestedSuburbs(reqSuburbs);
+    saveSearchParamsToLocalStorage(minBeds, minBaths, minCarSpaces, maxPrice, maxDistanceFromTrain, reqSuburbs);
     const key = getQueryVariable('api_key');
     const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
     const suburbArray = suburbs.split(',').map((s) => {
@@ -206,7 +223,7 @@ function App() {
                         </div>
                         <div className="col-12">
                             <input id="showArchivedCheckbox" type="checkbox" defaultChecked={showArchived} onChange={() => { setShowArchived(!showArchived) }} />
-                            <label htmlFor="showArchivedCheckbox">Show archived properties</label>
+                            <label htmlFor="showArchivedCheckbox">Show hidden properties</label>
                         </div>
                     </div>
                 : <></>

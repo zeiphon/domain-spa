@@ -31,7 +31,7 @@ function Search(props: any) {
                         <label htmlFor="suburb">Suburb(s):</label>
                     </div>
                     <div className="col">
-                        <input id="suburb" type="text" placeholder="e.g Kew, Rye" defaultValue={suburbs} onChange={updateSuburbs} onBlur={updateSuburbs} />
+                        <textarea id="suburb" rows={1} placeholder="e.g Kew, Rye" defaultValue={suburbs} onChange={updateSuburbs} onBlur={updateSuburbs} />
                     </div>
                 </div>
                 <NumericSearchField type="min" icon="icon-bed" defaultValue={minBeds} updateHandler={updateMinBeds} interval={1} />
