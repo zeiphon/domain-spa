@@ -15,9 +15,11 @@ function SimpleCarousel(props: { id: string, urls: string[], altText: string }) 
         const icon = i === index ? "circle" : "circle-empty";
         return <i key={`dot_${id}_${i}`}className={`icon-${icon}`} />
     });
-    const imgStyle = {
+    const imgStyle = urls[index]
+    ? {
         backgroundImage: `url('${urls[index]}')`,
     }
+    : {};
 
     /* Preload adjacent images to prevent flicker on scroll */
     const previousImage = <img src={urls[previousIndex]} style={{display: "none"}} />

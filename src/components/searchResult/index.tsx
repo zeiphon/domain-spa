@@ -50,7 +50,7 @@ function SearchResult(props: any) {
                 {y.stop_name.replace(' Station', '')}: {Math.round(y.distance * 10) / 10}km
             </span>
         });
-    const imageUrls = data.listing.media
+    const imageUrls = (data.listing.media ?? [])
         .filter(x => x.category === "Image")
         .map(y => `${y.url}/500x500`);
 
