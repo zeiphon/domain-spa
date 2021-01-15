@@ -5,6 +5,8 @@ import Footer from './components/footer';
 import axios from 'axios';
 import SearchResult from './components/searchResult';
 import findClosestStops from './utils/distance'
+import { isArchivedInStorage, loadSearchParamsFromLocalStorage, saveSearchParamsToLocalStorage } from './utils/localStorageHelper';
+import DomainListingWrapper from './types/domain';
 
 //https://css-tricks.com/snippets/javascript/get-url-variables/
 const getQueryVariable = function(variable) {
@@ -17,26 +19,20 @@ const getQueryVariable = function(variable) {
     return false;
 };
 
-const _searchParamsLocalStorageKey = 'DPS_searchParams';
-  const loadSearchParamsFromLocalStorage = function() {
-      return JSON.parse(localStorage.getItem(_searchParamsLocalStorageKey));
-  }
-  const saveSearchParamsToLocalStorage = function(minBeds, minBaths, minCarSpaces, maxPrice, maxDistFromTrain, suburbArray) {
-    window.localStorage.setItem(_searchParamsLocalStorageKey, JSON.stringify({
-        'minBeds': minBeds,
-        'minBaths': minBaths,
-        'minCarSpaces': minCarSpaces,
-        'maxPrice': maxPrice,
-        'maxDistFromTrain': maxDistFromTrain,
-        'suburbs': suburbArray,
-    }));
-  };
+interface DomainListingWrapperWithClosestStops extends DomainListingWrapper {
+    closestStops: Array<ClosestStop>;
+}
+
+interface ClosestStop {
+    stop_name: string;
+    distance: number;
+}
 
 function App() {
   const suburbsFromQueryString = getQueryVariable('suburbs');
   const savedSearchParams = loadSearchParamsFromLocalStorage() ?? {};
 
-  const defaultSuburbs = savedSearchParams.suburbs ?? (suburbsFromQueryString ? decodeURI((suburbsFromQueryString)) : '');
+  const defaultSuburbs = savedSearchParams.suburbCsv ?? (suburbsFromQueryString ? decodeURI((suburbsFromQueryString)) : '');
   const [suburbs, setSuburbs] = React.useState(defaultSuburbs);
   const [minBeds, setMinBeds] = React.useState(savedSearchParams.minBeds ?? 2);
   const [minBaths, setMinBaths] = React.useState(savedSearchParams.minBaths ?? 1);
@@ -44,27 +40,28 @@ function App() {
   const [maxPrice, setMaxPrice] = React.useState(savedSearchParams.maxPrice ?? 650000);
   const [maxDistanceFromTrain, setMaxDistanceFromTrain] = React.useState(savedSearchParams.maxDistFromTrain ?? 1.25);
 
-  const [results, setResults] = React.useState([]);
-  const [searchResultList, setSearchResultList] = React.useState([]);
+  const [results, setResults] = React.useState(new Array<DomainListingWrapperWithClosestStops>());
+  const [searchResultList, setSearchResultList] = React.useState(new Array<JSX.Element>());
   const [isLoading, setIsLoading] = React.useState(false);
   const [showArchived, setShowArchived] = React.useState(false);
   const [requestedSuburbs, setRequestedSuburbs] = React.useState('');
   const [suburbCountsString, setSuburbCountsString] = React.useState('');
+  const [resultsCount, setResultsCount] = React.useState(0);
 
   const setStateFromChangeEvent = function(evt, setFunc) {
       setFunc(evt.currentTarget.value);
   }
 
-  const setResultsWithClosestStops = function(r) {
-    const resultsWithClosestStops = r
+  const setResultsWithClosestStops = function(r: DomainListingWrapper[]) {
+    const resultsWithClosestStops: DomainListingWrapperWithClosestStops[] = r
         .filter(x => {
             return x?.listing?.propertyDetails
                 && x.listing.propertyDetails.latitude
                 && x.listing.propertyDetails.longitude;
         })
         .map(x => {
-            x.closestStops = findClosestStops(x.listing.propertyDetails.latitude, x.listing.propertyDetails.longitude);
-            return x;
+            const closestStops: ClosestStop[] = findClosestStops(x.listing.propertyDetails.latitude, x.listing.propertyDetails.longitude);
+            return { ...x, closestStops: closestStops };
         })
         .filter(x => {
             return x.closestStops.length > 0
@@ -109,7 +106,7 @@ function App() {
         "sortKey": "DateListed",
         "direction": "Descending"
       },
-      "pageSize": 100
+      "pageSize": 200
     };
 
     if (key) {
@@ -145,10 +142,11 @@ function App() {
                 data={x}
                 showArchived={showArchived}
             />)
-        : <><span className="d-block pl-3">No properties found.</span></>;
+        : [];
     setSearchResultList(list);
 
     const suburbCounts = {};
+    let hiddenResultCount = 0;
     results.map(x => {
         if (x?.listing?.propertyDetails) {
             const upperCaseSuburb = x.listing.propertyDetails.suburb.toUpperCase();
@@ -158,9 +156,13 @@ function App() {
                 suburbCounts[upperCaseSuburb] = 1;
             }
         }
+        if (isArchivedInStorage(x.listing.listingSlug)) {
+            hiddenResultCount += 1; // TODO convert this to a map for immutability?
+        }
     });
+    setResultsCount(showArchived ? list.length : list.length - hiddenResultCount);
     const orderedSuburbCounts = orderObjectPropertiesByCount(suburbCounts);
-    let counts = [];
+    let counts: string[] = [];
     for (const s in orderedSuburbCounts) {
         counts.push(`${toTitleCase(s)} (${orderedSuburbCounts[s]})`);
     }
@@ -219,7 +221,7 @@ function App() {
                 ?
                     <div className="row">
                         <div className="col">
-                            <span>Showing {searchResultList.length} properties in {suburbCountsString}</span>
+                            <span>Showing {resultsCount} properties in {suburbCountsString}</span>
                         </div>
                         <div className="col-12">
                             <input id="showArchivedCheckbox" type="checkbox" defaultChecked={showArchived} onChange={() => { setShowArchived(!showArchived) }} />
@@ -228,7 +230,11 @@ function App() {
                     </div>
                 : <></>
                 }
-                <div className="row">{searchResultList}</div>
+                <div className="row">{
+                    searchResultList.length > 0
+                        ? searchResultList
+                        : <><span className="d-block pl-3">No properties found.</span></>
+                }</div>
             </>
             }
           </div>
@@ -241,7 +247,7 @@ function App() {
 
 export default App;
 
-function getMockResults() {
+function getMockResults(): DomainListingWrapper[] {
   return [
     {
         "type": "PropertyListing",

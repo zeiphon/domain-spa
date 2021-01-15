@@ -3,33 +3,12 @@ import AgencyDetails from '../agencyDetails';
 import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
 import './searchResult.scss';
+import { isArchivedInStorage, saveInLocalStorage, getArchivedDataFromLocalStorage } from '../../utils/localStorageHelper';
 
 function SearchResult(props: any) {
     const {
         closestStops, data, showArchived //, isArchivedInStorage
     } = props;
-
-    const _archivedDataLocalStorageKey = 'DPS_archivedListings';
-    const getArchivedDataFromLocalStorage = (): {} => {
-        return JSON.parse(localStorage.getItem(_archivedDataLocalStorageKey) ?? '{}');
-    }
-
-    const isArchivedInStorage = (key: string) => {
-        const storageData = getArchivedDataFromLocalStorage();
-        return storageData && storageData[key];
-    }
-
-    function saveInLocalStorage(key: string, archive: boolean): void {
-        const storedData = getArchivedDataFromLocalStorage();
-
-        if (archive) {
-            storedData[key] = true;
-        } else {
-            delete storedData[key];
-        }
-
-        localStorage.setItem(_archivedDataLocalStorageKey, JSON.stringify(storedData));
-    }
 
     const [isArchived, setIsArchived] = useState(isArchivedInStorage(data.listing.listingSlug));
     const href = `https://domain.com.au/${data.listing.listingSlug}`;
