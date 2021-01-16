@@ -44,6 +44,6 @@ export function saveSearchParamsToLocalStorage(
         'minCarSpaces': minCarSpaces,
         'maxPrice': maxPrice,
         'maxDistFromTrain': maxDistFromTrain,
-        'suburbs': suburbCsv,
+        'suburbCsv': suburbCsv,
     }));
 };
