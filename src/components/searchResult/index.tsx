@@ -65,11 +65,11 @@ function SearchResult(props: any) {
                             <span className="row">{closestStopsMarkup}</span>
                         </div>
                         <div className="row text-center mb-2">
-                            <span className="col-6"><NewTabLink href={href} label="View" /></span>
-                            <span className="col-6"><a href="javascript:(0);" onClick={() => {
+                            <span className="col-6"><a href="javascript:(0);" className={!isArchived ? "text-danger" : ""} onClick={() => {
                                 setIsArchived(!isArchived)
                                 saveInLocalStorage(data.listing.listingSlug, !isArchived);
                             }}>{isArchived ? 'Show' : 'Hide'}</a></span>
+                            <span className="col-6"><NewTabLink href={href} label="View" className="text-success" /></span>
                         </div>
                     </div>
                 </div>
