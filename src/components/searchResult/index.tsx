@@ -33,6 +33,59 @@ function SearchResult(props: any) {
         .filter(x => x.category === "Image")
         .map(y => `${y.url}/500x500`);
 
+    const parsePropertyType = (propertyType: string, unitNumber: string, description: string) => {
+        switch (propertyType.toLowerCase()) {
+            case "NewApartments".toLowerCase():
+                return "New Apartment"
+            case "ApartmentUnitFlat".toLowerCase():
+                // Check the description first, to see if apartment or unit are mentioned
+                if (description.toLowerCase().indexOf("apartment") >= 0) {
+                    return "Apartment";
+                }
+                if (description.toLowerCase().indexOf("unit") >= 0) {
+                    return "Unit";
+                }
+
+                // If it's only numeric, use the value to guess if it's an apartment
+                if (new RegExp(/^\d+$/).test(unitNumber)) {
+                    const numericUnitNumber = parseInt(unitNumber);
+
+                    // If it's > 99, it's almost definitely an apartment
+                    if (numericUnitNumber > 99) {
+                        return "Apartment";
+                    }
+
+                    // If it's < 20, it's possibly a unit
+                    if (numericUnitNumber < 30) {
+                        return "Unit";
+                    }
+                } else {
+                    // If it contains a G, it's likely a ground floor apartment
+                    if (unitNumber.toLowerCase().indexOf("g") >= 0) {
+                        return "Apartment";
+                    }
+
+                    // If it contains an A or B, it's potentially a subdivision so likely a unit
+                    if (new RegExp(/[ABab]/).test(unitNumber)) {
+                        return "Unit";
+                    }
+                }
+
+                // If nothing matched, return a combined value
+                return "Apartment / Unit";
+            case "House".toLowerCase():
+            case "Townhouse".toLowerCase():
+            default:
+                return propertyType;
+        }
+    }
+
+    const propertyType = parsePropertyType(
+        data.listing.propertyDetails.propertyType,
+        data.listing.propertyDetails.unitNumber,
+        data.listing.summaryDescription
+    );
+
     return !isArchived || (isArchived && showArchived)
     ? (
         <React.Fragment key={data.listing.listingSlug}>
@@ -58,6 +111,11 @@ function SearchResult(props: any) {
                             <span className="d-block">{streetAddress}</span>
                             <span className="d-block">{data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}</span>
                             <span className="d-block">
+                                <span className="badge badge-pill badge-secondary">
+                                    {propertyType}
+                                </span>
+                            </span>
+                            <span className="d-block">
                                 <span className="icon-wrapper"><i className="icon-bed" />{data.listing.propertyDetails.bedrooms}</span>
                                 <span className="icon-wrapper"><i className="icon-bath" />{data.listing.propertyDetails.bathrooms}</span>
                                 <span className="icon-wrapper"><i className="icon-cab" />{data.listing.propertyDetails.carspaces}</span>
@@ -65,11 +123,11 @@ function SearchResult(props: any) {
                             <span className="row">{closestStopsMarkup}</span>
                         </div>
                         <div className="row text-center mb-2">
+                            <span className="col-6"><NewTabLink href={href} label="View" className="text-success" /></span>
                             <span className="col-6"><a href="javascript:(0);" className={!isArchived ? "text-danger" : ""} onClick={() => {
                                 setIsArchived(!isArchived)
                                 saveInLocalStorage(data.listing.listingSlug, !isArchived);
                             }}>{isArchived ? 'Show' : 'Hide'}</a></span>
-                            <span className="col-6"><NewTabLink href={href} label="View" className="text-success" /></span>
                         </div>
                     </div>
                 </div>
