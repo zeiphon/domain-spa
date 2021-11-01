@@ -262,10 +262,10 @@ function App() {
                     </div>
                 : <></>
                 }
-                <div className="row">{
+                <div className={`d-flex flex-wrap ${searchResultList.length > 0 ? 'justify-content-around' : ''}`}>{
                     searchResultList.length > 0
                         ? searchResultList
-                        : <><span className="d-block pl-3">No properties found.</span></>
+                        : <span className="d-block">No properties found.</span>
                 }</div>
             </>
             }

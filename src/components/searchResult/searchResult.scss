@@ -1,5 +1,4 @@
 .search-result {
-    max-width: 300px;
 
     .icon-bed,
     .icon-cab {
@@ -17,6 +16,13 @@
         margin-right: 10px;
         display: inline-block;
     }
+}
+
+.search-result-wrapper {
+    width: 0;
+    flex: 1 1 0;
+    min-width: 300px;
+    max-width: 300px;
 }
 
 .search-result.archived {
