@@ -41,7 +41,7 @@ function Search(props: any) {
                 <NumericSearchField type="max" icon="icon-train" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} interval={0.25} />
 
                 <div className="row">
-                    <div className="offset-lg-4 col-lg-8 mt-2">
+                    <div className="ml-3 mt-2">
                         <input type="button" value="Search" onClick={runSearch} disabled={!suburbs} />
                     </div>
                 </div>
