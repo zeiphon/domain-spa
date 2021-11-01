@@ -228,7 +228,7 @@ function App() {
         </div>
       }
       {offset < 30 &&
-        <div className="d-flex flex-row justify-content-around mt-3 py-2 sticky bg-white border-bottom border-secondary">
+        <div className="d-flex flex-row justify-content-around pt-3 pb-2 sticky bg-white border-bottom border-secondary">
             <div className={stickyBarItemClass}>
                 <i className="icon-bed mr-1 mr-sm-2" />{minBeds}+
             </div>
@@ -239,7 +239,7 @@ function App() {
                 <i className="icon-cab mr-1 mr-sm-2" />{minCarSpaces}+
             </div>
             <div className={stickyBarItemClass}>
-                <i className="icon-dollar mr-sm-1" />&lt;{maxPrice >= oneMil ? `${(maxPrice / oneMil).toFixed(2)}M` :  `${(maxPrice / 1000).toFixed(2)}K`}
+                <i className="icon-dollar mr-sm-1" />&lt;{maxPrice >= oneMil ? `${(maxPrice / oneMil).toFixed(2)}M` : `${(maxPrice / 1000)}K`}
             </div>
             <div className={stickyBarItemClass}>
                 <i className="icon-train mr-1 mr-sm-2" />&lt;{maxDistanceFromTrain} km
