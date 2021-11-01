@@ -198,7 +198,7 @@ function App() {
   return (
     <div className="App py-2 container-fluid">
       <h3 className="py-2 bg-light">Domain Property Search</h3>
-      <div className="row no-gutters mt-3">
+      <div className="row mt-3">
         <div className="col-12 mb-2 pb-2 pb-sm-0">
             <div className="border border-secondary rounded bg-white p-2">
                 <Search
@@ -212,6 +212,8 @@ function App() {
                 />
             </div>
         </div>
+      </div>
+      <div className="row">
         <div className="col-12">
           <div className="border border-secondary rounded bg-white p-2 px-3" id="output">
             {isLoading
