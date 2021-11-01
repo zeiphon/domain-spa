@@ -1,13 +1,18 @@
 .numeric-search-field {
     width: 295px;
+    min-width: 230px;
+
+    .controls {
+        width: 100%;
+    }
 
     .value {
-        min-width: 45%;
+        min-width: 60%;
         text-align: center;
     }
     .down,
     .up {
-        min-width: 15%;
+        min-width: 20%;
         text-align: center;
         cursor: pointer;
     }

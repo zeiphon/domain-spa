@@ -3,7 +3,7 @@
 
     textarea {
         width: 100%;
-        max-width: 200px;
+        min-height: 30px;
     }
 
     input[type=number] {
@@ -13,5 +13,9 @@
 
     label {
         margin-bottom: 0px;
+    }
+
+    .search-button {
+        min-height: 34px;
     }
 }

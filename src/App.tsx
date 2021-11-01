@@ -199,7 +199,7 @@ function App() {
     <div className="App py-2 container-fluid">
       <h3 className="py-2 bg-light">Domain Property Search</h3>
       <div className="row no-gutters mt-3">
-        <div className="col-md-4 col-lg-3 pr-sm-2 pb-2 pb-sm-0">
+        <div className="col-12 mb-2 pb-2 pb-sm-0">
             <div className="border border-secondary rounded bg-white p-2">
                 <Search
                     suburbs={suburbs} updateSuburbs={(evt) => setStateFromChangeEvent(evt, setSuburbs)}
@@ -212,7 +212,7 @@ function App() {
                 />
             </div>
         </div>
-        <div className="col-md-8">
+        <div className="col-12">
           <div className="border border-secondary rounded bg-white p-2 px-3" id="output">
             {isLoading
             ? spinner
