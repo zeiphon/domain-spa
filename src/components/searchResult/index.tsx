@@ -4,6 +4,7 @@ import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
 import './searchResult.scss';
 import { isArchivedInStorage, saveInLocalStorage, getArchivedDataFromLocalStorage } from '../../utils/localStorageHelper';
+import { getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
 
 function SearchResult(props: any) {
     const {
@@ -86,6 +87,11 @@ function SearchResult(props: any) {
         data.listing.summaryDescription
     );
 
+    const openTimes = data?.listing?.inspectionSchedule?.times ?? [];
+    const openTime = openTimes[0]
+        ? `${getShortDay(openTimes[0].openingTime )} ${getTwelveHourTime(openTimes[0].openingTime)}`
+        : undefined;
+
     return !isArchived || (isArchived && showArchived)
     ? (
         <React.Fragment key={data.listing.listingSlug}>
@@ -114,6 +120,11 @@ function SearchResult(props: any) {
                                 <span className="badge badge-pill badge-secondary">
                                     {propertyType}
                                 </span>
+                                {openTime &&
+                                    <span className="badge badge-pill badge-success ml-2">
+                                        Open {openTime}
+                                    </span>
+                                }
                             </span>
                             <span className="d-block">
                                 <span className="icon-wrapper"><i className="icon-bed" />{data.listing.propertyDetails.bedrooms}</span>
