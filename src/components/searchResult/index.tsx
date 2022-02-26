@@ -5,6 +5,7 @@ import SimpleCarousel from '../simpleCarousel';
 import './searchResult.scss';
 import { isArchivedInStorage, saveInLocalStorage, getArchivedDataFromLocalStorage } from '../../utils/localStorageHelper';
 import { getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
+import InspectionTimes from '../inspectionTimes';
 
 function SearchResult(props: any) {
     const {
@@ -106,7 +107,7 @@ function SearchResult(props: any) {
                             />
                         </div>
                         <AgencyDetails
-                            id={data.listing.listingSlug}
+                            id={`agency_${data.listing.listingSlug}`}
                             name={agent.name}
                             logoUrl={agent.logoUrl}
                             preferredColourHex={agent.preferredColourHex}
@@ -116,14 +117,17 @@ function SearchResult(props: any) {
                             <span className="d-block font-weight-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
                             <span className="d-block">{streetAddress}</span>
                             <span className="d-block">{data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}</span>
-                            <span className="d-block">
+                            <span className="d-block my-1">
                                 <span className="badge badge-pill badge-secondary">
                                     {propertyType}
                                 </span>
                                 {openTime &&
+                                    <>
                                     <span className="badge badge-pill badge-success ml-2">
                                         Open {openTime}
                                     </span>
+                                    <InspectionTimes id={`inspections_${data.listing.listingSlug}`} inspectionSchedule={data.listing.inspectionSchedule} />
+                                    </>
                                 }
                             </span>
                             <span className="d-block">
