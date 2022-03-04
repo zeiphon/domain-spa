@@ -19,14 +19,20 @@ export const getDateRange = (startDateTime: string, endDateTime: string): string
 }
 
 export const getShortDateAndTime = (dateTime: string) => {
+
+    var startTime = getTwelveHourTime(dateTime);
+
+    return `${getShortDate(dateTime)} ${startTime}`;
+}
+
+export const getShortDate = (dateTime: string) => {
     const startDate = new Date(dateTime);
 
     var day = getShortDay(dateTime);
     var date = startDate.getDate();
     var month = getShortMonth(startDate.getMonth()+1);
-    var startTime = getTwelveHourTime(dateTime);
 
-    return `${day} ${date} ${month} ${startTime}`;
+    return `${day} ${date} ${month}`;
 }
 
 const getShortMonth = (monthIndex: number) => {

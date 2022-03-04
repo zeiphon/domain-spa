@@ -4,7 +4,7 @@ import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
 import './searchResult.scss';
 import { isArchivedInStorage, saveInLocalStorage, getArchivedDataFromLocalStorage } from '../../utils/localStorageHelper';
-import { getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
+import { getShortDate, getShortDateAndTime, getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
 import InspectionTimes from '../inspectionTimes';
 import DomainListingWrapper from '../../types/domain';
 
@@ -97,7 +97,11 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
     const openTimes = (data?.listing?.inspectionSchedule?.times ?? []).filter(x => new Date(x.openingTime) > new Date());
 
     const openTime = openTimes[0]
-        ? `${getShortDay(openTimes[0].openingTime )} ${getTwelveHourTime(openTimes[0].openingTime)}`
+        ? getShortDate(openTimes[0].openingTime)
+        : undefined;
+
+    const auctionDate = data?.listing?.auctionSchedule?.time
+        ? getShortDate(data.listing.auctionSchedule.time)
         : undefined;
 
     return !isArchived || (isArchived && showArchived)
@@ -131,6 +135,11 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 {openTime &&
                                     <span className={`badge badge-pill badge-${isAuctionTimeInFuture ? 'danger' : 'success'} ml-2`}>
                                         Open {openTime}
+                                    </span>
+                                }
+                                {!openTime && isAuctionTimeInFuture && auctionDate &&
+                                     <span className="badge badge-pill badge-danger ml-2">
+                                        Auction {auctionDate}
                                     </span>
                                 }
                                 {(openTime || isAuctionTimeInFuture) &&
