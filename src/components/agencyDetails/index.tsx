@@ -1,14 +1,15 @@
 import React from 'react';
 import { useState } from 'react';
+import { Contact } from '../../types/domain';
 import AgentDetails from '../agentDetails';
 import './agencyDetails.scss';
 
 function AgencyDetails(props: {
     id: string,
     name: string,
-    logoUrl: string,
+    logoUrl?: string,
     preferredColourHex: string,
-    contacts: { name: string, photoUrl: string }[]
+    contacts?: Contact[]
 }) {
     const { id, name, logoUrl, preferredColourHex, contacts } = props;
 

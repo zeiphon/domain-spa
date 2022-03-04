@@ -1,19 +1,28 @@
 import React from 'react';
 import { useState } from 'react';
-import { getDateRange } from '../../utils/dateTimeHelper';
+import { AuctionSchedule, InspectionSchedule } from '../../types/domain';
+import { getDateRange, getShortDateAndTime, getShortDay } from '../../utils/dateTimeHelper';
 import './inspectionTimes.scss';
 
 function InspectionTimes(props: {
     id: string,
-    inspectionSchedule: {
-        byAppointment: boolean,
-        recurring: boolean;
-        times: [{ openingTime: string; closingTime: string }] }
+    inspectionSchedule?: InspectionSchedule,
+    auctionSchedule?: AuctionSchedule
 }) {
-    const { id, inspectionSchedule } = props;
+    const { id, inspectionSchedule, auctionSchedule } = props;
     const [inspectionTimesOpen, setInspectionTimesOpen] = useState(false);
 
-    return inspectionSchedule && inspectionSchedule.times && inspectionSchedule.times.length > 0
+    const times = inspectionSchedule
+        && inspectionSchedule.times
+        && inspectionSchedule.times.length > 0
+        ? inspectionSchedule.times.filter(x => new Date(x.openingTime) > new Date())
+        : [];
+
+    const isAuctionTimeInFuture = auctionSchedule
+        && auctionSchedule.time
+        && new Date(auctionSchedule.time) > new Date();
+
+    return times.length > 0 || isAuctionTimeInFuture
     ? (
         <React.Fragment key={id}>
             <span className="toggle ml-1" onClick={() => setInspectionTimesOpen(!inspectionTimesOpen)}><i className={`icon-${inspectionTimesOpen ? "up" : "down"}-open`} /></span>
@@ -21,9 +30,12 @@ function InspectionTimes(props: {
             {inspectionTimesOpen &&
                 <span className="d-block mt-1 ml-1">
                     <ul className="inspection-times pl-3 mb-1">
-                        {inspectionSchedule.times.map(x =>
-                            <li className="ml-0">{getDateRange(x.openingTime, x.closingTime)}</li>
+                        {times.map(x =>
+                            <li key={`${id}-inspection-${x.openingTime}`} className="ml-0">{getDateRange(x.openingTime, x.closingTime)}</li>
                         )}
+                        {auctionSchedule && auctionSchedule.time &&
+                        <li key={`${id}-auction-${auctionSchedule.time}`} className="text-danger ml-0">{getShortDateAndTime(auctionSchedule.time)}</li>
+                        }
                     </ul>
                 </span>
             }

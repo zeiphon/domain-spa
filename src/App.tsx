@@ -361,7 +361,7 @@ function getMockResults(): DomainListingWrapper[] {
                 "Auction Sat 30 May"
             ],
             "auctionSchedule": {
-                "time": "2020-05-30T12:00:00",
+                "time": "2024-05-30T12:00:00",
                 "auctionLocation": "On Site"
             },
             "inspectionSchedule": {
@@ -369,8 +369,12 @@ function getMockResults(): DomainListingWrapper[] {
                 "recurring": false,
                 "times": [
                     {
-                        "openingTime": "2020-05-23T13:00:00",
-                        "closingTime": "2020-05-23T13:30:00"
+                        "openingTime": "2020-04-23T10:00:00",
+                        "closingTime": "2020-04-23T10:30:00"
+                    },
+                    {
+                        "openingTime": "2024-05-23T13:00:00",
+                        "closingTime": "2024-05-23T13:30:00"
                     }
                 ]
             },
@@ -459,8 +463,8 @@ function getMockResults(): DomainListingWrapper[] {
                 "recurring": false,
                 "times": [
                     {
-                        "openingTime": "2020-05-23T12:00:00",
-                        "closingTime": "2020-05-23T12:30:00"
+                        "openingTime": "2024-05-23T12:00:00",
+                        "closingTime": "2024-05-23T12:30:00"
                     }
                 ]
             },

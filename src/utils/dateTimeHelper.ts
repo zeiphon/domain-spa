@@ -10,17 +10,23 @@ export const getTwelveHourTime = (dateTime: string): string => {
 }
 
 export const getDateRange = (startDateTime: string, endDateTime: string): string => {
-    const startDate = new Date(startDateTime);
-
-    var day = getShortDay(startDateTime);
-    var date = startDate.getDate();
-    var month = getShortMonth(startDate.getMonth());
-    var startTime = getTwelveHourTime(startDateTime);
+    var startDateTimeString = getShortDateAndTime(startDateTime);
     var endTime = getTwelveHourTime(endDateTime);
 
-    return `${day} ${date} ${month} ${startTime} - ${endTime}`;
+    return `${startDateTimeString} - ${endTime}`;
 
     // Thu 12 Mar 11:15 AM -11:45 AM
+}
+
+export const getShortDateAndTime = (dateTime: string) => {
+    const startDate = new Date(dateTime);
+
+    var day = getShortDay(dateTime);
+    var date = startDate.getDate();
+    var month = getShortMonth(startDate.getMonth()+1);
+    var startTime = getTwelveHourTime(dateTime);
+
+    return `${day} ${date} ${month} ${startTime}`;
 }
 
 const getShortMonth = (monthIndex: number) => {

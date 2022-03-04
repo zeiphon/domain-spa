@@ -6,8 +6,9 @@ import './searchResult.scss';
 import { isArchivedInStorage, saveInLocalStorage, getArchivedDataFromLocalStorage } from '../../utils/localStorageHelper';
 import { getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
 import InspectionTimes from '../inspectionTimes';
+import DomainListingWrapper from '../../types/domain';
 
-function SearchResult(props: any) {
+function SearchResult(props: {closestStops: any, data: DomainListingWrapper, showArchived: boolean}) {
     const {
         closestStops, data, showArchived //, isArchivedInStorage
     } = props;
@@ -88,7 +89,13 @@ function SearchResult(props: any) {
         data.listing.summaryDescription
     );
 
-    const openTimes = data?.listing?.inspectionSchedule?.times ?? [];
+    const isAuctionTimeInFuture = data?.listing?.auctionSchedule
+        && data.listing.auctionSchedule.time
+        && new Date(data.listing.auctionSchedule.time) > new Date()
+        ? true : false;
+
+    const openTimes = (data?.listing?.inspectionSchedule?.times ?? []).filter(x => new Date(x.openingTime) > new Date());
+
     const openTime = openTimes[0]
         ? `${getShortDay(openTimes[0].openingTime )} ${getTwelveHourTime(openTimes[0].openingTime)}`
         : undefined;
@@ -122,12 +129,16 @@ function SearchResult(props: any) {
                                     {propertyType}
                                 </span>
                                 {openTime &&
-                                    <>
-                                    <span className="badge badge-pill badge-success ml-2">
+                                    <span className={`badge badge-pill badge-${isAuctionTimeInFuture ? 'danger' : 'success'} ml-2`}>
                                         Open {openTime}
                                     </span>
-                                    <InspectionTimes id={`inspections_${data.listing.listingSlug}`} inspectionSchedule={data.listing.inspectionSchedule} />
-                                    </>
+                                }
+                                {(openTime || isAuctionTimeInFuture) &&
+                                    <InspectionTimes
+                                        id={`inspections_${data.listing.listingSlug}`}
+                                        inspectionSchedule={data.listing.inspectionSchedule}
+                                        auctionSchedule={data.listing.auctionSchedule}
+                                    />
                                 }
                             </span>
                             <span className="d-block">

@@ -3,7 +3,7 @@ import React from 'react';
 function AgentDetails(props: {
     id: string,
     name: string,
-    photoUrl: string,
+    photoUrl?: string,
 }) {
     const { id, name, photoUrl } = props;
 
