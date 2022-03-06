@@ -48,15 +48,6 @@ function App() {
   const [suburbCountsString, setSuburbCountsString] = React.useState('');
   const [resultsCount, setResultsCount] = React.useState(0);
 
-  const [offset, setOffset] = useState(100);
-
-  useEffect(() => {
-    window.onscroll = () => {
-      const top = document.getElementById("searchResultsContainer")?.getBoundingClientRect().top;
-      setOffset(top ?? 0);
-    }
-  }, []);
-
   const setStateFromChangeEvent = function(evt, setFunc) {
       setFunc(evt.currentTarget.value);
   }
@@ -204,48 +195,25 @@ function App() {
     return result;
   }
 
-  const stickyBarItemClass = 'mr-1';
-  const oneMil = 1000000;
-
   return (
     <div className="App py-2 px-0 container-fluid">
       <h3 className="py-2 bg-light">Domain Property Search</h3>
-      {offset >= 30 &&
-        <div className="row mt-3 px-3">
-            <div className="col-12 mb-2 pb-2 pb-sm-0">
-                <div className="border border-secondary rounded bg-white p-2">
-                    <Search
-                        suburbs={suburbs} updateSuburbs={(evt) => setStateFromChangeEvent(evt, setSuburbs)}
-                        minBeds={minBeds} updateMinBeds={(val) => setMinBeds(val)}
-                        minBaths={minBaths} updateMinBaths={(val) => setMinBaths(val)}
-                        minCarSpaces={minCarSpaces} updateMinCarSpaces={(val) => setMinCarSpaces(val)}
-                        maxPrice={maxPrice} updateMaxPrice={(val) => setMaxPrice(val)}
-                        maxDistanceFromTrain={maxDistanceFromTrain} updateMaxDistanceFromTrain={(val) => setMaxDistanceFromTrain(val)}
-                        runSearch={runSearch}
-                    />
-                </div>
-            </div>
-        </div>
-      }
-      {offset < 30 &&
-        <div className="d-flex flex-row justify-content-around pt-3 pb-2 sticky bg-white border-bottom border-secondary">
-            <div className={stickyBarItemClass}>
-                <i className="icon-bed mr-1 mr-sm-2" />{minBeds}+
-            </div>
-            <div className={stickyBarItemClass}>
-                <i className="icon-bath mr-1 mr-sm-2" />{minBaths}+
-            </div>
-            <div className={stickyBarItemClass}>
-                <i className="icon-cab mr-1 mr-sm-2" />{minCarSpaces}+
-            </div>
-            <div className={stickyBarItemClass}>
-                <i className="icon-dollar mr-sm-1" />&lt;{maxPrice >= oneMil ? `${(maxPrice / oneMil).toFixed(2)}M` : `${(maxPrice / 1000)}K`}
-            </div>
-            <div className={stickyBarItemClass}>
-                <i className="icon-train mr-1 mr-sm-2" />&lt;{maxDistanceFromTrain} km
-            </div>
-        </div>
-      }
+
+      <div className="row mt-3 px-3">
+          <div className="col-12 mb-2 pb-2 pb-sm-0">
+              <div className="border border-secondary rounded bg-white p-2">
+                  <Search
+                      suburbs={suburbs} updateSuburbs={(evt) => setStateFromChangeEvent(evt, setSuburbs)}
+                      minBeds={minBeds} updateMinBeds={(val) => setMinBeds(val)}
+                      minBaths={minBaths} updateMinBaths={(val) => setMinBaths(val)}
+                      minCarSpaces={minCarSpaces} updateMinCarSpaces={(val) => setMinCarSpaces(val)}
+                      maxPrice={maxPrice} updateMaxPrice={(val) => setMaxPrice(val)}
+                      maxDistanceFromTrain={maxDistanceFromTrain} updateMaxDistanceFromTrain={(val) => setMaxDistanceFromTrain(val)}
+                      runSearch={runSearch}
+                  />
+              </div>
+          </div>
+      </div>
       <div className="row px-3" id="searchResultsContainer">
         <div className="col-12">
           <div className="border border-secondary rounded bg-white p-2 px-3" id="output">
