@@ -4,7 +4,7 @@ import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
 import './searchResult.scss';
 import { isArchivedInStorage, saveInLocalStorage, getArchivedDataFromLocalStorage } from '../../utils/localStorageHelper';
-import { getShortDate, getShortDateAndTime, getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
+import { getRelativeShortDate, getShortDate, getShortDateAndTime, getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
 import InspectionTimes from '../inspectionTimes';
 import DomainListingWrapper from '../../types/domain';
 
@@ -97,11 +97,11 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
     const openTimes = (data?.listing?.inspectionSchedule?.times ?? []).filter(x => new Date(x.openingTime) > new Date());
 
     const openTime = openTimes[0]
-        ? getShortDate(openTimes[0].openingTime)
+        ? getRelativeShortDate(openTimes[0].openingTime, true)
         : undefined;
 
     const auctionDate = data?.listing?.auctionSchedule?.time
-        ? getShortDate(data.listing.auctionSchedule.time)
+        ? getRelativeShortDate(data.listing.auctionSchedule.time, false)
         : undefined;
 
     return !isArchived || (isArchived && showArchived)
@@ -133,7 +133,7 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                     {propertyType}
                                 </span>
                                 {openTime &&
-                                    <span className={`badge badge-pill badge-${isAuctionTimeInFuture ? 'danger' : 'success'} ml-2`}>
+                                    <span className="badge badge-pill badge-success ml-2">
                                         Open {openTime}
                                     </span>
                                 }
@@ -154,8 +154,11 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 <span className="icon-wrapper"><i className="icon-bed" />{data.listing.propertyDetails.bedrooms}</span>
                                 <span className="icon-wrapper"><i className="icon-bath" />{data.listing.propertyDetails.bathrooms}</span>
                                 <span className="icon-wrapper"><i className="icon-cab" />{data.listing.propertyDetails.carspaces}</span>
+                                {auctionDate &&
+                                    <span className="icon-wrapper text-danger"><i className="icon-hammer mr-1" />{auctionDate}</span>
+                                }
                             </span>
-                            <span className="row">{closestStopsMarkup}</span>
+                            <span className="row mt-1">{closestStopsMarkup}</span>
                         </div>
                         <div className="row text-center mb-2">
                             <span className="col-6"><NewTabLink href={href} label="View" className="text-success" /></span>

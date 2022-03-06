@@ -5,13 +5,13 @@ export const getShortDay = (dateTime: string): string => {
 }
 
 export const getTwelveHourTime = (dateTime: string): string => {
-    var date = new Date(dateTime);
+    const date = new Date(dateTime);
     return date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 }
 
 export const getDateRange = (startDateTime: string, endDateTime: string): string => {
-    var startDateTimeString = getShortDateAndTime(startDateTime);
-    var endTime = getTwelveHourTime(endDateTime);
+    const startDateTimeString = getShortDateAndTime(startDateTime);
+    const endTime = getTwelveHourTime(endDateTime);
 
     return `${startDateTimeString} - ${endTime}`;
 
@@ -19,20 +19,38 @@ export const getDateRange = (startDateTime: string, endDateTime: string): string
 }
 
 export const getShortDateAndTime = (dateTime: string) => {
+    const startTime = getTwelveHourTime(dateTime);
 
-    var startTime = getTwelveHourTime(dateTime);
-
-    return `${getShortDate(dateTime)} ${startTime}`;
+    return `${getRelativeShortDate(dateTime, false)} ${startTime}`;
 }
 
 export const getShortDate = (dateTime: string) => {
     const startDate = new Date(dateTime);
 
-    var day = getShortDay(dateTime);
-    var date = startDate.getDate();
-    var month = getShortMonth(startDate.getMonth()+1);
+    const day = getShortDay(dateTime);
+    const date = startDate.getDate();
+    const month = getShortMonth(startDate.getMonth()+1);
 
     return `${day} ${date} ${month}`;
+}
+
+export const getRelativeShortDate = (dateTime: string, lowercase: boolean) => {
+    const date = new Date(dateTime);
+    const today = new Date();
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+
+    if (date < tomorrow) return lowercase ? 'today' : 'Today';
+
+    const dayAfterTomorrow = new Date(tomorrow);
+    dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 1);
+    dayAfterTomorrow.setHours(0, 0, 0, 0);
+
+    if (date < dayAfterTomorrow) return lowercase ? 'tomorrow' :  'Tomorrow';
+
+    return getShortDate(dateTime);
 }
 
 const getShortMonth = (monthIndex: number) => {

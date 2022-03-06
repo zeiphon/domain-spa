@@ -29,12 +29,12 @@ function InspectionTimes(props: {
 
             {inspectionTimesOpen &&
                 <span className="d-block mt-1 ml-1">
-                    <ul className="inspection-times pl-3 mb-1">
+                    <ul className="inspection-times pl-3 mb-2">
                         {times.map(x =>
-                            <li key={`${id}-inspection-${x.openingTime}`} className="ml-0">{getDateRange(x.openingTime, x.closingTime)}</li>
+                            <li key={`${id}-inspection-${x.openingTime}`} className="ml-0 mb-1">{getDateRange(x.openingTime, x.closingTime)}</li>
                         )}
                         {auctionSchedule && auctionSchedule.time &&
-                        <li key={`${id}-auction-${auctionSchedule.time}`} className="text-danger ml-0">{getShortDateAndTime(auctionSchedule.time)}</li>
+                        <li key={`${id}-auction-${auctionSchedule.time}`} className="text-danger ml-0 mb-1"><i className="icon-hammer" /> {getShortDateAndTime(auctionSchedule.time)}</li>
                         }
                     </ul>
                 </span>
