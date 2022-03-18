@@ -30,6 +30,9 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
             return <span className="col-12" key={key}>
                 <i className="icon-train" />
                 {y.stop_name.replace(' Station', '')}: {Math.round(y.distance * 10) / 10}km
+                <a target="_blank" className="ml-1 dark-link" href={`https://www.google.com/maps/dir/${data.listing.propertyDetails.latitude},${data.listing.propertyDetails.longitude}/${y.latitude},${y.longitude}/data=!3m1!4b1!4m2!4m1!3e2`}>
+                    <i className="icon-direction" />
+                </a>
             </span>
         });
     const imageUrls = (data.listing.media ?? [])
@@ -127,7 +130,12 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                         <div className="px-3 pt-1 pb-2 mb-auto">
                             <span className="d-block font-weight-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
                             <span className="d-block">{streetAddress}</span>
-                            <span className="d-block">{data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}</span>
+                            <span className="d-block">
+                                {data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}
+                                <a target="_blank" className="ml-1 dark-link" href={`https://www.google.com/maps/search/?api=1&query=${data.listing.propertyDetails.latitude},${data.listing.propertyDetails.longitude}`}>
+                                    <i className="icon-map-o" />
+                                </a>
+                            </span>
                             <span className="d-block my-1">
                                 <span className="badge badge-pill badge-secondary">
                                     {propertyType}

@@ -1,5 +1,4 @@
 .search-result {
-
     .icon-bed,
     .icon-cab {
         margin-left: -2px;
@@ -15,6 +14,10 @@
     .icon-wrapper {
         margin-right: 10px;
         display: inline-block;
+    }
+
+    a.dark-link {
+        color: rgb(33, 37, 41);
     }
 }
 

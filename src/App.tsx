@@ -26,6 +26,8 @@ interface DomainListingWrapperWithClosestStops extends DomainListingWrapper {
 interface ClosestStop {
     stop_name: string;
     distance: number;
+    latitude: number;
+    longitude: number;
 }
 
 function App() {
@@ -122,7 +124,7 @@ function App() {
             });
     } else {
         setIsLoading(true);
-        await axios.get('./static-data.json')
+        await axios.get('https://scottabutler.github.io/domain-react-spa/static-data.json')
             .then(x => {
                 setIsLoading(false);
                 setResultsWithClosestStops(x.data);
