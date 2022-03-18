@@ -75,6 +75,7 @@
         auctionSchedule?: AuctionSchedule;
         inspectionSchedule?: InspectionSchedule;
         listingSlug: string;
+        dateListed: string;
     }
 
     export default interface DomainListingWrapper {

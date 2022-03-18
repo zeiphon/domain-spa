@@ -53,6 +53,11 @@ export const getRelativeShortDate = (dateTime: string, lowercase: boolean) => {
     return getShortDate(dateTime);
 }
 
+export const getHourDifference = (firstDate: Date, secondDate: Date) => {
+    var diff = Math.round(Math.abs(firstDate.getTime() - secondDate.getTime()) / 3600000);
+    return diff;
+}
+
 const getShortMonth = (monthIndex: number) => {
     switch(monthIndex) {
         case 1:  return 'Jan';

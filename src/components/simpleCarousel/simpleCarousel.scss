@@ -10,7 +10,7 @@
         position: absolute;
         top: 80px;
         border: none;
-        background-color: rgba(155, 155, 155, 0.363);
+        background-color: rgba(155, 155, 155, 0.463);
         outline: none;
         height: 40px;
         width: 40px;
@@ -20,7 +20,7 @@
     }
     .back-button:hover,
     .next-button:hover {
-        background-color: rgba(85, 85, 85, 0.363);
+        background-color: rgba(85, 85, 85, 0.463);
         outline: none;
         height: 40px;
         width: 40px;
@@ -41,6 +41,12 @@
         left: 10%;
         color:rgb(224, 224, 224);
         font-size: 8px;
+
+        span {
+            background-color: rgba(155, 155, 155, 0.463);
+            border-radius: 8px;
+            padding: 2px 2px 3px 2px;
+        }
     }
     .img {
         height: 100%;

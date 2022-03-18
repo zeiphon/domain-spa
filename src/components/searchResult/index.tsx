@@ -4,7 +4,7 @@ import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
 import './searchResult.scss';
 import { isArchivedInStorage, saveInLocalStorage, getArchivedDataFromLocalStorage } from '../../utils/localStorageHelper';
-import { getRelativeShortDate, getShortDate, getShortDateAndTime, getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
+import { getHourDifference, getRelativeShortDate, getShortDate, getShortDateAndTime, getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
 import InspectionTimes from '../inspectionTimes';
 import DomainListingWrapper from '../../types/domain';
 
@@ -107,6 +107,14 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
         ? getRelativeShortDate(data.listing.auctionSchedule.time, false)
         : undefined;
 
+    const addedHoursAgo = getHourDifference(new Date(), new Date(data.listing.dateListed));
+    const addedDaysAgo = addedHoursAgo > 24 ? Math.round(addedHoursAgo / 24) : 0;
+    const addedTag = addedHoursAgo < 24
+        ? <span className="added-date">ADDED {addedHoursAgo} HOURS AGO</span>
+        : addedHoursAgo < 73
+            ? <span className="added-date">ADDED {addedDaysAgo} DAYS AGO</span>
+            : <></>
+
     return !isArchived || (isArchived && showArchived)
     ? (
         <React.Fragment key={data.listing.listingSlug}>
@@ -119,6 +127,7 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 urls={imageUrls}
                                 altText={imageAltText}
                             />
+                            {addedTag}
                         </div>
                         <AgencyDetails
                             id={`agency_${data.listing.listingSlug}`}
