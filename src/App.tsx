@@ -7,6 +7,7 @@ import SearchResult from './components/searchResult';
 import findClosestStops from './utils/distance'
 import { isArchivedInStorage, loadSearchParamsFromLocalStorage, saveSearchParamsToLocalStorage } from './utils/localStorageHelper';
 import DomainListingWrapper from './types/domain';
+import { getRandomListedDate } from './utils/staticDataHelper';
 
 //https://css-tricks.com/snippets/javascript/get-url-variables/
 const getQueryVariable = function(variable) {
@@ -127,13 +128,29 @@ function App() {
         await axios.get('https://scottabutler.github.io/domain-react-spa/static-data.json')
             .then(x => {
                 setIsLoading(false);
-                setResultsWithClosestStops(x.data);
+                var updatedData = postProcessSampleData(x.data);
+                setResultsWithClosestStops(updatedData);
             })
             .catch(err => {
                 setIsLoading(false);
                 console.error(err);
             });
     }
+  }
+
+  const postProcessSampleData = (data: DomainListingWrapper[]): DomainListingWrapper[] => {
+      return data.map(x => {
+          // Set random listed date
+          x.listing.dateListed = getRandomListedDate();
+
+          // Set random auction schedule
+          // TODO
+
+          // Set random inspection schedule
+          // TODO
+
+          return x;
+      }).sort((a, b) => new Date(b.listing.dateListed).getTime() - new Date(a.listing.dateListed).getTime());
   }
 
   const spinner = isLoading

@@ -58,6 +58,14 @@ export const getHourDifference = (firstDate: Date, secondDate: Date) => {
     return diff;
 }
 
+export const getDateTimeString = (date: Date) => {
+    return `${date.getFullYear()}-${ensureTwoDigits(date.getMonth()+1)}-${ensureTwoDigits(date.getDate())}T${ensureTwoDigits(date.getHours())}:${ensureTwoDigits(date.getMinutes())}:${ensureTwoDigits(date.getSeconds())}`;
+}
+
+const ensureTwoDigits = (number: number): string => {
+    return number < 10 ? `0${number}` : number.toString();
+}
+
 const getShortMonth = (monthIndex: number) => {
     switch(monthIndex) {
         case 1:  return 'Jan';

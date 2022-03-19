@@ -110,9 +110,9 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
     const addedHoursAgo = getHourDifference(new Date(), new Date(data.listing.dateListed));
     const addedDaysAgo = addedHoursAgo > 24 ? Math.round(addedHoursAgo / 24) : 0;
     const addedTag = addedHoursAgo < 24
-        ? <span className="added-date">ADDED {addedHoursAgo} HOURS AGO</span>
+        ? <span className="added-date">ADDED {addedHoursAgo} {addedHoursAgo > 1 ? 'HOURS' : 'HOUR'} AGO</span>
         : addedHoursAgo < 73
-            ? <span className="added-date">ADDED {addedDaysAgo} DAYS AGO</span>
+            ? <span className="added-date">ADDED {addedDaysAgo} {addedDaysAgo > 1 ? 'DAYS' : 'DAY'} AGO</span>
             : <></>
 
     return !isArchived || (isArchived && showArchived)
