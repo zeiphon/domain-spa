@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.scss';
 import Search from './components/search';
 import Footer from './components/footer';
@@ -35,6 +35,7 @@ function App() {
   const suburbsFromQueryString = getQueryVariable('suburbs');
   const savedSearchParams = loadSearchParamsFromLocalStorage() ?? {};
 
+  const [selectedState, setSelectedState] = React.useState(savedSearchParams.state ?? 'VIC');
   const defaultSuburbs = savedSearchParams.suburbCsv ?? (suburbsFromQueryString ? decodeURI((suburbsFromQueryString)) : '');
   const [suburbs, setSuburbs] = React.useState(defaultSuburbs);
   const [minBeds, setMinBeds] = React.useState(savedSearchParams.minBeds ?? 2);
@@ -80,12 +81,20 @@ function App() {
         .sort()
         .join(', ');
     setRequestedSuburbs(reqSuburbs);
-    saveSearchParamsToLocalStorage(minBeds, minBaths, minCarSpaces, maxPrice, maxDistanceFromTrain, reqSuburbs);
+    saveSearchParamsToLocalStorage(
+        minBeds,
+        minBaths,
+        minCarSpaces,
+        maxPrice,
+        maxDistanceFromTrain,
+        reqSuburbs,
+        selectedState
+    );
     const key = getQueryVariable('api_key');
     const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
     const suburbArray = suburbs.split(',').map((s) => {
         return {
-              "state":"VIC",
+              "state":selectedState,
               "suburb":s.trim()
             };
     });
@@ -117,7 +126,13 @@ function App() {
         await axios.post(url, data)
             .then(x => {
                 setIsLoading(false);
-                setResultsWithClosestStops(x.data);
+                // TODO - Detect if the selected state has any stops
+                if (selectedState === 'VIC') {
+                    setResultsWithClosestStops(x.data);
+                } else {
+                    const closestStops: ClosestStop[] = [];
+                    setResults(x.data.map(y => { return { ...y, closestStops: closestStops } }));
+                }
             })
             .catch(err => {
                 setIsLoading(false);
@@ -231,6 +246,7 @@ function App() {
           <div className="col-12 mb-2 pb-2 pb-sm-0">
               <div className="border border-secondary rounded bg-white p-2">
                   <Search
+                      state={selectedState} updateState={(evt) => setStateFromChangeEvent(evt, setSelectedState)}
                       suburbs={suburbs} updateSuburbs={(evt) => setStateFromChangeEvent(evt, setSuburbs)}
                       minBeds={minBeds} updateMinBeds={(val) => setMinBeds(val)}
                       minBaths={minBaths} updateMinBaths={(val) => setMinBaths(val)}

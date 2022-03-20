@@ -5,6 +5,7 @@ import SuburbSearch from '../suburbSearch';
 
 function Search(props: any) {
     const {
+        state, updateState,
         suburbs, updateSuburbs,
         minBeds, updateMinBeds,
         minBaths, updateMinBaths,
@@ -23,11 +24,18 @@ function Search(props: any) {
             <span className="d-none d-xl-inline-block">XL</span> */}
             <div className="row mb-2">
                 <div className="col-12">
-                    <label htmlFor="state">State: Victoria</label>
+                    <label htmlFor="state">State: </label>
+                    <select className="state-dropdown" name="state" defaultValue={state} onChange={updateState}>
+                        <option value="ACT">ACT</option>
+                        <option value="NSW">NSW</option>
+                        <option value="NT">NT</option>
+                        <option value="QLD">QLD</option>
+                        <option value="SA">SA</option>
+                        <option value="TAS">TAS</option>
+                        <option value="VIC">VIC</option>
+                        <option value="WA">WA</option>
+                    </select>
                 </div>
-                {/* <div className="col">
-                    <input id="state" type="text" value="VIC" disabled />
-                </div> */}
             </div>
 
             <div className="row">
@@ -40,8 +48,10 @@ function Search(props: any) {
                 <NumericSearchField type="min" icon="icon-bath" defaultValue={minBaths} updateHandler={updateMinBaths} interval={1} />
                 <NumericSearchField type="min" icon="icon-cab" defaultValue={minCarSpaces} updateHandler={updateMinCarSpaces} interval={1} />
                 <NumericSearchField type="max" icon="icon-dollar" defaultValue={maxPrice} updateHandler={updateMaxPrice} interval={10000} />
-                <NumericSearchField type="max" icon="icon-train" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} interval={0.25} suffix=' km' />
 
+                {state === "VIC" && // TODO - Detect if the selected state has any stops
+                    <NumericSearchField type="max" icon="icon-train" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} interval={0.25} suffix=' km' />
+                }
                 <div className="col-sm-6, col-md-2">
                     <div className="mt-2">
                         <input type="button" className="search-button" value="Search" onClick={runSearch} disabled={!suburbs} />

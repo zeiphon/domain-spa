@@ -27,7 +27,8 @@ export function loadSearchParamsFromLocalStorage(): {
     minCarSpaces?: number;
     maxPrice?: number;
     maxDistFromTrain?: number;
-    suburbCsv?: string
+    suburbCsv?: string;
+    state?: string;
 } {
     return JSON.parse(localStorage.getItem(_searchParamsLocalStorageKey) ?? '{}');
 }
@@ -37,13 +38,15 @@ export function saveSearchParamsToLocalStorage(
     minCarSpaces: number,
     maxPrice: number,
     maxDistFromTrain: number,
-    suburbCsv: string): void {
-    window.localStorage.setItem(_searchParamsLocalStorageKey, JSON.stringify({
-        'minBeds': minBeds,
-        'minBaths': minBaths,
-        'minCarSpaces': minCarSpaces,
-        'maxPrice': maxPrice,
-        'maxDistFromTrain': maxDistFromTrain,
-        'suburbCsv': suburbCsv,
-    }));
+    suburbCsv: string,
+    state: string): void {
+        window.localStorage.setItem(_searchParamsLocalStorageKey, JSON.stringify({
+            'minBeds': minBeds,
+            'minBaths': minBaths,
+            'minCarSpaces': minCarSpaces,
+            'maxPrice': maxPrice,
+            'maxDistFromTrain': maxDistFromTrain,
+            'suburbCsv': suburbCsv,
+            'state': state
+        }));
 };
