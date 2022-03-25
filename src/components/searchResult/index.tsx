@@ -107,13 +107,31 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
         ? getRelativeShortDate(data.listing.auctionSchedule.time, false)
         : undefined;
 
-    const addedHoursAgo = getHourDifference(new Date(), new Date(data.listing.dateListed));
-    const addedDaysAgo = addedHoursAgo > 24 ? Math.round(addedHoursAgo / 24) : 0;
-    const addedTag = addedHoursAgo < 24
-        ? <span className="added-date">ADDED {addedHoursAgo} {addedHoursAgo > 1 ? 'HOURS' : 'HOUR'} AGO</span>
-        : addedHoursAgo < 73
-            ? <span className="added-date">ADDED {addedDaysAgo} {addedDaysAgo > 1 ? 'DAYS' : 'DAY'} AGO</span>
-            : <></>
+    const getAddedTagText = (dateListed: string): string => {
+        const now = new Date();
+        const listingDate = new Date(data.listing.dateListed);
+        const addedHoursAgo = getHourDifference(now, listingDate);
+        const addedDaysAgo = addedHoursAgo > 24
+            ? now.getDate() - listingDate.getDate()
+            : 0;
+
+        if (addedHoursAgo < 1) return "ADDED JUST NOW";
+
+        if (addedHoursAgo < 2) return "ADDED 1 HOUR AGO";
+
+        if (listingDate.getDate() == now.getDate()) return `ADDED ${addedHoursAgo} HOURS AGO`;
+
+        if (listingDate.getDate() == now.getDate() - 1) return "ADDED YESTERDAY";
+
+        if (addedDaysAgo < 4) return `ADDED ${addedDaysAgo} DAYS AGO`;
+
+        return "";
+    };
+
+    const addedTagText = getAddedTagText(data.listing.dateListed);
+    const addedTag = addedTagText != ""
+        ? <span className="added-date">{addedTagText}</span>
+        : <></>
 
     return !isArchived || (isArchived && showArchived)
     ? (
