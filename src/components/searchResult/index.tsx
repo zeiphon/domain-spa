@@ -3,14 +3,14 @@ import AgencyDetails from '../agencyDetails';
 import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
 import './searchResult.scss';
-import { isArchivedInStorage, saveInLocalStorage, getArchivedDataFromLocalStorage } from '../../utils/localStorageHelper';
-import { getHourDifference, getRelativeShortDate, getShortDate, getShortDateAndTime, getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
+import { isArchivedInStorage, saveInLocalStorage } from '../../utils/localStorageHelper';
+import { getHourDifference, getRelativeShortDate } from '../../utils/dateTimeHelper';
 import InspectionTimes from '../inspectionTimes';
 import DomainListingWrapper from '../../types/domain';
 
 function SearchResult(props: {closestStops: any, data: DomainListingWrapper, showArchived: boolean}) {
     const {
-        closestStops, data, showArchived //, isArchivedInStorage
+        closestStops, data, showArchived
     } = props;
 
     const [isArchived, setIsArchived] = useState(isArchivedInStorage(data.listing.listingSlug));
@@ -109,11 +109,9 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
 
     const getAddedTagText = (dateListed: string): string => {
         const now = new Date();
-        const listingDate = new Date(data.listing.dateListed);
+        const listingDate = new Date(dateListed);
         const addedHoursAgo = getHourDifference(now, listingDate);
-        const addedDaysAgo = addedHoursAgo > 24
-            ? now.getDate() - listingDate.getDate()
-            : 0;
+        const addedDaysAgo = Math.floor(addedHoursAgo / 24);
 
         if (addedHoursAgo < 1) return "ADDED JUST NOW";
 
@@ -121,9 +119,9 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
 
         if (listingDate.getDate() == now.getDate()) return `ADDED ${addedHoursAgo} HOURS AGO`;
 
-        if (listingDate.getDate() == now.getDate() - 1) return "ADDED YESTERDAY";
+        if (addedDaysAgo < 2) return "ADDED YESTERDAY";
 
-        if (addedDaysAgo < 4) return `ADDED ${addedDaysAgo} DAYS AGO`;
+        if (addedDaysAgo < 8) return `ADDED ${addedDaysAgo} DAYS AGO`;
 
         return "";
     };
