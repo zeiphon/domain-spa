@@ -74,6 +74,8 @@ function App() {
     setResults(resultsWithClosestStops);
   }
 
+  const apiKey = getQueryVariable('api_key');
+
   const runSearch = async function() {
     const reqSuburbs = suburbs
         .split(',')
@@ -90,14 +92,15 @@ function App() {
         reqSuburbs,
         selectedState
     );
-    const key = getQueryVariable('api_key');
-    const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + key;
+
+    const url = 'https://api.domain.com.au/v1/listings/residential/_search?api_key=' + apiKey;
     const suburbArray = suburbs.split(',').map((s) => {
         return {
               "state":selectedState,
               "suburb":s.trim()
             };
     });
+
     const data = {
       "listingType":"Sale",
       "propertyTypes":[
@@ -121,7 +124,7 @@ function App() {
       "pageSize": 200
     };
 
-    if (key) {
+    if (apiKey) {
         setIsLoading(true);
         await axios.post(url, data)
             .then(x => {
@@ -240,6 +243,11 @@ function App() {
 
   return (
     <div className="App py-2 container-fluid">
+      {!apiKey &&
+        <div className="alert alert-info" role="alert">
+            <strong>Demo mode</strong> - Sample data will be returned unless a Domain Property API key is supplied using the <code>api_key</code> query string parameter.
+        </div>
+      }
       <h3 className="py-2 bg-light">Domain Property Search</h3>
 
       <div className="row mt-3">
