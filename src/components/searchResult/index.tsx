@@ -6,7 +6,7 @@ import './searchResult.scss';
 import { isArchivedInStorage, saveInLocalStorage } from '../../utils/localStorageHelper';
 import { getHourDifference, getRelativeShortDate } from '../../utils/dateTimeHelper';
 import InspectionTimes from '../inspectionTimes';
-import DomainListingWrapper from '../../types/domain';
+import DomainListingWrapper, { AuctionSchedule } from '../../types/domain';
 
 function SearchResult(props: {closestStops: any, data: DomainListingWrapper, showArchived: boolean}) {
     const {
@@ -126,10 +126,28 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
         return "";
     };
 
+    // TODO: Make this into a component
     const addedTagText = getAddedTagText(data.listing.dateListed);
     const addedTag = addedTagText != ""
         ? <span className="added-date">{addedTagText}</span>
         : <></>
+
+    // TODO: Make this into a component
+    const buildProgressBar = (dateListed: string, auctionSchedule?: AuctionSchedule) => {
+        const msToDaysMultiplier = 1000 * 60 * 60 * 24;
+
+        const dateListedDays = Math.round(new Date(dateListed).getTime() / msToDaysMultiplier);
+        const auctionDateDays = auctionSchedule?.time ? Math.round(new Date(auctionSchedule.time).getTime() / msToDaysMultiplier) : 0;
+        const nowDays = Math.round(new Date().getTime() / msToDaysMultiplier);
+
+        const min = 0;
+        const max = 100;
+        const progress = Math.round((auctionDateDays > 0 ? ((nowDays - dateListedDays) / (auctionDateDays - dateListedDays)) : 0) * 100);
+
+        return  <div className="progress" style={{height: "2px"}}>
+                    <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin={min} aria-valuemax={max}></div>
+                </div>
+    }
 
     return !isArchived || (isArchived && showArchived)
     ? (
@@ -160,6 +178,9 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 <a target="_blank" className="ml-1 dark-link" href={`https://www.google.com/maps/search/?api=1&query=${data.listing.propertyDetails.latitude},${data.listing.propertyDetails.longitude}`}>
                                     <i className="icon-map-o" />
                                 </a>
+                            </span>
+                            <span className="d-block mt-1">
+                                {buildProgressBar(data.listing.dateListed, data.listing.auctionSchedule)}
                             </span>
                             <span className="d-block my-1">
                                 <span className="badge badge-pill badge-secondary">
