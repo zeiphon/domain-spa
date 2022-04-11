@@ -34,6 +34,17 @@ export const getShortDate = (dateTime: string) => {
     return `${day} ${date} ${month}`;
 }
 
+export const isToday = (dateTime: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+
+    return dateTime >= today && dateTime < tomorrow;
+}
+
 export const getRelativeShortDate = (dateTime: string, lowercase: boolean) => {
     const date = new Date(dateTime);
     const today = new Date();

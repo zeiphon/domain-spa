@@ -4,7 +4,7 @@ import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
 import './searchResult.scss';
 import { isArchivedInStorage, saveInLocalStorage } from '../../utils/localStorageHelper';
-import { getHourDifference, getRelativeShortDate } from '../../utils/dateTimeHelper';
+import { getHourDifference, getRelativeShortDate, isToday } from '../../utils/dateTimeHelper';
 import InspectionTimes from '../inspectionTimes';
 import DomainListingWrapper, { AuctionSchedule } from '../../types/domain';
 
@@ -117,7 +117,7 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
 
         if (addedHoursAgo < 2) return "ADDED 1 HOUR AGO";
 
-        if (listingDate.getDate() == now.getDate()) return `ADDED ${addedHoursAgo} HOURS AGO`;
+        if (isToday(listingDate)) return `ADDED ${addedHoursAgo} HOURS AGO`;
 
         if (addedDaysAgo < 2) return "ADDED YESTERDAY";
 
