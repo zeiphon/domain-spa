@@ -4,9 +4,11 @@ import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
 import './searchResult.scss';
 import { isArchivedInStorage, saveInLocalStorage } from '../../utils/localStorageHelper';
-import { getHourDifference, getRelativeShortDate, isToday } from '../../utils/dateTimeHelper';
+import { getRelativeShortDate } from '../../utils/dateTimeHelper';
 import InspectionTimes from '../inspectionTimes';
-import DomainListingWrapper, { AuctionSchedule } from '../../types/domain';
+import DomainListingWrapper from '../../types/domain';
+import AddedTag from '../addedTag';
+import ListingProgressBar from '../listingProgressBar';
 
 function SearchResult(props: {closestStops: any, data: DomainListingWrapper, showArchived: boolean}) {
     const {
@@ -107,48 +109,6 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
         ? getRelativeShortDate(data.listing.auctionSchedule.time, false)
         : undefined;
 
-    const getAddedTagText = (dateListed: string): string => {
-        const now = new Date();
-        const listingDate = new Date(dateListed);
-        const addedHoursAgo = getHourDifference(now, listingDate);
-        const addedDaysAgo = Math.floor(addedHoursAgo / 24);
-
-        if (addedHoursAgo < 1) return "ADDED JUST NOW";
-
-        if (addedHoursAgo < 2) return "ADDED 1 HOUR AGO";
-
-        if (isToday(listingDate)) return `ADDED ${addedHoursAgo} HOURS AGO`;
-
-        if (addedDaysAgo < 2) return "ADDED YESTERDAY";
-
-        if (addedDaysAgo < 8) return `ADDED ${addedDaysAgo} DAYS AGO`;
-
-        return "";
-    };
-
-    // TODO: Make this into a component
-    const addedTagText = getAddedTagText(data.listing.dateListed);
-    const addedTag = addedTagText != ""
-        ? <span className="added-date">{addedTagText}</span>
-        : <></>
-
-    // TODO: Make this into a component
-    const buildProgressBar = (dateListed: string, auctionSchedule?: AuctionSchedule) => {
-        const msToDaysMultiplier = 1000 * 60 * 60 * 24;
-
-        const dateListedDays = Math.round(new Date(dateListed).getTime() / msToDaysMultiplier);
-        const auctionDateDays = auctionSchedule?.time ? Math.round(new Date(auctionSchedule.time).getTime() / msToDaysMultiplier) : 0;
-        const nowDays = Math.round(new Date().getTime() / msToDaysMultiplier);
-
-        const min = 0;
-        const max = 100;
-        const progress = Math.round((auctionDateDays > 0 ? ((nowDays - dateListedDays) / (auctionDateDays - dateListedDays)) : 0) * 100);
-
-        return  <div className="progress" style={{height: "2px"}}>
-                    <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin={min} aria-valuemax={max}></div>
-                </div>
-    }
-
     return !isArchived || (isArchived && showArchived)
     ? (
         <React.Fragment key={data.listing.listingSlug}>
@@ -161,7 +121,7 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 urls={imageUrls}
                                 altText={imageAltText}
                             />
-                            {addedTag}
+                            <AddedTag id={`addedTag_${data.listing.listingSlug}`} dateListed={data.listing.dateListed} />
                         </div>
                         <AgencyDetails
                             id={`agency_${data.listing.listingSlug}`}
@@ -180,7 +140,7 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 </a>
                             </span>
                             <span className="d-block mt-1">
-                                {buildProgressBar(data.listing.dateListed, data.listing.auctionSchedule)}
+                                <ListingProgressBar id={`listingProgressBar_${data.listing.listingSlug}`} dateListed={data.listing.dateListed} auctionScheduleTime={data.listing.auctionSchedule?.time} />
                             </span>
                             <span className="d-block my-1">
                                 <span className="badge badge-pill badge-secondary">
