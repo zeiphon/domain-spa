@@ -1,24 +1,83 @@
-import { AuctionSchedule } from "../types/domain";
-import { getDateTimeString } from "./dateTimeHelper";
+import { AuctionSchedule, InspectionSchedule } from "../types/domain";
+import { daysAsMinutes, getDateTimeString } from "./dateTimeHelper";
 
 export const getRandomListedDate = (): string => {
     return getDateTimeString(
-        getRandomDate((-5 * 24 * 60), 0) // Up to 5 days in the past
+        getRandomDate(new Date(), daysAsMinutes(-5), 0) // Up to 5 days in the past
     );
 }
 
-export const getRandomAuctionSchedule = (): AuctionSchedule | undefined => {
-    const rand = randomInt(1, 3);
-    return rand < 3 // Approx 2/3 listings will have an auction schedule
-        ? {
-            time: getAuctionDate(),
-            auctionLocation: ""
-        }
+export const getRandomInspectionAndAuctionSchedules = () : {
+    inspectionSchedule: InspectionSchedule | undefined,
+    auctionSchedule: AuctionSchedule | undefined
+} => {
+    const rand = randomInt(1, 4);
+    // 1 no inspections or auction, 2 inspect only, 3 inspect and auction, 4 auction only
+    const hasInspectionSchedule = rand  > 1 && rand < 4;
+    const hasAuctionSchedule = rand > 2;
+
+    const inspectionSchedule = hasInspectionSchedule ? getInspectionSchedule() : undefined;
+    const lastInspectionTime = hasInspectionSchedule && inspectionSchedule?.times && inspectionSchedule.times.length > 0
+        ? inspectionSchedule.times[inspectionSchedule.times.length - 1].closingTime
         : undefined;
+
+    const auctionSchedule = hasAuctionSchedule
+        ? lastInspectionTime
+            // get auction time after last inspection time
+            ? getAuctionSchedule(new Date(lastInspectionTime))
+            : getAuctionSchedule()
+        : undefined;
+
+    return {
+        inspectionSchedule: inspectionSchedule,
+        auctionSchedule: auctionSchedule
+    }
 }
 
-const getAuctionDate = () : string => {
-    const date = getRandomDate(0, (28 * 24 * 60)) // Up to 28 days in the future
+const getInspectionSchedule = () : InspectionSchedule => {
+    // get 1-3 inspection times
+    const inspectionCount = randomInt(1, 3);
+
+    const inspectionSchedule: InspectionSchedule = {
+        byAppointment: false,
+        recurring: false,
+        times: []
+    };
+
+    let baseDate = new Date();
+    for (let i = 0; i < inspectionCount; i++) {
+        // get random date for opening date
+        const openingDate = getRandomDateAndTime(baseDate, 0, daysAsMinutes(7));
+
+        // create copy for closing and add 30 minutes
+        const closingDate = new Date(openingDate);
+        closingDate.setMinutes(closingDate.getMinutes() + 30);
+
+        // convert both to strings and push on to times array
+        inspectionSchedule.times.push({
+            openingTime: getDateTimeString(openingDate),
+            closingTime: getDateTimeString(closingDate)
+        })
+
+        // set base date for next loop
+        baseDate = closingDate;
+    }
+
+    return inspectionSchedule;
+}
+
+const getAuctionSchedule = (baseDate?: Date) : AuctionSchedule => {
+    const date = baseDate
+        ? getRandomDateAndTime(baseDate, 0, daysAsMinutes(7)) // Up to 7 days from the base date
+        : getRandomDateAndTime(new Date(), 0, daysAsMinutes(28)) // Up to 28 days from now
+
+    return  {
+        time: getDateTimeString(date), // 2022-03-18T19:46:23
+        auctionLocation: ""
+    }
+}
+
+const setRandomTime = (date: Date) : Date => {
     const rand = randomInt(1, 3);
 
     switch (rand) {
@@ -39,20 +98,21 @@ const getAuctionDate = () : string => {
             date.setMinutes(0);
     }
 
-    return getDateTimeString(
-        date
-    );
-}
-
-const getRandomDate = (minMinuteOffset: number, maxMinuteOffset: number): Date => {
-    const date = new Date();
-    const randomMinutes = randomInt(minMinuteOffset, maxMinuteOffset);
-    date.setMinutes(date.getMinutes() + randomMinutes);
-
-    // 2022-03-18T19:46:23
     return date;
 }
 
-function randomInt(min, max) { // min and max included
+const getRandomDateAndTime = (baseDate: Date, minMinuteOffset: number, maxMinuteOffset: number) => {
+    return setRandomTime(getRandomDate(baseDate, minMinuteOffset, maxMinuteOffset));
+}
+
+const getRandomDate = (baseDate: Date, minMinuteOffset: number, maxMinuteOffset: number): Date => {
+    const date = new Date(baseDate);
+    const randomMinutes = randomInt(minMinuteOffset, maxMinuteOffset);
+    date.setMinutes(date.getMinutes() + randomMinutes);
+
+    return date;
+}
+
+const randomInt = (min, max) => { // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min)
 }

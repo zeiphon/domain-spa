@@ -168,7 +168,7 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 <span className="icon-wrapper"><i className="icon-bed" />{data.listing.propertyDetails.bedrooms}</span>
                                 <span className="icon-wrapper"><i className="icon-bath" />{data.listing.propertyDetails.bathrooms}</span>
                                 <span className="icon-wrapper"><i className="icon-cab" />{data.listing.propertyDetails.carspaces}</span>
-                                {auctionDate &&
+                                {auctionDate && isAuctionTimeInFuture &&
                                     <span className="icon-wrapper text-danger"><i className="icon-hammer mr-1" />{auctionDate}</span>
                                 }
                             </span>

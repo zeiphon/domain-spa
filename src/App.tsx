@@ -7,7 +7,7 @@ import SearchResult from './components/searchResult';
 import findClosestStops from './utils/distance'
 import { isArchivedInStorage, loadSearchParamsFromLocalStorage, saveSearchParamsToLocalStorage } from './utils/localStorageHelper';
 import DomainListingWrapper from './types/domain';
-import { getRandomAuctionSchedule, getRandomListedDate } from './utils/staticDataHelper';
+import { getRandomInspectionAndAuctionSchedules, getRandomListedDate } from './utils/staticDataHelper';
 
 //https://css-tricks.com/snippets/javascript/get-url-variables/
 const getQueryVariable = function(variable) {
@@ -161,11 +161,10 @@ function App() {
           // Set random listed date
           x.listing.dateListed = getRandomListedDate();
 
-          // Set random auction schedule
-          x.listing.auctionSchedule = getRandomAuctionSchedule();
-
-          // Set random inspection schedule
-          // TODO
+          // Set random auction and inspection schedules
+          const { inspectionSchedule, auctionSchedule } = getRandomInspectionAndAuctionSchedules();
+          x.listing.auctionSchedule = auctionSchedule;
+          x.listing.inspectionSchedule = inspectionSchedule
 
           return x;
       }).sort((a, b) => new Date(b.listing.dateListed).getTime() - new Date(a.listing.dateListed).getTime());

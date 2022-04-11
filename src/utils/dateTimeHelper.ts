@@ -13,9 +13,8 @@ export const getDateRange = (startDateTime: string, endDateTime: string): string
     const startDateTimeString = getShortDateAndTime(startDateTime);
     const endTime = getTwelveHourTime(endDateTime);
 
+    // Thu 12 Mar 11:15 AM - 11:45 AM
     return `${startDateTimeString} - ${endTime}`;
-
-    // Thu 12 Mar 11:15 AM -11:45 AM
 }
 
 export const getShortDateAndTime = (dateTime: string) => {
@@ -43,6 +42,10 @@ export const isToday = (dateTime: Date) => {
     tomorrow.setHours(0, 0, 0, 0);
 
     return dateTime >= today && dateTime < tomorrow;
+}
+
+export const daysAsMinutes = (days: number) => {
+    return days * 24 * 60;
 }
 
 export const getRelativeShortDate = (dateTime: string, lowercase: boolean) => {
