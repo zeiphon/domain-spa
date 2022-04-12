@@ -1,7 +1,7 @@
 import React from 'react';
 import NumericSearchField from '../numericSearchField';
 import './search.scss';
-import SuburbSearch from '../suburbSearch';
+// import SuburbSearch from '../suburbSearch';
 
 function Search(props: any) {
     const {
@@ -22,19 +22,28 @@ function Search(props: any) {
             <span className="d-none d-md-inline-block d-lg-none">MD</span>
             <span className="d-none d-lg-inline-block d-xl-none">LG</span>
             <span className="d-none d-xl-inline-block">XL</span> */}
+
             <div className="row mb-2">
                 <div className="col-12">
-                    <label htmlFor="state">State: </label>
-                    <select className="state-dropdown" name="state" defaultValue={state} onChange={updateState}>
-                        <option value="ACT">ACT</option>
-                        <option value="NSW">NSW</option>
-                        <option value="NT">NT</option>
-                        <option value="QLD">QLD</option>
-                        <option value="SA">SA</option>
-                        <option value="TAS">TAS</option>
-                        <option value="VIC">VIC</option>
-                        <option value="WA">WA</option>
-                    </select>
+                    <span className="state-radios">
+                        {["ACT", "NSW", "NT", "QLD", "TAS", "VIC", "WA"].map(x => {
+                            const labelClass = `border border-secondary text-center mr-2 my-1 px-3 py-2 ${state === x ? 'selected' : ''}`;
+                            return <React.Fragment key={`state_radio_${x}`}>
+                                <input
+                                    type="radio"
+                                    name="state"
+                                    id={`state_${x}`}
+                                    value={x}
+                                    checked={state === x}
+                                    onChange={updateState}
+                                />
+                                <label htmlFor={`state_${x}`} className={labelClass}>
+                                    {x}
+                                </label>
+                            </React.Fragment>
+                        })
+                        }
+                    </span>
                 </div>
             </div>
 
