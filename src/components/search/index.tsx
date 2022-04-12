@@ -24,10 +24,10 @@ function Search(props: any) {
             <span className="d-none d-xl-inline-block">XL</span> */}
 
             <div className="row mb-2">
-                <div className="col-12">
+                <div className="col-12 text-center text-sm-left">
                     <span className="state-radios">
-                        {["ACT", "NSW", "NT", "QLD", "TAS", "VIC", "WA"].map(x => {
-                            const labelClass = `border border-secondary text-center mr-2 my-1 px-3 py-2 ${state === x ? 'selected' : ''}`;
+                        {["ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"].map(x => {
+                            const labelClass = `border border-secondary text-center mr-1 my-1 px-2 py-1 ${state === x ? 'selected' : ''}`;
                             return <React.Fragment key={`state_radio_${x}`}>
                                 <input
                                     type="radio"
@@ -48,8 +48,17 @@ function Search(props: any) {
             </div>
 
             <div className="row">
-                <div className="col-8 col-sm-6 col-md-6 col-lg-4">
-                    <textarea id="suburb" className="border-secondary" rows={1} placeholder="Suburb(s) e.g Kew, Rye" defaultValue={suburbs} onChange={updateSuburbs} onBlur={updateSuburbs} />
+                <div className="col-12 col-sm-6 col-md-6 col-lg-4">
+                    <textarea
+                        id="suburb"
+                        className="border-secondary border rounded"
+                        data-role="tagsinput"
+                        rows={1}
+                        placeholder="Suburb(s) e.g Kew, Rye"
+                        defaultValue={suburbs}
+                        onChange={updateSuburbs}
+                        onBlur={updateSuburbs}
+                    />
                 </div>
             </div>
             <div className="row">
