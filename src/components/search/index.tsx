@@ -52,9 +52,9 @@ function Search(props: any) {
                 {state === "VIC" && // TODO - Detect if the selected state has any stops
                     <NumericSearchField type="max" icon="icon-train" defaultValue={maxDistanceFromTrain} updateHandler={updateMaxDistanceFromTrain} interval={0.25} suffix=' km' />
                 }
-                <div className="col-sm-6, col-md-2">
+                <div className="col-sm-6 col-md-4 col-lg-3">
                     <div className="mt-2">
-                        <input type="button" className="search-button" value="Search" onClick={runSearch} disabled={!suburbs} />
+                        <input type="button" className="search-button px-3 rounded" value="Search" onClick={runSearch} disabled={!suburbs} />
                     </div>
                 </div>
             </div>

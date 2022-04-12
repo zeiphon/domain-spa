@@ -25,7 +25,7 @@ function NumericSearchField(props: any) {
     }
 
     return (
-        <div className="col-sm-4 col-md-1 numeric-search-field mb-2 px-3">
+        <div className="col-sm-6 col-md-4 col-lg-3 col-xl-12 numeric-search-field mb-2 px-3">
             <div className="align-bottom controls mt-2 px-0">
                 <button className="down bg-light text-dark p-1 border border-secondary rounded-left d-inline-block" onClick={decrement}>-</button>
                 <span className="value px-2 py-1 border-top border-bottom border-secondary d-inline-block"><i className={`${icon} float-left`} />{text}{suffix ?? ''}</span>

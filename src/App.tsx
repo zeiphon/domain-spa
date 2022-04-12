@@ -179,6 +179,11 @@ function App() {
     : <></>
 
   React.useEffect(() => {
+    if (apiKey) return;
+    runSearch();
+  }, [])
+
+  React.useEffect(() => {
     const list = results && results.length > 0
         ? results.map(x =>
             <SearchResult
@@ -200,9 +205,11 @@ function App() {
             } else {
                 suburbCounts[upperCaseSuburb] = 1;
             }
-        }
-        if (isArchivedInStorage(x.listing.listingSlug)) {
-            hiddenResultCount += 1; // TODO convert this to a map for immutability?
+
+            if (isArchivedInStorage(x.listing.listingSlug)) {
+                hiddenResultCount += 1; // TODO convert this to a map for immutability?
+                suburbCounts[upperCaseSuburb]--;
+            }
         }
     });
     setResultsCount(showArchived ? list.length : list.length - hiddenResultCount);
@@ -267,7 +274,7 @@ function App() {
       </div>
       <div className="row" id="searchResultsContainer">
         <div className="col-12">
-          <div className="border border-secondary rounded bg-white p-2 px-3" id="output">
+          <div className="border border-secondary rounded bg-white py-2 px-3" id="output">
             {isLoading
             ? spinner
             : <>
