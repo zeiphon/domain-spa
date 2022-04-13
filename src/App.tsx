@@ -6,8 +6,9 @@ import axios from 'axios';
 import SearchResult from './components/searchResult';
 import findClosestStops from './utils/distance'
 import { isArchivedInStorage, loadSearchParamsFromLocalStorage, saveSearchParamsToLocalStorage } from './utils/localStorageHelper';
-import DomainListingWrapper from './types/domain';
+import DomainListingWrapper, { State } from './types/domain';
 import { getRandomInspectionAndAuctionSchedules, getRandomListedDate } from './utils/staticDataHelper';
+import { getSuburbOptionsForState, Option } from './data/allSuburbOptions';
 
 //https://css-tricks.com/snippets/javascript/get-url-variables/
 const getQueryVariable = function(variable) {
@@ -35,14 +36,15 @@ function App() {
   const suburbsFromQueryString = getQueryVariable('suburbs');
   const savedSearchParams = loadSearchParamsFromLocalStorage() ?? {};
 
-  const [selectedState, setSelectedState] = React.useState(savedSearchParams.state ?? 'VIC');
+  const [selectedState, setSelectedState] = React.useState<State>(savedSearchParams.state ?? 'VIC');
   const defaultSuburbs = savedSearchParams.suburbCsv ?? (suburbsFromQueryString ? decodeURI((suburbsFromQueryString)) : '');
-  const [suburbs, setSuburbs] = React.useState(defaultSuburbs);
-  const [minBeds, setMinBeds] = React.useState(savedSearchParams.minBeds ?? 2);
-  const [minBaths, setMinBaths] = React.useState(savedSearchParams.minBaths ?? 1);
-  const [minCarSpaces, setMinCarSpaces] = React.useState(savedSearchParams.minCarSpaces ?? 1);
-  const [maxPrice, setMaxPrice] = React.useState(savedSearchParams.maxPrice ?? 650000);
-  const [maxDistanceFromTrain, setMaxDistanceFromTrain] = React.useState(savedSearchParams.maxDistFromTrain ?? 1.25);
+  const [suburbs, setSuburbs] = React.useState<string>(defaultSuburbs);
+  const [suburbOptions, setSuburbOptions] = React.useState<Option[]>(getSuburbOptionsForState(selectedState));
+  const [minBeds, setMinBeds] = React.useState<number>(savedSearchParams.minBeds ?? 2);
+  const [minBaths, setMinBaths] = React.useState<number>(savedSearchParams.minBaths ?? 1);
+  const [minCarSpaces, setMinCarSpaces] = React.useState<number>(savedSearchParams.minCarSpaces ?? 1);
+  const [maxPrice, setMaxPrice] = React.useState<number>(savedSearchParams.maxPrice ?? 650000);
+  const [maxDistanceFromTrain, setMaxDistanceFromTrain] = React.useState<number>(savedSearchParams.maxDistFromTrain ?? 1.25);
 
   const [results, setResults] = React.useState(new Array<DomainListingWrapperWithClosestStops>());
   const [searchResultList, setSearchResultList] = React.useState(new Array<JSX.Element>());
@@ -173,10 +175,15 @@ function App() {
   const spinner = isLoading
     ? (
         <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
+            <span className="visually-hidden">Loading...</span>
         </div>
     )
     : <></>
+
+
+  React.useEffect(() => {
+    setSuburbOptions(getSuburbOptionsForState(selectedState));
+  }, [selectedState])
 
   React.useEffect(() => {
     if (apiKey) return;
@@ -250,18 +257,20 @@ function App() {
   return (
     <div className="App py-2 container-fluid">
       {!apiKey &&
-        <div className="alert alert-info" role="alert">
+        <div className="alert alert-info mb-1" role="alert">
             <strong>Demo mode</strong> - Sample data will be returned unless a Domain Property API key is supplied using the <code>api_key</code> query string parameter.
         </div>
       }
-      <h3 className="py-2 bg-light">Domain Property Search</h3>
+      <h3 className="pt-2 bg-light">Domain Property Search</h3>
 
       <div className="row mt-3">
           <div className="col-12 mb-2 pb-2 pb-sm-0">
               <div className="border border-secondary rounded bg-white p-2">
                   <Search
                       state={selectedState} updateState={(evt) => setStateFromChangeEvent(evt, setSelectedState)}
-                      suburbs={suburbs} updateSuburbs={(evt) => setStateFromChangeEvent(evt, setSuburbs)}
+                      //suburbs={suburbs} updateSuburbs={(evt) => setStateFromChangeEvent(evt, setSuburbs)}
+                      suburbs={suburbs} updateSuburbs={(val) => setSuburbs(val)}
+                      suburbOptions={suburbOptions}
                       minBeds={minBeds} updateMinBeds={(val) => setMinBeds(val)}
                       minBaths={minBaths} updateMinBaths={(val) => setMinBaths(val)}
                       minCarSpaces={minCarSpaces} updateMinCarSpaces={(val) => setMinCarSpaces(val)}

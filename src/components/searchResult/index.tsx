@@ -32,7 +32,7 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
             return <span className="col-12" key={key}>
                 <i className="icon-train" />
                 {y.stop_name.replace(' Station', '')}: {Math.round(y.distance * 10) / 10}km
-                <a target="_blank" className="ml-1 dark-link" href={`https://www.google.com/maps/dir/${data.listing.propertyDetails.latitude},${data.listing.propertyDetails.longitude}/${y.latitude},${y.longitude}/data=!3m1!4b1!4m2!4m1!3e2`}>
+                <a target="_blank" className="ms-1 dark-link" href={`https://www.google.com/maps/dir/${data.listing.propertyDetails.latitude},${data.listing.propertyDetails.longitude}/${y.latitude},${y.longitude}/data=!3m1!4b1!4m2!4m1!3e2`}>
                     <i className="icon-direction" />
                 </a>
             </span>
@@ -131,11 +131,11 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                             contacts={agent.contacts}
                             key={`agent_${data.listing.listingSlug}`} />
                         <div className="px-3 pt-1 pb-2 mb-auto">
-                            <span className="d-block font-weight-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
+                            <span className="d-block fw-bold text-truncate">{data.listing.priceDetails.displayPrice}</span>
                             <span className="d-block">{streetAddress}</span>
                             <span className="d-block">
                                 {data.listing.propertyDetails.suburb} {data.listing.propertyDetails.state} {data.listing.propertyDetails.postcode}
-                                <a target="_blank" className="ml-1 dark-link" href={`https://www.google.com/maps/search/?api=1&query=${data.listing.propertyDetails.latitude},${data.listing.propertyDetails.longitude}`}>
+                                <a target="_blank" className="ms-1 dark-link" href={`https://www.google.com/maps/search/?api=1&query=${data.listing.propertyDetails.latitude},${data.listing.propertyDetails.longitude}`}>
                                     <i className="icon-map-o" />
                                 </a>
                             </span>
@@ -143,16 +143,16 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 <ListingProgressBar id={`listingProgressBar_${data.listing.listingSlug}`} dateListed={data.listing.dateListed} auctionScheduleTime={data.listing.auctionSchedule?.time} />
                             </span>
                             <span className="d-block my-1">
-                                <span className="badge badge-pill badge-secondary">
+                                <span className="badge rounded-pill bg-secondary">
                                     {propertyType}
                                 </span>
                                 {openTime &&
-                                    <span className="badge badge-pill badge-success ml-2">
+                                    <span className="badge rounded-pill bg-success ms-2">
                                         Open {openTime}
                                     </span>
                                 }
                                 {!openTime && isAuctionTimeInFuture && auctionDate &&
-                                     <span className="badge badge-pill badge-danger ml-2">
+                                     <span className="badge rounded-pill bg-danger ms-2">
                                         Auction {auctionDate}
                                     </span>
                                 }
@@ -169,14 +169,14 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 <span className="icon-wrapper"><i className="icon-bath" />{data.listing.propertyDetails.bathrooms}</span>
                                 <span className="icon-wrapper"><i className="icon-cab" />{data.listing.propertyDetails.carspaces}</span>
                                 {auctionDate && isAuctionTimeInFuture &&
-                                    <span className="icon-wrapper text-danger"><i className="icon-hammer mr-1" />{auctionDate}</span>
+                                    <span className="icon-wrapper text-danger"><i className="icon-hammer me-1" />{auctionDate}</span>
                                 }
                             </span>
                             <span className="row mt-1">{closestStopsMarkup}</span>
                         </div>
                         <div className="row text-center mb-2">
-                            <span className="col-6"><NewTabLink href={href} label="View" className="text-success" /></span>
-                            <span className="col-6"><a href="javascript:(0);" className={!isArchived ? "text-danger" : ""} onClick={() => {
+                            <span className="col-6"><NewTabLink href={href} label="View" className="text-success text-decoration-none" /></span>
+                            <span className="col-6"><a href="javascript:(0);" className={!isArchived ? "text-danger text-decoration-none" : "text-decoration-none"} onClick={() => {
                                 setIsArchived(!isArchived)
                                 saveInLocalStorage(data.listing.listingSlug, !isArchived);
                             }}>{isArchived ? 'Show' : 'Hide'}</a></span>

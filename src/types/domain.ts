@@ -83,4 +83,6 @@
         listing: Listing;
     }
 
+    export type State = "ACT" | "NSW" | "NT" | "QLD" | "SA" | "TAS" | "VIC" | "WA";
+
 //}

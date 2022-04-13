@@ -25,16 +25,16 @@ function InspectionTimes(props: {
     return times.length > 0 || isAuctionTimeInFuture
     ? (
         <React.Fragment key={id}>
-            <span className="toggle ml-1" onClick={() => setInspectionTimesOpen(!inspectionTimesOpen)}><i className={`icon-${inspectionTimesOpen ? "up" : "down"}-open`} /></span>
+            <span className="toggle ms-1" onClick={() => setInspectionTimesOpen(!inspectionTimesOpen)}><i className={`icon-${inspectionTimesOpen ? "up" : "down"}-open`} /></span>
 
             {inspectionTimesOpen &&
-                <span className="d-block mt-1 ml-1">
+                <span className="d-block mt-1 ms-1">
                     <ul className="inspection-times pl-3 mb-2">
                         {times.map(x =>
-                            <li key={`${id}-inspection-${x.openingTime}`} className="ml-0 mb-1">{getDateRange(x.openingTime, x.closingTime)}</li>
+                            <li key={`${id}-inspection-${x.openingTime}`} className="ms-0 mb-1">{getDateRange(x.openingTime, x.closingTime)}</li>
                         )}
                         {auctionSchedule && auctionSchedule.time &&
-                        <li key={`${id}-auction-${auctionSchedule.time}`} className="text-danger ml-0 mb-1"><i className="icon-hammer" /> {getShortDateAndTime(auctionSchedule.time)}</li>
+                        <li key={`${id}-auction-${auctionSchedule.time}`} className="text-danger ms-0 mb-1"><i className="icon-hammer" /> {getShortDateAndTime(auctionSchedule.time)}</li>
                         }
                     </ul>
                 </span>

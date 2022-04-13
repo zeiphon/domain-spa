@@ -1,3 +1,5 @@
+import { State } from "../types/domain";
+
 const _archivedDataLocalStorageKey = 'DPS_archivedListings';
 export const getArchivedDataFromLocalStorage = (): {} => {
     return JSON.parse(localStorage.getItem(_archivedDataLocalStorageKey) ?? '{}');
@@ -28,7 +30,7 @@ export function loadSearchParamsFromLocalStorage(): {
     maxPrice?: number;
     maxDistFromTrain?: number;
     suburbCsv?: string;
-    state?: string;
+    state?: State;
 } {
     return JSON.parse(localStorage.getItem(_searchParamsLocalStorageKey) ?? '{}');
 }

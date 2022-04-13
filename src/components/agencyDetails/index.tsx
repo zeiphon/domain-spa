@@ -21,7 +21,7 @@ function AgencyDetails(props: {
     return (
         <React.Fragment key={id}>
             <div className={`agency-details px-3 ${open ? "open" : "closed"}`} style={{backgroundColor: agentBackgroundColour, color: agentTextColour}}>
-                <span className="toggle mr-2" onClick={() => setOpen(!open)}><i className={`icon-${open ? "up" : "down"}-open`} /></span>
+                <span className="toggle me-2" onClick={() => setOpen(!open)}><i className={`icon-${open ? "up" : "down"}-open`} /></span>
                 {!logoUrl &&
                 <span className="agency-name">{name}</span>
                 }
