@@ -3,9 +3,12 @@
 }
 
 #footer {
-  color: rgb(197, 197, 197);
+  color: rgb(179, 179, 179);
   font-size: 8pt;
-  text-align: center;
+
+  a, a:visited {
+    color: rgb(0, 190, 179);
+  }
 }
 
 label, input {
@@ -40,4 +43,10 @@ html, body {
 
 body {
   min-width: 330px;
+}
+
+#searchResultsContainer {
+  .form-check {
+    margin-left: 10px;
+  }
 }

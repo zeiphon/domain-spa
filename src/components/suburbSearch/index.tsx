@@ -15,18 +15,21 @@ interface SuburbSearchProps {
 
 function SuburbSearch(props: SuburbSearchProps) {
     const { suburbs, updateSuburbs, state, suburbOptions } = props;
-
+    const splitSuburbs = suburbs.split(',');
     return  <div className="suburb-search">
                 <Typeahead
                     id="suburb-typeahead"
                     labelKey="name"
                     multiple
-                    onChange={(x) => { updateSuburbs(x.map(x => { return x["name"]; }).join(','))}}
+                    onChange={(x) => { updateSuburbs(x.map(x => { return x["name"]; }).join(',')) }}
                     options={suburbOptions}
-                    placeholder="Select some suburbs..."
+                    placeholder="Start typing a suburb..."
                     minLength={2}
-                    selected={suburbs.split(',').map(x => { return { name: x.trim() } })}
+                    selected={splitSuburbs.filter(x => x !== "").map(x => { return { name: x.trim() } })}
                 />
+                {splitSuburbs.length > 3 &&
+                    <div className="text-secondary scroll-message">Scroll the text box to add more suburbs</div>
+                }
             </div>
 }
 

@@ -82,20 +82,6 @@ function Search(props: SearchProps) {
                     <SuburbSearch suburbs={suburbs} updateSuburbs={updateSuburbs} state={state} suburbOptions={suburbOptions} />
                 </div>
             </div>
-            {/* <div className="row">
-                <div className="col-12 col-sm-6 col-md-6 col-lg-4 px-3">
-                    <textarea
-                        id="suburb"
-                        className="border-secondary border rounded"
-                        data-role="tagsinput"
-                        rows={1}
-                        placeholder="Suburb(s) e.g Kew, Rye"
-                        defaultValue={suburbs}
-                        onChange={updateSuburbs}
-                        onBlur={updateSuburbs}
-                    />
-                </div>
-            </div> */}
             <div className="row">
                 <NumericSearchField type="min" icon="icon-bed" defaultValue={minBeds} updateHandler={updateMinBeds} interval={1} />
                 <NumericSearchField type="min" icon="icon-bath" defaultValue={minBaths} updateHandler={updateMinBaths} interval={1} />
@@ -107,7 +93,7 @@ function Search(props: SearchProps) {
                 }
                 <div className="col-sm-6 col-md-4 col-lg-3 px-3">
                     <div className="mt-2">
-                        <input type="button" className="search-button px-3 rounded" value="Search" onClick={runSearch} disabled={!suburbs} />
+                        <input type="button" className="search-button px-3 rounded mb-1" value="Search" onClick={runSearch} disabled={!suburbs} />
                     </div>
                 </div>
             </div>

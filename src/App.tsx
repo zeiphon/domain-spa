@@ -52,6 +52,7 @@ function App() {
   const [showArchived, setShowArchived] = React.useState(false);
   const [requestedSuburbs, setRequestedSuburbs] = React.useState('');
   const [suburbCountsString, setSuburbCountsString] = React.useState('');
+  const [suburbCountsOpen, setSuburbCountsOpen] = React.useState(false);
   const [resultsCount, setResultsCount] = React.useState(0);
 
   const setStateFromChangeEvent = function(evt, setFunc) {
@@ -268,7 +269,6 @@ function App() {
               <div className="border border-secondary rounded bg-white p-2">
                   <Search
                       state={selectedState} updateState={(evt) => setStateFromChangeEvent(evt, setSelectedState)}
-                      //suburbs={suburbs} updateSuburbs={(evt) => setStateFromChangeEvent(evt, setSuburbs)}
                       suburbs={suburbs} updateSuburbs={(val) => setSuburbs(val)}
                       suburbOptions={suburbOptions}
                       minBeds={minBeds} updateMinBeds={(val) => setMinBeds(val)}
@@ -289,15 +289,25 @@ function App() {
             : <>
                 {results && results.length > 0 && requestedSuburbs
                 ?
-                    <div className="row">
-                        <div className="col">
-                            <span>Showing {resultsCount} properties in {suburbCountsString}</span>
+                    <>
+                        <div className="row">
+                            <div className="col-6">
+                                <span>Showing {resultsCount} properties</span>
+                                <span className="toggle ms-1 text-secondary" onClick={() => setSuburbCountsOpen(!suburbCountsOpen)}>
+                                    <i className={`icon-${suburbCountsOpen ? "up" : "down"}-open`} />
+                                </span>
+                                {suburbCountsOpen &&
+                                    <div>{suburbCountsString}</div>
+                                }
+                            </div>
                         </div>
-                        <div className="col-12">
-                            <input id="showArchivedCheckbox" type="checkbox" defaultChecked={showArchived} onChange={() => { setShowArchived(!showArchived) }} />
-                            <label htmlFor="showArchivedCheckbox">Show hidden properties</label>
+                        <div className="row">
+                            <div className="col-12 form-check form-switch">
+                                <input className="form-check-input" type="checkbox" id="showArchivedCheckbox" defaultChecked={showArchived} onChange={() => { setShowArchived(!showArchived) }} />
+                                <label className="form-check-label" htmlFor="showArchivedCheckbox">Show hidden properties</label>
+                            </div>
                         </div>
-                    </div>
+                    </>
                 : <></>
                 }
                 <div className={`d-flex flex-wrap ${searchResultList.length > 0 ? 'justify-content-around justify-content-md-start' : ''}`}>{
