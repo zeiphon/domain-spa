@@ -291,7 +291,7 @@ function App() {
                 ?
                     <>
                         <div className="row">
-                            <div className="col-6">
+                            <div className="col-12">
                                 <span>Showing {resultsCount} properties</span>
                                 <span className="toggle ms-1 text-secondary" onClick={() => setSuburbCountsOpen(!suburbCountsOpen)}>
                                     <i className={`icon-${suburbCountsOpen ? "up" : "down"}-open`} />
@@ -301,10 +301,10 @@ function App() {
                                 }
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-12 form-check form-switch">
-                                <input className="form-check-input" type="checkbox" id="showArchivedCheckbox" defaultChecked={showArchived} onChange={() => { setShowArchived(!showArchived) }} />
-                                <label className="form-check-label" htmlFor="showArchivedCheckbox">Show hidden properties</label>
+                        <div className="row my-1">
+                            <div className="col-12 form-check form-switch mb-0">
+                                <input className="form-check-input mb-0" type="checkbox" id="showArchivedCheckbox" defaultChecked={showArchived} onChange={() => { setShowArchived(!showArchived) }} />
+                                <label className="form-check-label mb-0" htmlFor="showArchivedCheckbox">Show hidden properties</label>
                             </div>
                         </div>
                     </>
