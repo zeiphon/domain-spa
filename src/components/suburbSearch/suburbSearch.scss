@@ -14,20 +14,20 @@
         }
 
         .rbt-token-remove-button {
-            height: 14px;
             padding-top: 0;
             padding-bottom: 0;
+            padding-right: 3px;
+            line-height: 100%;
         }
 
         .bbtn-close {
             padding-top: 0;
             padding-bottom: 0;
+            height: 100%;
         }
 
         .rbt-close-content {
-            margin-top: 0;
-            margin-left: 4px;
-            text-align: center;
+            margin: auto;
         }
     }
 
