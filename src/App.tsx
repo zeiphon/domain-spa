@@ -32,6 +32,14 @@ interface ClosestStop {
     longitude: number;
 }
 
+interface DomainResponseHeaders {
+    "x-quota-perday-limit": string;
+    "x-quota-perday-remaining": string;
+    "x-total-count": string;
+    "x-pagination-pagenumber": string;
+    "x-pagination-pagesize": string;
+}
+
 function App() {
   const suburbsFromQueryString = getQueryVariable('suburbs');
   const savedSearchParams = loadSearchParamsFromLocalStorage() ?? {};
@@ -54,32 +62,38 @@ function App() {
   const [suburbCountsString, setSuburbCountsString] = React.useState('');
   const [suburbCountsOpen, setSuburbCountsOpen] = React.useState(false);
   const [resultsCount, setResultsCount] = React.useState(0);
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const [headers, setHeaders] = React.useState<DomainResponseHeaders | undefined>(undefined);
+
+  const pageSize = 200;
 
   const setStateFromChangeEvent = function(evt, setFunc) {
       setFunc(evt.currentTarget.value);
   }
 
-  const setResultsWithClosestStops = function(r: DomainListingWrapper[]) {
-    const resultsWithClosestStops: DomainListingWrapperWithClosestStops[] = r
+  const getResultsWithClosestStops = function(r: DomainListingWrapper[]) {
+    const resultsWithLatLng: DomainListingWrapper[] = r
         .filter(x => {
             return x?.listing?.propertyDetails
                 && x.listing.propertyDetails.latitude
                 && x.listing.propertyDetails.longitude;
-        })
-        .map(x => {
+        });
+    const resultsWithClosestStops1: DomainListingWrapperWithClosestStops[] =
+        resultsWithLatLng.map(x => {
             const closestStops: ClosestStop[] = findClosestStops(x.listing.propertyDetails.latitude, x.listing.propertyDetails.longitude);
             return { ...x, closestStops: closestStops };
-        })
-        .filter(x => {
+        });
+    const resultsWithClosestStops: DomainListingWrapperWithClosestStops[] =
+        resultsWithClosestStops1.filter(x => {
             return x.closestStops.length > 0
                 && Math.round(x.closestStops[0].distance * 10) / 10 <= maxDistanceFromTrain;
         });
-    setResults(resultsWithClosestStops);
+    return resultsWithClosestStops;
   }
 
   const apiKey = getQueryVariable('api_key');
 
-  const runSearch = async function() {
+  const runSearch = async function(pageNo: number) {
     const reqSuburbs = suburbs
         .split(',')
         .map(x => x.trim())
@@ -124,20 +138,30 @@ function App() {
         "sortKey": "DateListed",
         "direction": "Descending"
       },
-      "pageSize": 200
+      "pageSize": pageSize,
+      "pageNumber": pageNo
     };
 
     if (apiKey) {
         setIsLoading(true);
         await axios.post(url, data)
             .then(x => {
+                setHeaders({
+                    "x-quota-perday-limit": x.headers["x-quota-perday-limit"],
+                    "x-quota-perday-remaining":  x.headers["x-quota-perday-remaining"],
+                    "x-total-count":  x.headers["x-total-count"],
+                    "x-pagination-pagenumber":  x.headers["x-pagination-pagenumber"],
+                    "x-pagination-pagesize":  x.headers["x-pagination-pagesize"],
+                });
+                setPageNumber(parseInt(x.headers["x-pagination-pagenumber"]));
                 setIsLoading(false);
                 // TODO - Detect if the selected state has any stops
                 if (selectedState === 'VIC') {
-                    setResultsWithClosestStops(x.data);
+                    const newResultsWithStops = getResultsWithClosestStops(x.data);
+                    setResults(pageNo === 1 ? newResultsWithStops : results.concat(newResultsWithStops));
                 } else {
-                    const closestStops: ClosestStop[] = [];
-                    setResults(x.data.map(y => { return { ...y, closestStops: closestStops } }));
+                    const newResultsWithEmptyStops: DomainListingWrapperWithClosestStops[] = x.data.map(y => { return { ...y, closestStops: [] } });
+                    setResults(pageNo === 1 ? newResultsWithEmptyStops : results.concat(newResultsWithEmptyStops));
                 }
             })
             .catch(err => {
@@ -150,7 +174,8 @@ function App() {
             .then(x => {
                 setIsLoading(false);
                 var updatedData = postProcessSampleData(x.data);
-                setResultsWithClosestStops(updatedData);
+                var withStops = getResultsWithClosestStops(updatedData);
+                setResults(withStops);
             })
             .catch(err => {
                 setIsLoading(false);
@@ -179,8 +204,7 @@ function App() {
             <span className="visually-hidden">Loading...</span>
         </div>
     )
-    : <></>
-
+    : <></>;
 
   React.useEffect(() => {
     setSuburbOptions(getSuburbOptionsForState(selectedState));
@@ -188,7 +212,7 @@ function App() {
 
   React.useEffect(() => {
     if (apiKey) return;
-    runSearch();
+    runSearch(1);
   }, [])
 
   React.useEffect(() => {
@@ -255,6 +279,19 @@ function App() {
     return result;
   }
 
+  // LOAD MORE
+  const hasMore = headers && parseInt(headers['x-total-count']) > (parseInt(headers['x-pagination-pagesize']) * parseInt(headers['x-pagination-pagenumber']));
+  const loadMoreButton = hasMore
+    ?
+        <>
+            <input type="button" className="load-more-button px-3 rounded mb-1" onClick={() => runSearch(pageNumber + 1)} value="Load more" disabled={!hasMore} />
+        </>
+    : <></>;
+  const footerMetadata = headers
+    ? `${headers['x-total-count']}.${headers['x-pagination-pagesize']}.${headers['x-pagination-pagenumber']}.${headers['x-quota-perday-limit']}.${headers['x-quota-perday-remaining']}`
+    : "";
+  // END LOAD MORE
+
   return (
     <div className="App py-2 container-fluid">
       {!apiKey &&
@@ -284,9 +321,7 @@ function App() {
       <div className="row" id="searchResultsContainer">
         <div className="col-12">
           <div className="border border-secondary rounded bg-white py-2 px-3" id="output">
-            {isLoading
-            ? spinner
-            : <>
+            <>
                 {results && results.length > 0 && requestedSuburbs
                 ?
                     <>
@@ -310,17 +345,23 @@ function App() {
                     </>
                 : <></>
                 }
-                <div className={`d-flex flex-wrap ${searchResultList.length > 0 ? 'justify-content-around justify-content-md-start' : ''}`}>{
-                    searchResultList.length > 0
-                        ? searchResultList
-                        : <span className="d-block">No properties found.</span>
-                }</div>
+                <div className={`d-flex flex-wrap ${searchResultList.length > 0 ? 'justify-content-around justify-content-md-start' : ''}`}>
+                    {
+                        searchResultList.length > 0
+                            ? searchResultList
+                            : <span className="d-block">No properties found.</span>
+                    }
+                </div>
             </>
+            {isLoading
+                ? spinner
+                : <></>
             }
+            {results && results.length > 0 && <div className="col-12 mx-0 mx-md-3 text-center text-md-start my-2">{loadMoreButton}</div>}
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer metadata={footerMetadata} />
     </div>
   );
 }

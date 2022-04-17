@@ -29,7 +29,7 @@ interface SearchProps {
     maxDistanceFromTrain: number;
     updateMaxDistanceFromTrain: (maxDistanceFromTrain: number) => void;
 
-    runSearch: any
+    runSearch: (pageNo: number) => any;
 }
 
 function Search(props: SearchProps) {
@@ -93,7 +93,7 @@ function Search(props: SearchProps) {
                 }
                 <div className="col-sm-6 col-md-4 col-lg-3 px-3">
                     <div className="mt-2">
-                        <input type="button" className="search-button px-3 rounded mb-1" value="Search" onClick={runSearch} disabled={!suburbs} />
+                        <input type="button" className="search-button px-3 rounded mb-1" value="Search" onClick={() => { return runSearch(1); }} disabled={!suburbs} />
                     </div>
                 </div>
             </div>
