@@ -56,13 +56,17 @@ export const getRelativeShortDate = (dateTime: string, lowercase: boolean) => {
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(0, 0, 0, 0);
 
-    if (date < tomorrow) return lowercase ? 'today' : 'Today';
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setHours(0, 0, 0, 0);
+
+    if (date < tomorrow && date > yesterday) return lowercase ? 'today' : 'Today';
 
     const dayAfterTomorrow = new Date(tomorrow);
     dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 1);
     dayAfterTomorrow.setHours(0, 0, 0, 0);
 
-    if (date < dayAfterTomorrow) return lowercase ? 'tomorrow' :  'Tomorrow';
+    if (date > today && date < dayAfterTomorrow) return lowercase ? 'tomorrow' :  'Tomorrow';
 
     return getShortDate(dateTime);
 }

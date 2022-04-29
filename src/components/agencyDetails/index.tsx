@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Contact } from '../../types/domain';
 import AgentDetails from '../agentDetails';
 import './agencyDetails.scss';
+import placeholder from '../../images/agent placeholder.png';
 
 function AgencyDetails(props: {
     id: string,
@@ -26,10 +27,10 @@ function AgencyDetails(props: {
                 <span className="agency-name">{name}</span>
                 }
                 {logoUrl &&
-                <img className="agency-logo" src={logoUrl} />
+                <img className="agency-logo" src={logoUrl} alt="Agency logo" />
                 }
                 {!open && contacts && contacts[0] && contacts[0].photoUrl &&
-                <img className="agent-photo" style={{border: `3px solid ${agentBackgroundColour}`}} src={contacts[0].photoUrl} />
+                <img loading="lazy" className="agent-photo" style={{border: `3px solid ${agentBackgroundColour}`}} src={contacts[0].photoUrl ?? placeholder} alt="Primary agent" />
                 }
                 {open &&
                 <React.Fragment>

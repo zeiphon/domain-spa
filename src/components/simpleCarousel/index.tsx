@@ -22,8 +22,8 @@ function SimpleCarousel(props: { id: string, urls: string[], altText: string }) 
     : {};
 
     /* Preload adjacent images to prevent flicker on scroll */
-    const previousImage = <img src={urls[previousIndex]} style={{display: "none"}} />
-    const nextImage = <img src={urls[nextIndex]} style={{display: "none"}} />
+    const previousImage = <img src={urls[previousIndex]} style={{display: "none"}} alt="Previous carousel" />
+    const nextImage = <img src={urls[nextIndex]} style={{display: "none"}} alt="Next carousel" />
 
     return (
         <div className="wrapper" key={id}>

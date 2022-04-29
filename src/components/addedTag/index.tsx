@@ -1,5 +1,5 @@
 import React from 'react';
-import { getHourDifference, isToday } from '../../utils/dateTimeHelper';
+import { getHourDifference, getRelativeShortDate, isToday } from '../../utils/dateTimeHelper';
 import './addedTag.scss';
 
 function AddedTag(props: {
@@ -24,11 +24,13 @@ function AddedTag(props: {
 
         if (addedDaysAgo < 8) return `ADDED ${addedDaysAgo} DAYS AGO`;
 
-        return "";
+        if (addedDaysAgo < 15) return `ADDED LAST WEEK`;
+
+        return `ADDED ${getRelativeShortDate(dateListed, false).toUpperCase()}`;
     };
 
     const addedTagText = getAddedTagText(dateListed);
-    const addedTag = addedTagText != ""
+    const addedTag = addedTagText !== ""
         ? <span className="added-date">{addedTagText}</span>
         : <></>
 

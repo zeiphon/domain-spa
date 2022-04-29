@@ -3,7 +3,7 @@ import { daysAsMinutes, getDateTimeString } from "./dateTimeHelper";
 
 export const getRandomListedDate = (): string => {
     return getDateTimeString(
-        getRandomDate(new Date(), daysAsMinutes(-5), 0) // Up to 5 days in the past
+        getRandomDate(new Date(), daysAsMinutes(-20), 0) // Up to 20 days in the past
     );
 }
 
