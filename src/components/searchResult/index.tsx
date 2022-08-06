@@ -4,7 +4,7 @@ import NewTabLink from '../newTabLink';
 import SimpleCarousel from '../simpleCarousel';
 import './searchResult.scss';
 import { isArchivedInStorage, saveInLocalStorage } from '../../utils/localStorageHelper';
-import { getRelativeShortDate } from '../../utils/dateTimeHelper';
+import { getRelativeShortDate, getTwelveHourTime } from '../../utils/dateTimeHelper';
 import InspectionTimes from '../inspectionTimes';
 import DomainListingWrapper from '../../types/domain';
 import AddedTag from '../addedTag';
@@ -104,10 +104,12 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
     const openTime = openTimes[0]
         ? getRelativeShortDate(openTimes[0].openingTime, true)
         : undefined;
+    const openTimeToDisplay = openTime?.toLowerCase() === 'today' ? getTwelveHourTime(openTimes[0].openingTime) : openTime;
 
     const auctionDate = data?.listing?.auctionSchedule?.time
         ? getRelativeShortDate(data.listing.auctionSchedule.time, false)
         : undefined;
+    const auctionDateToDisplay = auctionDate?.toLowerCase() === 'today' ? getTwelveHourTime(data.listing.auctionSchedule!.time) : auctionDate;
 
     return !isArchived || (isArchived && showArchived)
     ? (
@@ -148,12 +150,12 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 </span>
                                 {openTime &&
                                     <span className="badge rounded-pill bg-success ms-2">
-                                        Open {openTime}
+                                        Open {openTimeToDisplay}
                                     </span>
                                 }
                                 {!openTime && isAuctionTimeInFuture && auctionDate &&
                                      <span className="badge rounded-pill bg-danger ms-2">
-                                        Auction {auctionDate}
+                                        Auction {auctionDateToDisplay === 'Tomorrow' ? 'tomorrow' : auctionDateToDisplay}
                                     </span>
                                 }
                                 {(openTime || isAuctionTimeInFuture) &&
@@ -169,7 +171,9 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
                                 <span className="icon-wrapper"><i className="icon-bath" />{data.listing.propertyDetails.bathrooms}</span>
                                 <span className="icon-wrapper"><i className="icon-cab" />{data.listing.propertyDetails.carspaces}</span>
                                 {auctionDate && isAuctionTimeInFuture &&
-                                    <span className="icon-wrapper text-danger"><i className="icon-hammer me-1" />{auctionDate}</span>
+                                    <span className="icon-wrapper text-danger"><i className="icon-hammer me-1" />
+                                        {auctionDateToDisplay === 'tomorrow' ? 'Tomorrow' : auctionDateToDisplay}
+                                    </span>
                                 }
                             </span>
                             <span className="row mt-1">{closestStopsMarkup}</span>
