@@ -57,7 +57,7 @@ function AgencyDetails(props: {
 function hexToRgb(hex: string): number[] {
     const withoutHash = hex.replaceAll('#', '');
     const parts = withoutHash.length === 3
-        ? [ withoutHash[0], withoutHash[1], withoutHash[2] ]
+        ? [ withoutHash[0] + withoutHash[0], withoutHash[1] + withoutHash[1], withoutHash[2] + withoutHash[2] ]
         : [ withoutHash.substr(0, 2), withoutHash.substr(2, 2), withoutHash.substr(4, 2) ];
     return parts.map((x) => parseInt(`0x${x}`, 16));
 }
