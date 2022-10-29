@@ -20,17 +20,20 @@ export const getDateRange = (startDateTime: string, endDateTime: string): string
 export const getShortDateAndTime = (dateTime: string) => {
     const startTime = getTwelveHourTime(dateTime);
 
-    return `${getRelativeShortDate(dateTime, false)} ${startTime}`;
+    return `${getRelativeShortDate(dateTime, false, false)} ${startTime}`;
 }
 
-export const getShortDate = (dateTime: string) => {
+export const getShortDate = (dateTime: string, includeYear: boolean) => {
     const startDate = new Date(dateTime);
 
     const day = getShortDay(dateTime);
     const date = startDate.getDate();
     const month = getShortMonth(startDate.getMonth()+1);
+    const year = startDate.getFullYear();
 
-    return `${day} ${date} ${month}`;
+    return includeYear
+        ? `${day} ${date} ${month} ${year}`
+        : `${day} ${date} ${month}`;
 }
 
 export const isToday = (dateTime: Date) => {
@@ -48,7 +51,7 @@ export const daysAsMinutes = (days: number) => {
     return days * 24 * 60;
 }
 
-export const getRelativeShortDate = (dateTime: string, lowercase: boolean) => {
+export const getRelativeShortDate = (dateTime: string, lowercase: boolean, includeYear: boolean) => {
     const date = new Date(dateTime);
     const today = new Date();
 
@@ -68,7 +71,7 @@ export const getRelativeShortDate = (dateTime: string, lowercase: boolean) => {
 
     if (date > today && date < dayAfterTomorrow) return lowercase ? 'tomorrow' : 'Tomorrow';
 
-    return getShortDate(dateTime);
+    return getShortDate(dateTime, includeYear);
 }
 
 export const getHourDifference = (firstDate: Date, secondDate: Date) => {

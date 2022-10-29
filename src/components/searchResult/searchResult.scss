@@ -19,6 +19,10 @@
     a.dark-link {
         color: rgb(33, 37, 41);
     }
+
+    .icon-direction::before {
+        rotate: inherit;
+    }
 }
 
 .search-result-wrapper {

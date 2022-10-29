@@ -15,13 +15,39 @@ function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
     return d;
   }
 
-function deg2rad(deg) {
+function deg2rad(deg: number): number {
     return deg * (Math.PI/180)
 }
 
-function findClosestStops(lat, lon) {
-  let nearbyStops = [];
-  const offset = 0.02;
+function rad2deg(rad: number): number {
+    return rad * 180 / Math.PI;
+}
+
+//Source: https://stackoverflow.com/a/52079217
+function bearing(startLat: number, startLng: number, destLat: number, destLng: number): number {
+  startLat = deg2rad(startLat);
+  startLng = deg2rad(startLng);
+  destLat = deg2rad(destLat);
+  destLng = deg2rad(destLng);
+
+  const y = Math.sin(destLng - startLng) * Math.cos(destLat);
+  const x = Math.cos(startLat) * Math.sin(destLat) -
+        Math.sin(startLat) * Math.cos(destLat) * Math.cos(destLng - startLng);
+  const brng = Math.atan2(y, x);
+  const brngDegrees = rad2deg(brng);
+  return (brngDegrees + 360) % 360;
+}
+
+type Stop = {
+  stop_suburb: string;
+  stop_name: string;
+  stop_latitude: number;
+  stop_longitude: number;
+}
+
+function findClosestStops(lat: number, lon: number) {
+  let nearbyStops: Stop[] = [];
+  const offset: number = 0.02;
   for (const stop of stops) {
     const lonDiff = stop.stop_longitude - lon;
     const latDiff = stop.stop_latitude - lat;
@@ -37,7 +63,8 @@ function findClosestStops(lat, lon) {
         stop_name: x.stop_name,
         distance: getDistanceFromLatLonInKm(lat, lon, x.stop_latitude, x.stop_longitude),
         latitude: x.stop_latitude,
-        longitude: x.stop_longitude
+        longitude: x.stop_longitude,
+        bearing: Math.round(bearing(lat, lon, x.stop_latitude, x.stop_longitude))
       }
     })
     .sort((a, b) => a.distance - b.distance);

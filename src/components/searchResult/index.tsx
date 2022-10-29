@@ -26,14 +26,19 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
 
     //Select at most the first two closest stops, then add markup for rendering
     const closestStopsMarkup = closestStops
-        .filter((stop, i) => { return i < 2 })
+        .filter((_, i: number) => { return i < 2 })
         .map(y => {
             const key = `${data.listing.listingSlug}_${y.stop_name.replace(' ', '')}`;
+            const rotation = `${y.bearing - 45}deg`;
+            const distance = Math.round(y.distance * 10) / 10;
+            const distanceToDisplay = distance < 1 ? distance * 1000 : distance;
+            const units = distance < 1 ? 'm' : 'km';
+
             return <span className="col-12" key={key}>
                 <i className="icon-train" />
-                {y.stop_name.replace(' Station', '')}: {Math.round(y.distance * 10) / 10}km
+                {y.stop_name.replace(' Station', '')}: {distanceToDisplay}{units}
                 <a target="_blank" className="ms-1 dark-link" href={`https://www.google.com/maps/dir/${data.listing.propertyDetails.latitude},${data.listing.propertyDetails.longitude}/${y.latitude},${y.longitude}/data=!3m1!4b1!4m2!4m1!3e2`}>
-                    <i className="icon-direction" />
+                    <i className="icon-direction" style={{rotate: rotation}} />
                 </a>
             </span>
         });
@@ -102,12 +107,12 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
     const openTimes = (data?.listing?.inspectionSchedule?.times ?? []).filter(x => new Date(x.openingTime) > new Date());
 
     const openTime = openTimes[0]
-        ? getRelativeShortDate(openTimes[0].openingTime, true)
+        ? getRelativeShortDate(openTimes[0].openingTime, true, false)
         : undefined;
     const openTimeToDisplay = openTime?.toLowerCase() === 'today' ? getTwelveHourTime(openTimes[0].openingTime) : openTime;
 
     const auctionDate = data?.listing?.auctionSchedule?.time
-        ? getRelativeShortDate(data.listing.auctionSchedule.time, false)
+        ? getRelativeShortDate(data.listing.auctionSchedule.time, false, false)
         : undefined;
     const auctionDateToDisplay = auctionDate?.toLowerCase() === 'today' ? getTwelveHourTime(data.listing.auctionSchedule!.time) : auctionDate;
 

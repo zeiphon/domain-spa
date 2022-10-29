@@ -26,7 +26,8 @@ function AddedTag(props: {
 
         if (addedDaysAgo < 15) return `ADDED LAST WEEK`;
 
-        return `ADDED ${getRelativeShortDate(dateListed, false).toUpperCase()}`;
+        const includeYear = listingDate.getFullYear() < now.getFullYear();
+        return `ADDED ${getRelativeShortDate(dateListed, false, includeYear).toUpperCase()}`;
     };
 
     const addedTagText = getAddedTagText(dateListed);
