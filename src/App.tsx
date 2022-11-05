@@ -9,6 +9,8 @@ import { isArchivedInStorage, loadSearchParamsFromLocalStorage, saveSearchParams
 import DomainListingWrapper, { State } from './types/domain';
 import { getRandomInspectionAndAuctionSchedules, getRandomListedDate } from './utils/staticDataHelper';
 import { getSuburbOptionsForState, Option } from './data/allSuburbOptions';
+import { ClosestStop, DomainListingWrapperWithClosestStops, DomainResponseHeaders } from './types/app';
+import InspectionTimesView from './components/inspectionTimesView';
 
 //https://css-tricks.com/snippets/javascript/get-url-variables/
 const getQueryVariable = function(variable) {
@@ -20,25 +22,6 @@ const getQueryVariable = function(variable) {
     }
     return false;
 };
-
-interface DomainListingWrapperWithClosestStops extends DomainListingWrapper {
-    closestStops: Array<ClosestStop>;
-}
-
-interface ClosestStop {
-    stop_name: string;
-    distance: number;
-    latitude: number;
-    longitude: number;
-}
-
-interface DomainResponseHeaders {
-    "x-quota-perday-limit": string;
-    "x-quota-perday-remaining": string;
-    "x-total-count": string;
-    "x-pagination-pagenumber": string;
-    "x-pagination-pagesize": string;
-}
 
 function App() {
   const suburbsFromQueryString = getQueryVariable('suburbs');
@@ -302,7 +285,7 @@ function App() {
       <h3 className="pt-2 bg-light">Domain Property Search</h3>
 
       <div className="row mt-3">
-          <div className="col-12 mb-2 pb-2 pb-sm-0">
+          <div className="col-12 pb-2">
               <div className="border border-secondary rounded bg-white p-2">
                   <Search
                       state={selectedState} updateState={(evt) => setStateFromChangeEvent(evt, setSelectedState)}
@@ -318,8 +301,8 @@ function App() {
               </div>
           </div>
       </div>
-      <div className="row" id="searchResultsContainer">
-        <div className="col-12">
+      <div className="row">
+        <div className="col-12 col-lg-8" id="search-results-container">
           <div className="border border-secondary rounded bg-white py-2 px-3" id="output">
             <>
                 {results && results.length > 0 && requestedSuburbs
@@ -336,7 +319,7 @@ function App() {
                                 }
                             </div>
                         </div>
-                        <div className="row my-1">
+                        <div className="row my-1 ms-0">
                             <div className="col-12 form-check form-switch mb-0">
                                 <input className="form-check-input mb-0" type="checkbox" id="showArchivedCheckbox" defaultChecked={showArchived} onChange={() => { setShowArchived(!showArchived) }} />
                                 <label className="form-check-label mb-0" htmlFor="showArchivedCheckbox">Show hidden properties</label>
@@ -359,6 +342,11 @@ function App() {
             }
             {results && results.length > 0 && <div className="col-12 mx-0 mx-md-3 text-center text-md-start my-2">{loadMoreButton}</div>}
           </div>
+        </div>
+        <div className="col-12 col-lg-4 ps-lg-0 ">
+            <div className="border border-secondary rounded bg-white py-2 px-3 mt-2 mt-lg-0">
+                <InspectionTimesView results={results.filter(x => !isArchivedInStorage(x.listing.listingSlug))} />
+            </div>
         </div>
       </div>
       <Footer metadata={footerMetadata} />

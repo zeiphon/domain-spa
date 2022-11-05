@@ -36,7 +36,7 @@ export const getShortDate = (dateTime: string, includeYear: boolean) => {
         : `${day} ${date} ${month}`;
 }
 
-export const isToday = (dateTime: Date) => {
+export const isToday = (dateTime: Date): boolean => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -47,11 +47,11 @@ export const isToday = (dateTime: Date) => {
     return dateTime >= today && dateTime < tomorrow;
 }
 
-export const daysAsMinutes = (days: number) => {
+export const daysAsMinutes = (days: number): number => {
     return days * 24 * 60;
 }
 
-export const getRelativeShortDate = (dateTime: string, lowercase: boolean, includeYear: boolean) => {
+export const getRelativeShortDate = (dateTime: string, lowercase: boolean, includeYear: boolean): string => {
     const date = new Date(dateTime);
     const today = new Date();
 
@@ -74,13 +74,17 @@ export const getRelativeShortDate = (dateTime: string, lowercase: boolean, inclu
     return getShortDate(dateTime, includeYear);
 }
 
-export const getHourDifference = (firstDate: Date, secondDate: Date) => {
+export const getHourDifference = (firstDate: Date, secondDate: Date): number => {
     var diff = Math.round(Math.abs(firstDate.getTime() - secondDate.getTime()) / 3600000);
     return diff;
 }
 
-export const getDateTimeString = (date: Date) => {
+export const getDateTimeString = (date: Date): string => {
     return `${date.getFullYear()}-${ensureTwoDigits(date.getMonth()+1)}-${ensureTwoDigits(date.getDate())}T${ensureTwoDigits(date.getHours())}:${ensureTwoDigits(date.getMinutes())}:${ensureTwoDigits(date.getSeconds())}`;
+}
+
+export const getDateWithoutTime = (date: Date): Date => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 const ensureTwoDigits = (number: number): string => {

@@ -47,7 +47,7 @@ const getInspectionSchedule = () : InspectionSchedule => {
     let baseDate = new Date();
     for (let i = 0; i < inspectionCount; i++) {
         // get random date for opening date
-        const openingDate = getRandomDateAndTime(baseDate, 0, daysAsMinutes(7));
+        const openingDate = getRandomDateAndTime(baseDate, 60, daysAsMinutes(7));
 
         // create copy for closing and add 30 minutes
         const closingDate = new Date(openingDate);
