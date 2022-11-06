@@ -86,7 +86,7 @@ function buildInspectionMarkup(inspectionDays: Map<string, InspectionDay>): JSX.
         const shortDate = getRelativeShortDate(x.date.toISOString(), false, false);
 
         inspectionMarkup.push(
-        <>
+        <div key={`insp-${shortDate}-container`}>
             <div>{shortDate}</div>
             <ul key={`insp-${shortDate}`} className="ps-0">
                 {x.inspections
@@ -97,11 +97,10 @@ function buildInspectionMarkup(inspectionDays: Map<string, InspectionDay>): JSX.
                                 <img src={x.imageSrc} className="inspection-thumbnail me-2" />
                                 <div>{getTwelveHourTime(x.openingTime)}<br/>{x.address}</div>
                             </div>
-                            <></>
                         </li>
                     )}
             </ul>
-        </>
+        </div>
         )
     });
     return <>{inspectionMarkup}</>;

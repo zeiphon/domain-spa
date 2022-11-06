@@ -46,7 +46,15 @@ function App() {
   const [suburbCountsOpen, setSuburbCountsOpen] = React.useState(false);
   const [resultsCount, setResultsCount] = React.useState(0);
   const [pageNumber, setPageNumber] = React.useState(1);
-  const [headers, setHeaders] = React.useState<DomainResponseHeaders | undefined>(undefined);
+
+  const defaultHeaders = {
+    "x-quota-perday-limit": "500",
+    "x-quota-perday-remaining": "500",
+    "x-total-count": "10",
+    "x-pagination-pagenumber": "1",
+    "x-pagination-pagesize": "200",
+  }
+  const [headers, setHeaders] = React.useState<DomainResponseHeaders>(defaultHeaders);
 
   const pageSize = 200;
 
@@ -130,13 +138,13 @@ function App() {
         await axios.post(url, data)
             .then(x => {
                 setHeaders({
-                    "x-quota-perday-limit": x.headers["x-quota-perday-limit"],
-                    "x-quota-perday-remaining":  x.headers["x-quota-perday-remaining"],
-                    "x-total-count":  x.headers["x-total-count"],
-                    "x-pagination-pagenumber":  x.headers["x-pagination-pagenumber"],
-                    "x-pagination-pagesize":  x.headers["x-pagination-pagesize"],
+                    "x-quota-perday-limit": x.headers["x-quota-perday-limit"] ?? defaultHeaders["x-quota-perday-limit"],
+                    "x-quota-perday-remaining": x.headers["x-quota-perday-remaining"] ?? defaultHeaders["x-quota-perday-remaining"],
+                    "x-total-count": x.headers["x-total-count"] ?? defaultHeaders["x-total-count"],
+                    "x-pagination-pagenumber": x.headers["x-pagination-pagenumber"] ?? defaultHeaders["x-pagination-pagenumber"],
+                    "x-pagination-pagesize": x.headers["x-pagination-pagesize"] ?? defaultHeaders["x-pagination-pagesize"],
                 });
-                setPageNumber(parseInt(x.headers["x-pagination-pagenumber"]));
+                setPageNumber(parseInt(x.headers["x-pagination-pagenumber"] ?? defaultHeaders["x-pagination-pagenumber"]));
                 setIsLoading(false);
                 // TODO - Detect if the selected state has any stops
                 if (selectedState === 'VIC') {
