@@ -36,32 +36,30 @@ function sortMap<TValue>(input: Map<string, TValue>, ): Map<string, TValue> {
     );
 }
 
-function InspectionTimesView(props: {
-    results: DomainListingWrapperWithClosestStops[]
-}) {
-    const { results } = props;
+function getInspectionTimesFronResults(results: DomainListingWrapperWithClosestStops[]): InspectionTime[] {
+    return results && results.length > 0
+        ? results.flatMap(x => {
+            const result: InspectionTime[] = x.listing.inspectionSchedule?.times
+                .filter(t => t && new Date(t.openingTime) > new Date())
+                .map(y => {
+                    return {
+                        imageSrc: x.listing.media[0].url,
+                        openingTime: y.openingTime,
+                        closingTime: y.closingTime,
+                        address: x.listing.propertyDetails.displayableAddress,
+                        listingSlug: x.listing.listingSlug
+                    }
+                }) ?? [];
+            return result;
+        })
+        : [];
+}
 
-    const inspectionTimes: InspectionTime[] = results && results.length > 0
-    ? results.flatMap(x => {
-        const result: InspectionTime[] = x.listing.inspectionSchedule?.times
-            .filter(t => t && new Date(t.openingTime) > new Date())
-            .map(y => {
-                return {
-                    imageSrc: x.listing.media[0].url,
-                    openingTime: y.openingTime,
-                    closingTime: y.closingTime,
-                    address: x.listing.propertyDetails.displayableAddress,
-                    listingSlug: x.listing.listingSlug
-                }
-            }) ?? [];
-        return result;
-    })
-    : [];
-
+function groupInspectionTimesByDay(inspectionTimes: InspectionTime[]): Map<string, InspectionDay> {
     const inspectionDays: Map<string, InspectionDay> = new Map();
 
     const now = new Date();
-    const futureDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 4);
+    const futureDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7);
     inspectionTimes.map(x => {
         const openingDate = new Date(x.openingTime);
 
@@ -76,12 +74,15 @@ function InspectionTimesView(props: {
         } else {
             inspectionDays.set(key, { date: date, inspections: [x] });
         }
-    })
+    });
 
+    return inspectionDays;
+}
+
+function buildInspectionMarkup(inspectionDays: Map<string, InspectionDay>): JSX.Element {
     const inspectionMarkup: JSX.Element[] = [];
-    const sortedInspectionDays = sortMap(inspectionDays);
 
-    sortedInspectionDays.forEach(x => {
+    inspectionDays.forEach(x => {
         const shortDate = getRelativeShortDate(x.date.toISOString(), false, false);
         console.log(`insp-${shortDate}`);
         inspectionMarkup.push(
@@ -103,10 +104,28 @@ function InspectionTimesView(props: {
         </>
         )
     });
+    return <>{inspectionMarkup}</>;
+}
+
+function buildMarkup(results: DomainListingWrapperWithClosestStops[]): JSX.Element {
+    if (!results || results.length === 0)
+        return <div>None.</div>
+
+    const inspectionTimes = getInspectionTimesFronResults(results);
+    const inspectionDays = groupInspectionTimesByDay(inspectionTimes);
+    const sortedInspectionDays = sortMap(inspectionDays);
+    const inspectionMarkup = buildInspectionMarkup(sortedInspectionDays);
+
+    return inspectionMarkup;
+}
+
+function InspectionTimesView(props: {
+    results: DomainListingWrapperWithClosestStops[]
+}) {
+    const { results } = props;
 
     return <div id="inspection-times-view">
-        <h4>Inspection times</h4>
-        {inspectionMarkup}
+        {buildMarkup(results)}
     </div>
 }
 

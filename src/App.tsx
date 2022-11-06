@@ -275,6 +275,11 @@ function App() {
     : "";
   // END LOAD MORE
 
+  const [selectedTabId, setSelectedTabId] = React.useState<number>(1);
+  function handleTabSelection(tabId: number) {
+    setSelectedTabId(tabId);
+  }
+
   return (
     <div className="App py-2 container-fluid">
       {!apiKey &&
@@ -302,9 +307,14 @@ function App() {
           </div>
       </div>
       <div className="row">
-        <div className="col-12 col-lg-8" id="search-results-container">
-          <div className="border border-secondary rounded bg-white py-2 px-3" id="output">
-            <>
+        <div className="col-12">
+          <div className="border border-secondary rounded bg-white py-2" id="output">
+            <div className="px-3 mb-2 mt-1 d-flex" id="tab-container">
+                <span className={`tab px-3 py-2 ${selectedTabId === 1 ? 'active' : ''}`} onClick={() => handleTabSelection(1)}>Search results</span>
+                <span className={`tab px-3 py-2 ${selectedTabId === 2 ? 'active' : ''}`} onClick={() => handleTabSelection(2)}>Inspection times</span>
+                <span className="tab flex-grow-1"></span>
+            </div>
+            <div className={`mx-3 ${selectedTabId === 1 ? '' : 'd-none'}`}>
                 {results && results.length > 0 && requestedSuburbs
                 ?
                     <>
@@ -335,18 +345,16 @@ function App() {
                             : <span className="d-block">No properties found.</span>
                     }
                 </div>
-            </>
-            {isLoading
-                ? spinner
-                : <></>
-            }
-            {results && results.length > 0 && <div className="col-12 mx-0 mx-md-3 text-center text-md-start my-2">{loadMoreButton}</div>}
-          </div>
-        </div>
-        <div className="col-12 col-lg-4 ps-lg-0 ">
-            <div className="border border-secondary rounded bg-white py-2 px-3 mt-2 mt-lg-0">
+                {isLoading
+                    ? spinner
+                    : <></>
+                }
+                {results && results.length > 0 && <div className="col-12 mx-0 mx-md-3 text-center text-md-start my-2">{loadMoreButton}</div>}
+            </div>
+            <div className={`mx-3 ${selectedTabId === 2 ? '' : 'd-none'}`}>
                 <InspectionTimesView results={results.filter(x => !isArchivedInStorage(x.listing.listingSlug))} />
             </div>
+          </div>
         </div>
       </div>
       <Footer metadata={footerMetadata} />
