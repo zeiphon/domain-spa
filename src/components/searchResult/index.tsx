@@ -119,7 +119,7 @@ function SearchResult(props: {closestStops: any, data: DomainListingWrapper, sho
     return !isArchived || (isArchived && showArchived)
     ? (
         <React.Fragment key={data.listing.listingSlug}>
-            <div className="my-2 mx-3 search-result-wrapper">
+            <div className="my-2 me-sm-3 search-result-wrapper">
                 <div className={`search-result h-100 ${isArchived ? 'archived' : ''}`}>
                     <div className="border border-secondary h-100 shadow d-flex flex-column ">
                         <div className="px-0 text-center overflow-hidden carousel">

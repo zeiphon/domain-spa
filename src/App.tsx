@@ -309,12 +309,12 @@ function App() {
       <div className="row">
         <div className="col-12">
           <div className="border border-secondary rounded bg-white py-2" id="output">
-            <div className="px-3 mb-2 mt-1 d-flex" id="tab-container">
+            <div className="px-3 mb-2 mt-1 d-flex" id="tabContainer">
                 <span className={`tab px-3 py-2 ${selectedTabId === 1 ? 'active' : ''}`} onClick={() => handleTabSelection(1)}>Search results</span>
                 <span className={`tab px-3 py-2 ${selectedTabId === 2 ? 'active' : ''}`} onClick={() => handleTabSelection(2)}>Inspection times</span>
-                <span className="tab flex-grow-1"></span>
+                <span className="tab filler flex-grow-1"></span>
             </div>
-            <div className={`mx-3 ${selectedTabId === 1 ? '' : 'd-none'}`}>
+            <div className={`mx-3 ${selectedTabId === 1 ? '' : 'd-none'}`} id="searchResultsContainer">
                 {results && results.length > 0 && requestedSuburbs
                 ?
                     <>

@@ -1,15 +1,23 @@
 #output {
   min-height: 200px;
 
-  .tab {
-    border-top: 1px solid white;
-    border-bottom: 1px solid rgb(179, 179, 179);
-    border-radius: 5px 5px 0 0;
-  }
+  #tabContainer {
+    .tab {
+      border-top: 1px solid white;
+      border-bottom: 1px solid rgb(179, 179, 179);
+      border-radius: 5px 5px 0 0;
+      cursor: pointer;
+    }
 
-  .tab.active {
-    border: 1px solid rgb(179, 179, 179);
-    border-bottom: 1px solid white;
+    .tab.active {
+      border: 1px solid rgb(179, 179, 179);
+      border-bottom: 1px solid white;
+    }
+
+    .filler {
+      cursor: default;
+      border-bottom: 1px solid rgb(179, 179, 179);
+    }
   }
 }
 
@@ -60,8 +68,8 @@ body {
 }
 
 #searchResultsContainer {
-  .form-check {
-    margin-left: 10px;
+  .form-check-input {
+    cursor: pointer;
   }
 }
 
