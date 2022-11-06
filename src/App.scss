@@ -2,14 +2,14 @@
   min-height: 200px;
 
   .tab {
-    border-bottom: 1px solid rgb(0, 190, 179);
+    border-top: 1px solid white;
+    border-bottom: 1px solid rgb(179, 179, 179);
     border-radius: 5px 5px 0 0;
   }
 
   .tab.active {
-    font-weight: bold;
-    border: 1px solid rgb(0, 190, 179);
-    border-bottom: 0;
+    border: 1px solid rgb(179, 179, 179);
+    border-bottom: 1px solid white;
   }
 }
 

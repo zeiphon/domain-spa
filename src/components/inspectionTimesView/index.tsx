@@ -84,7 +84,7 @@ function buildInspectionMarkup(inspectionDays: Map<string, InspectionDay>): JSX.
 
     inspectionDays.forEach(x => {
         const shortDate = getRelativeShortDate(x.date.toISOString(), false, false);
-        console.log(`insp-${shortDate}`);
+
         inspectionMarkup.push(
         <>
             <div>{shortDate}</div>
