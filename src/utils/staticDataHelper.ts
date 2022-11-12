@@ -21,11 +21,8 @@ export const getRandomInspectionAndAuctionSchedules = () : {
         ? inspectionSchedule.times[inspectionSchedule.times.length - 1].closingTime
         : undefined;
 
-    const auctionSchedule = hasAuctionSchedule
-        ? lastInspectionTime
-            // get auction time after last inspection time
-            ? getAuctionSchedule(new Date(lastInspectionTime))
-            : getAuctionSchedule()
+    const auctionSchedule = hasAuctionSchedule && lastInspectionTime
+        ? getAuctionSchedule(new Date(lastInspectionTime))
         : undefined;
 
     return {
@@ -66,13 +63,9 @@ const getInspectionSchedule = () : InspectionSchedule => {
     return inspectionSchedule;
 }
 
-const getAuctionSchedule = (baseDate?: Date) : AuctionSchedule => {
-    const date = baseDate
-        ? getRandomDateAndTime(baseDate, 0, daysAsMinutes(7)) // Up to 7 days from the base date
-        : getRandomDateAndTime(new Date(), 0, daysAsMinutes(28)) // Up to 28 days from now
-
+const getAuctionSchedule = (baseDate: Date) : AuctionSchedule => {
     return  {
-        time: getDateTimeString(date), // 2022-03-18T19:46:23
+        time: getDateTimeString(baseDate), // 2022-03-18T19:46:23
         auctionLocation: ""
     }
 }

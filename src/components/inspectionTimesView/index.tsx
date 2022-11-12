@@ -1,8 +1,7 @@
 import React from 'react';
-import { useState } from 'react';
 import { DomainListingWrapperWithClosestStops } from '../../types/app';
-import { AuctionSchedule, InspectionSchedule } from '../../types/domain';
-import { getDateRange, getDateWithoutTime, getRelativeShortDate, getShortDateAndTime, getShortDay, getTwelveHourTime } from '../../utils/dateTimeHelper';
+import { getDateWithoutTime, getRelativeShortDate, getShortDateAndTime, getTwelveHourTime } from '../../utils/dateTimeHelper';
+import NewTabLink from '../newTabLink';
 import './inspectionTimesView.scss';
 
 type InspectionDay = {
@@ -14,7 +13,9 @@ type InspectionTime = {
     openingTime: string,
     closingTime: string,
     address: string,
-    listingSlug: string
+    listingSlug: string,
+    isAuction: boolean,
+    auctionTime: string | undefined,
 }
 
 function dateCompare(first: Date, second: Date): number {
@@ -26,37 +27,41 @@ function dateCompare(first: Date, second: Date): number {
 }
 
 // https://stackoverflow.com/a/44109065
-function sortMap<TValue>(input: Map<string, TValue>, ): Map<string, TValue> {
+function sortMap<TValue>(input: Map<number, TValue>, ): Map<number, TValue> {
     return new Map(
         Array
-          .from(input)
-          .sort((a, b) => {
-            return dateCompare(new Date(a[0]), new Date(b[0]));
-          })
+            .from(input)
+            .sort((a, b) => a[0] - b[0])
     );
 }
 
 function getInspectionTimesFronResults(results: DomainListingWrapperWithClosestStops[]): InspectionTime[] {
     return results && results.length > 0
         ? results.flatMap(x => {
-            const result: InspectionTime[] = x.listing.inspectionSchedule?.times
+            const inspectionTimesResult: InspectionTime[] = x.listing.inspectionSchedule?.times
                 .filter(t => t && new Date(t.openingTime) > new Date())
                 .map(y => {
+                    const hasAuction = !!x.listing.auctionSchedule;
+                    const isAuction = hasAuction && x.listing.auctionSchedule?.time == y.closingTime;
+
                     return {
                         imageSrc: x.listing.media[0].url,
                         openingTime: y.openingTime,
                         closingTime: y.closingTime,
                         address: x.listing.propertyDetails.displayableAddress,
-                        listingSlug: x.listing.listingSlug
+                        listingSlug: x.listing.listingSlug,
+                        isAuction: isAuction,
+                        auctionTime: x.listing.auctionSchedule?.time
                     }
                 }) ?? [];
-            return result;
+
+            return inspectionTimesResult;
         })
         : [];
 }
 
-function groupInspectionTimesByDay(inspectionTimes: InspectionTime[]): Map<string, InspectionDay> {
-    const inspectionDays: Map<string, InspectionDay> = new Map();
+function groupInspectionTimesByDay(inspectionTimes: InspectionTime[]): Map<number, InspectionDay> {
+    const inspectionDays: Map<number, InspectionDay> = new Map();
 
     const now = new Date();
     const futureDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7);
@@ -67,7 +72,7 @@ function groupInspectionTimesByDay(inspectionTimes: InspectionTime[]): Map<strin
             return;
 
         const date = getDateWithoutTime(openingDate);
-        const key = date.toLocaleDateString();
+        const key = date.getTime();
 
         if (inspectionDays.get(key)) {
             inspectionDays.get(key)!.inspections.push(x);
@@ -79,7 +84,13 @@ function groupInspectionTimesByDay(inspectionTimes: InspectionTime[]): Map<strin
     return inspectionDays;
 }
 
-function buildInspectionMarkup(inspectionDays: Map<string, InspectionDay>): JSX.Element {
+function buildAuctionMarkup(inspectionTime: InspectionTime): JSX.Element {
+    return <span className="icon-wrapper text-danger"><i className="icon-hammer me-1" />
+        {getTwelveHourTime(inspectionTime.auctionTime!)}
+    </span>
+}
+
+function buildInspectionMarkup(inspectionDays: Map<number, InspectionDay>): JSX.Element {
     const inspectionMarkup: JSX.Element[] = [];
 
     inspectionDays.forEach(x => {
@@ -94,8 +105,9 @@ function buildInspectionMarkup(inspectionDays: Map<string, InspectionDay>): JSX.
                     .map((x, i) =>
                         <li key={`insp-item-${i}-${x.listingSlug}`} className="my-2">
                             <div className="d-flex item-container">
-                                <img src={x.imageSrc} className="inspection-thumbnail me-2" />
-                                <div>{getTwelveHourTime(x.openingTime)}<br/>{x.address}</div>
+                            <NewTabLink href={`https://domain.com.au/${x.listingSlug}`} label="View" className="text-success text-decoration-none">
+                                <img src={x.imageSrc} className="inspection-thumbnail me-2" /></NewTabLink>
+                                <div>{getTwelveHourTime(x.openingTime)} {x.isAuction && <>{buildAuctionMarkup(x)}</>}<br/>{x.address}</div>
                             </div>
                         </li>
                     )}
