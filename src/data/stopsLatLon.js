@@ -310,9 +310,9 @@ const stops = [{
   "stop_longitude": 145.108246
 }, {
   "stop_suburb": "Mont Albert",
-  "stop_name": "Mont Albert Station",
-  "stop_latitude": -37.8194275,
-  "stop_longitude": 145.10553
+  "stop_name": "Union Station",
+  "stop_latitude": -37.822340,
+  "stop_longitude": 145.101498
 }, {
   "stop_suburb": "Oakleigh",
   "stop_name": "Huntingdale Station",
@@ -328,11 +328,6 @@ const stops = [{
   "stop_name": "Mernda Station",
   "stop_latitude": -37.60255,
   "stop_longitude": 145.100876
-}, {
-  "stop_suburb": "Surrey Hills",
-  "stop_name": "Surrey Hills Station",
-  "stop_latitude": -37.8241425,
-  "stop_longitude": 145.098785
 }, {
   "stop_suburb": "South Morang",
   "stop_name": "Hawkstowe Station",
