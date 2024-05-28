@@ -1,0 +1,53 @@
+
+<ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs px-3 mb-2 mt-1 d-flex">
+	<li [ngbNavItem]="1">
+		<button ngbNavLink>Search results</button>
+		<ng-template ngbNavContent>
+      <div class="mx-3 " id="searchResultsContainer">
+
+        <div *ngIf="!service.isLoading()" class="row">
+          <div class="col-12">
+            <span>Showing {{filteredSearchResults().length}} properties</span>
+            <span class="toggle ms-1 text-secondary" (click)="showSuburbs = !showSuburbs">
+              <i [class]="{'icon-up-open': showSuburbs, 'icon-down-open': !showSuburbs}"></i>
+            </span>
+            <suburb-summary *ngIf="showSuburbs" [results]="filteredSearchResults()" [filterSuburbs]="service.searchFilters()?.suburbs" />
+          </div>
+        </div>
+        <div *ngIf="!service.isLoading()" class="row my-1 ms-0">
+          <div class="col-12 form-check form-switch mb-0">
+            <input class="form-check-input mb-0" type="checkbox" id="showArchivedCheckbox" 
+                    [defaultChecked]="showArchived()"
+                    (change)="showArchived.set(!showArchived())" />
+            <label class="form-check-label mb-0" htmlFor="showArchivedCheckbox">Show hidden properties</label>
+          </div>
+        </div>
+    
+        <div class="d-flex flex-wrap justify-content-around justify-content-md-start">
+          <span *ngIf="service.searchResults().length == 0 && !service.isLoading()" class="d-block">No properties found.</span>
+        </div>
+    
+        <div>
+          <div *ngIf="service.isLoading()" class="loading-block">
+            <span class="loader"></span>
+            <p class="loading">Loading...</p>
+          </div>
+    
+          <div *ngIf="service.searchResults() && !service.isLoading()" class="d-flex flex-wrap justify-content-around justify-content-md-start">
+              @for (result of filteredSearchResults(); track result.listing.id) {
+              <listing-card [result]="result" [archived]="isArchived(result)" (archivedChanged)="onArchivedChanged(result, $event)" />
+              }
+          </div>
+        </div>
+      </div>
+		</ng-template>
+	</li>
+	<li [ngbNavItem]="2">
+		<button ngbNavLink>Inspection times</button>
+		<ng-template ngbNavContent>
+      <inspection-view [results]="filteredSearchResults()"></inspection-view>
+		</ng-template>
+	</li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>
